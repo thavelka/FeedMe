@@ -19,6 +19,22 @@ public class MainActivity extends ActionBarActivity {
 
     // Declaring views and variables
 
+
+
+//    //MAKE RESTAURANTS
+//    public Restaurant rest1 = new Restaurant("Buffalo Wild Wings", "903 University Dr.");
+//    public Restaurant rest2 = new Restaurant("Domino's Pizza", "409 University Dr.");
+//    public int[] days1 = {2};
+//    public int[] days2 = {1,2,3,4,5};
+//    public Listing listing1 = new Listing(rest1, days1, "Wing Tuesday: $0.65 traditional wings all day. Minimum 6 pieces", true);
+//    public Listing listing2 = new Listing(rest2, days2, "$7.99 3-topping large", true);
+//    public Listing[] mListings = {listing1, listing2};
+
+
+
+    //MAKE LISTINGS
+
+
     //Declaring titles and icons for testing in drawer layout
 
     String TITLES[] = {"Home","Favorites","Notifications","Settings"};
@@ -39,7 +55,6 @@ public class MainActivity extends ActionBarActivity {
     ActionBarDrawerToggle mDrawerToggle;                  // Declaring Action Bar mDrawerLayout Toggle
 
 
-
     ViewPager mViewPager;
     ViewPagerAdapter mViewPagerAdapter;
     SlidingTabLayout mTabs;
@@ -57,7 +72,7 @@ public class MainActivity extends ActionBarActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView); // Assigning the RecyclerView Object to the xml View
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView); // Assigning the RecyclerView Object to the xml View
 
         mRecyclerView.setHasFixedSize(true);                            // Letting the system know that the list objects are of fixed size
 
@@ -112,13 +127,12 @@ public class MainActivity extends ActionBarActivity {
         mTabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
             @Override
             public int getIndicatorColor(int position) {
-                return getResources().getColor(R.color.tabsScrollColor);
+                return getResources().getColor(R.color.tab_scroll_color);
             }
         });
 
         // Setting the ViewPager For the SlidingTabsLayout
         mTabs.setViewPager(mViewPager);
-
 
 
     }
