@@ -1,5 +1,6 @@
 package com.thavelka.feedme;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -26,14 +27,22 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
 
+        ListingGetter listingGetter = new ListingGetter();
+        Bundle bundle = new Bundle();
+
+        bundle.putParcelableArray("LISTINGS",listingGetter.getListings());
+
+
         if(position == 0) // if the position is 0 we are returning the First tab
         {
             Food foodTab = new Food();
+            foodTab.setArguments(bundle);
             return foodTab;
         }
         else             // As we are having 2 mTabs if the position is now 0 it must be 1 so we are returning second tab
         {
             Drinks drinksTab = new Drinks();
+            drinksTab.setArguments(bundle);
             return drinksTab;
         }
 

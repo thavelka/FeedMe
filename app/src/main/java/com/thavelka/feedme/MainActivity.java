@@ -1,9 +1,9 @@
 package com.thavelka.feedme;
 
+import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,24 +16,6 @@ import android.view.View;
     // Credit to Akash Bangad from android4devs.com for help with the material design layout
 
 public class MainActivity extends ActionBarActivity {
-
-    // Declaring views and variables
-
-
-
-//    //MAKE RESTAURANTS
-//    public Restaurant rest1 = new Restaurant("Buffalo Wild Wings", "903 University Dr.");
-//    public Restaurant rest2 = new Restaurant("Domino's Pizza", "409 University Dr.");
-//    public int[] days1 = {2};
-//    public int[] days2 = {1,2,3,4,5};
-//    public Listing listing1 = new Listing(rest1, days1, "Wing Tuesday: $0.65 traditional wings all day. Minimum 6 pieces", true);
-//    public Listing listing2 = new Listing(rest2, days2, "$7.99 3-topping large", true);
-//    public Listing[] mListings = {listing1, listing2};
-
-
-
-    //MAKE LISTINGS
-
 
     //Declaring titles and icons for testing in drawer layout
 
@@ -61,6 +43,9 @@ public class MainActivity extends ActionBarActivity {
     CharSequence mTabTitles[]={"Food","Drinks"};
     int mTabCount =2;
 
+    ListingGetter mListingGetter;
+    public static final String LISTINGS = "LISTINGS";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,17 +58,10 @@ public class MainActivity extends ActionBarActivity {
         setSupportActionBar(toolbar);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView); // Assigning the RecyclerView Object to the xml View
-
-        mRecyclerView.setHasFixedSize(true);                            // Letting the system know that the list objects are of fixed size
-
-        mAdapter = new DrawerAdapter(TITLES,ICONS,NAME,EMAIL,PROFILE);       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
-        // And passing the titles,icons,header view name, header view email,
-        // and header view profile picture
-
+        mRecyclerView.setHasFixedSize(true);                            // Letting the system know that the list objects are of fixed siz
+        mAdapter = new DrawerAdapter(TITLES,ICONS,NAME,EMAIL,PROFILE);       // Creating the Adapter
         mRecyclerView.setAdapter(mAdapter);                              // Setting the mViewPagerAdapter to RecyclerView
-
         mLayoutManager = new LinearLayoutManager(this);                 // Creating a layout Manager
-
         mRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
 
 
@@ -133,6 +111,7 @@ public class MainActivity extends ActionBarActivity {
 
         // Setting the ViewPager For the SlidingTabsLayout
         mTabs.setViewPager(mViewPager);
+
 
 
     }

@@ -1,14 +1,19 @@
 package com.thavelka.feedme;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by tim on 3/13/15.
  */
-public class Listing {
+public class Listing implements Parcelable{
 
     protected Restaurant mRestaurant;
     protected int[] mDays;
     protected String mDescription;
     protected boolean mIsFood;
+
+    public Listing () {};
 
     public Listing (Restaurant restaurant, int[] days, String description, boolean isFood) {
         mRestaurant = restaurant;
@@ -65,4 +70,37 @@ public class Listing {
         mDescription = description;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mRestaurant.getName());
+        dest.writeString(mRestaurant.getAddress());
+        dest.writeIntArray(mDays);
+        dest.writeString(mDescription);
+        dest.writeInt(mIsFood ? 1 : 0);
+    }
+
+    private Listing (Parcel in) {
+        setRestaurantName(in.readString());
+        setRestaurantAddress(in.readString());
+        mDays = in.createIntArray();
+        mDescription = in.readString();
+        mIsFood = in.readInt() != 0;
+    }
+
+    public static final Creator<Listing> CREATOR = new Creator<Listing>() {
+        @Override
+        public Listing createFromParcel(Parcel source) {
+            return new Listing(source);
+        }
+
+        @Override
+        public Listing[] newArray(int size) {
+            return new Listing[size];
+        }
+    };
 }
