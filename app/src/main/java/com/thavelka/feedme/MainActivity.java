@@ -17,6 +17,7 @@ import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 
 // Credit to Akash Bangad from android4devs.com for help with the material design layout
@@ -63,7 +64,10 @@ public class MainActivity extends ActionBarActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        dayOfWeek = new DateFormatSymbols().getWeekdays()[Calendar.DAY_OF_WEEK];
+
+        Calendar mCalendar = Calendar.getInstance();
+        dayOfWeek = mCalendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
+
         getSupportActionBar().setTitle(dayOfWeek);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView); // Assigning the RecyclerView Object to the xml View
@@ -88,7 +92,9 @@ public class MainActivity extends ActionBarActivity {
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
                 // Code here will execute once drawer is closed
-                dayOfWeek = new DateFormatSymbols().getWeekdays()[Calendar.DAY_OF_WEEK];
+                Calendar mCalendar = Calendar.getInstance();
+                dayOfWeek = mCalendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
+
                 getSupportActionBar().setTitle(dayOfWeek);
             }
 
