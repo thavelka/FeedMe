@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.parse.ParseObject;
+import com.software.shell.fab.ActionButton;
 
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
@@ -133,9 +134,13 @@ public class MainActivity extends ActionBarActivity {
         // Setting the ViewPager For the SlidingTabsLayout
         mTabs.setViewPager(mViewPager);
 
-        ParseObject testObject = new ParseObject("TestObject");
-        testObject.put("foo", "bar");
-        testObject.saveInBackground();
+        ActionButton actionButton = (ActionButton) findViewById(R.id.action_button);
+        actionButton.setButtonColor(getResources().getColor(R.color.fab_material_purple_500));
+        actionButton.setButtonColorPressed(getResources().getColor(R.color.fab_material_purple_900));
+        actionButton.setImageResource(R.drawable.fab_plus_icon);
+
+
+
 
 
 
