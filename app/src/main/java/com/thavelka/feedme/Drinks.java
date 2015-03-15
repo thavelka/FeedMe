@@ -20,14 +20,18 @@ public class Drinks extends Fragment {
     RecyclerView.Adapter mAdapter;                        // Declaring Adapter For Recycler View
     Listing[] mListings;
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v =inflater.inflate(R.layout.drinks,container,false);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         Parcelable[] parcelables = getArguments().getParcelableArray("LISTINGS");
         mListings = Arrays.copyOf(parcelables, parcelables.length, Listing[].class);
 
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View v =inflater.inflate(R.layout.drinks,container,false);
 
         mRecyclerView = (RecyclerView) v.findViewById(R.id.drinksRecyclerView); // Assigning the RecyclerView Object to the xml View
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));

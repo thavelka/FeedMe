@@ -11,9 +11,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
+
+import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 
-    // Credit to Akash Bangad from android4devs.com for help with the material design layout
+// Credit to Akash Bangad from android4devs.com for help with the material design layout
 
 public class MainActivity extends ActionBarActivity {
 
@@ -42,6 +48,7 @@ public class MainActivity extends ActionBarActivity {
     SlidingTabLayout mTabs;
     CharSequence mTabTitles[]={"Food","Drinks"};
     int mTabCount =2;
+    String dayOfWeek;
 
     ListingGetter mListingGetter;
     public static final String LISTINGS = "LISTINGS";
@@ -56,6 +63,8 @@ public class MainActivity extends ActionBarActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        dayOfWeek = new DateFormatSymbols().getWeekdays()[Calendar.DAY_OF_WEEK];
+        getSupportActionBar().setTitle(dayOfWeek);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView); // Assigning the RecyclerView Object to the xml View
         mRecyclerView.setHasFixedSize(true);                            // Letting the system know that the list objects are of fixed siz
@@ -71,14 +80,16 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                // code here will execute once the drawer is opened( As I dont want anything happened whe drawer is
-                // open I am not going to put anything here)
+                // code here will execute once the drawer is opened
+                getSupportActionBar().setTitle("FeedMe");
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
                 // Code here will execute once drawer is closed
+                dayOfWeek = new DateFormatSymbols().getWeekdays()[Calendar.DAY_OF_WEEK];
+                getSupportActionBar().setTitle(dayOfWeek);
             }
 
 
