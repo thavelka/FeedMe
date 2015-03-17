@@ -1,78 +1,43 @@
 package com.thavelka.feedme;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Locale;
 
-/**
- * Created by hp1 on 21-01-2015.
- */
+// Holds info needed to set up pager and sliding tabs
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
-    CharSequence Titles[]; // This will Store the mTabTitles of the Tabs which are Going to be passed when ViewPagerAdapter is created
-    int NumbOfTabs; // Store the number of mTabs, this will also be passed when the ViewPagerAdapter is created
+    CharSequence Titles[]; // Stores names of Tabs
+    int tabCount; // Number of Tabs
 
-
-    // Build a Constructor and assign the passed Values to appropriate values in the class
-    public ViewPagerAdapter(FragmentManager fm,CharSequence mTitles[], int mNumbOfTabsumb) {
+    public ViewPagerAdapter(FragmentManager fm,CharSequence mTitles[], int mTabCountSum) {
         super(fm);
-
         this.Titles = mTitles;
-        this.NumbOfTabs = mNumbOfTabsumb;
-
+        this.tabCount = mTabCountSum;
     }
 
-    //This method return the fragment for the every position in the View Pager
     @Override
     public Fragment getItem(int position) {
 
-        ListingGetter listingGetter = new ListingGetter();
-        //listingGetter.initUpload();
-        Bundle bundle = new Bundle();
-
-
-        if(position == 0) // if the position is 0 we are returning the First tab
-        {
-            Food foodTab = new Food();//
-            Calendar mCalendar = Calendar.getInstance();
-//            int day = mCalendar.get(Calendar.DAY_OF_WEEK);
-//            ArrayList<Listing> foodList = listingGetter.getFoodListings(day);
-//            Listing[] foodArray = foodList.toArray(new Listing[foodList.size()]);
-//            bundle.putParcelableArray("LISTINGS",foodArray);
-//            foodTab.setArguments(bundle);
-            return foodTab;
+        // Returns a fragment based on current position in pager
+        if(position == 0) {
+            return new Food(); // Creates and returns Food fragment
+        } else {
+            return new Drinks(); // Creates and return Drinks fragment
         }
-        else             // As we are having 2 mTabs if the position is now 0 it must be 1 so we are returning second tab
-        {
-            Drinks drinksTab = new Drinks();
-            Calendar mCalendar = Calendar.getInstance();
-            int day = mCalendar.get(Calendar.DAY_OF_WEEK);
-            //ArrayList<Listing> drinksList = listingGetter.getDrinkListings(day);
-            //Listing[] drinksArray = drinksList.toArray(new Listing[drinksList.size()]);
-            //bundle.putParcelableArray("LISTINGS",drinksArray);
-            //drinksTab.setArguments(bundle);
-            return drinksTab;
-        }
-
-
     }
 
-    // This method return the titles for the Tabs in the Tab Strip
-
     @Override
+    // Returns title of tab at current position
     public CharSequence getPageTitle(int position) {
         return Titles[position];
     }
 
-    // This method return the Number of mTabs for the mTabs Strip
-
     @Override
+    // Return number of tabs
     public int getCount() {
-        return NumbOfTabs;
+        return tabCount;
     }
 }

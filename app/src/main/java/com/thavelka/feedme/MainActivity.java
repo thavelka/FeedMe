@@ -48,19 +48,19 @@ public class MainActivity extends ActionBarActivity {
     String NAME = "Tim Havelka";
     String EMAIL = "tim.havelka@gmail.com";
     int PROFILE = R.drawable.tim;
-    protected ProgressBar mProgressBar;
 
-    RecyclerView mRecyclerView;                           // Declaring RecyclerView
-    RecyclerView.Adapter mAdapter;                        // Declaring Adapter For Recycler View
-    RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
-    DrawerLayout mDrawerLayout;                                  // Declaring DrawerLayout
-    ActionBarDrawerToggle mDrawerToggle;                  // Declaring Action Bar mDrawerLayout Toggle
-    ViewPager mViewPager;
-    ViewPagerAdapter mViewPagerAdapter;
-    SlidingTabLayout mTabs;
-    CharSequence mTabTitles[]={"Food","Drinks"};
-    int mTabCount =2;
-    String dayOfWeek;
+    protected ProgressBar mProgressBar;
+    protected RecyclerView mRecyclerView;                           // Declaring RecyclerView
+    protected RecyclerView.Adapter mAdapter;                        // Declaring Adapter For Recycler View
+    protected RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
+    protected DrawerLayout mDrawerLayout;                                  // Declaring DrawerLayout
+    protected ActionBarDrawerToggle mDrawerToggle;                  // Declaring Action Bar mDrawerLayout Toggle
+    protected ViewPager mViewPager;
+    protected ViewPagerAdapter mViewPagerAdapter;
+    protected SlidingTabLayout mTabs;
+    protected CharSequence mTabTitles[]={"Food","Drinks"};
+    protected int mTabCount =2;
+    protected String dayOfWeek;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,28 +79,28 @@ public class MainActivity extends ActionBarActivity {
 
         getSupportActionBar().setTitle(dayOfWeek);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView); // Assigning the RecyclerView Object to the xml View
-        mRecyclerView.setHasFixedSize(true);                            // Letting the system know that the list objects are of fixed siz
-        mAdapter = new DrawerAdapter(TITLES,ICONS,NAME,EMAIL,PROFILE);       // Creating the Adapter
-        mRecyclerView.setAdapter(mAdapter);                              // Setting the mViewPagerAdapter to RecyclerView
-        mLayoutManager = new LinearLayoutManager(this);                 // Creating a layout Manager
-        mRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        mRecyclerView.setHasFixedSize(true);
+        mAdapter = new DrawerAdapter(TITLES,ICONS,NAME,EMAIL,PROFILE);
+        mRecyclerView.setAdapter(mAdapter);
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
 
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.DrawerLayout);        // mDrawerLayout object Assigned to the view
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.DrawerLayout);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar,R.string.drawer_open,R.string.drawer_close){
 
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                // code here will execute once the drawer is opened
+                // Runs when drawer opened
                 getSupportActionBar().setTitle("FeedMe");
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                // Code here will execute once drawer is closed
+                // Runs when drawer closes
                 Calendar mCalendar = Calendar.getInstance();
                 dayOfWeek = mCalendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
 
@@ -110,8 +110,8 @@ public class MainActivity extends ActionBarActivity {
 
 
         }; // mDrawerLayout Toggle Object Made
-        mDrawerLayout.setDrawerListener(mDrawerToggle); // mDrawerLayout Listener set to the mDrawerLayout toggle
-        mDrawerToggle.syncState();               // Finally we set the drawer toggle sync State
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerToggle.syncState();
 
 
 

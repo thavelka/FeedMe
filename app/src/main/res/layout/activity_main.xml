@@ -34,14 +34,27 @@
                 android:layout_height="wrap_content"
                 android:elevation="4dp"
                 android:background="@color/primary"/>
-
-            <android.support.v4.view.ViewPager
-                android:id="@+id/pager"
-
-                android:layout_height="match_parent"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_weight="1"
-                />
+                android:layout_height="match_parent">
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/pager"
+
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    />
+                <com.software.shell.fab.ActionButton
+                    android:id="@+id/action_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/fab_margin"
+                    android:layout_marginBottom="@dimen/fab_margin"
+                    />
+                </RelativeLayout>
+
 
         </LinearLayout>
 
@@ -62,15 +75,7 @@
 
 </LinearLayout>
 
-    <com.software.shell.fab.ActionButton
-        android:id="@+id/action_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="@dimen/fab_margin"
-        android:layout_marginBottom="@dimen/fab_margin"
-        />
+
 
     <ProgressBar
         style="?android:attr/progressBarStyleLarge"

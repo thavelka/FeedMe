@@ -30,16 +30,6 @@ public class Drinks extends Fragment {
     RecyclerView mRecyclerView;                           // Declaring RecyclerView
     RecyclerView.Adapter mAdapter;                        // Declaring Adapter For Recycler View
 
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-
-
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v =inflater.inflate(R.layout.drinks,container,false);
@@ -67,16 +57,15 @@ public class Drinks extends Fragment {
 
     public void getListings(Integer day) {
 
-
-        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Listing");
-        query.whereEqualTo("isFood", true);
-        query.whereEqualTo("days", day);
-        query.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> objects, ParseException e) {
+        ParseQuery<Listing> query = ParseQuery.getQuery(Listing.class);
+        //query.whereEqualTo("isFood", true);
+        //query.whereEqualTo("days", day);
+        query.findInBackground(new FindCallback<Listing>() {
+            public void done(List<Listing> listings, ParseException e) {
 
                 if (e == null) {
 
-                    mAdapter = new ParseAdapter(getActivity(), objects);
+                    mAdapter = new ParseAdapter(getActivity(), listings);
 
                     mRecyclerView.setAdapter(mAdapter);
                     Log.d(TAG, "got objects");

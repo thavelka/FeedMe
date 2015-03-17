@@ -10,19 +10,21 @@ import android.widget.TextView;
 import com.parse.GetCallback;
 import com.parse.ParseObject;
 
-import java.text.ParseException;
 import java.util.List;
 
 /**
- * Created by tim on 3/13/15.
+ * Created by tim on 3/16/15.
  */
+
+// Custom ParseObject Adapter for Recycler View
+// Customized for Listing subclass
 public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHolder> {
 
-    private List<ParseObject> mObjects;
+    private List<Listing> mObjects;
 
-    public ParseAdapter(FragmentActivity activity, List<ParseObject> objects) {
+    public ParseAdapter(FragmentActivity activity, List<Listing> objects) {
+        // Get list of objects to adapt
         mObjects = objects;
-
     }
 
 
@@ -47,7 +49,7 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
 
     public class ParseViewHolder extends RecyclerView.ViewHolder {
 
-
+        // Declare views to be filled
         public TextView mNameLabel;
         public TextView mAddressLabel;
         public TextView mDescriptionLabel;
@@ -55,34 +57,19 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
 
         public ParseViewHolder(View itemView) {
             super(itemView);
-
+            // Define views to be filled
             mNameLabel = (TextView) itemView.findViewById(R.id.name);
             mAddressLabel = (TextView) itemView.findViewById(R.id.address);
             mDescriptionLabel = (TextView) itemView.findViewById(R.id.description);
         }
 
-        public void bindObject (ParseObject object) {
+        public void bindObject (Listing listing) {
 
-            object.getParseObject("restaurant")
-                    .fetchIfNeededInBackground(new GetCallback<ParseObject>() {
-
-                        @Override
-                        public void done(ParseObject object, com.parse.ParseException e) {
-                            mNameLabel.setText(object.getString("name"));
-                        }
-                    });
-
-            object.getParseObject("restaurant")
-                    .fetchIfNeededInBackground(new GetCallback<ParseObject>() {
-
-                        @Override
-                        public void done(ParseObject object, com.parse.ParseException e) {
-                            mAddressLabel.setText(object.getString("address"));
-                        }
-                    });
-
-
-            mDescriptionLabel.setText(object.getString("description"));
+            // Grabs name and address from object's restaurant pointer
+            // Sets TextView with values
+            mNameLabel.setText(listing.getName());
+            mAddressLabel.setText(listing.getAddress());
+            mDescriptionLabel.setText(listing.getDescription());
         }
 
     }

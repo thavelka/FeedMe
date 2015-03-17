@@ -1,31 +1,17 @@
 package com.thavelka.feedme;
 
-/**
- * Created by tim on 3/13/15.
- */
-public class Restaurant {
+import com.parse.ParseClassName;
+import com.parse.ParseObject;
 
-    protected String mName;
-    protected String mAddress;
-
-    public Restaurant (String name, String address) {
-        mName = name;
-        mAddress = address;
-    }
+@ParseClassName("Restaurant")
+public class Restaurant extends ParseObject {
 
     public String getName() {
-        return mName;
-    }
-
-    public void setName(String name) {
-        mName = name;
+        return getString("name");
     }
 
     public String getAddress() {
-        return mAddress;
+        return getString("address");
     }
 
-    public void setAddress(String address) {
-        mAddress = address;
-    }
 }
