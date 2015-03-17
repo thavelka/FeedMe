@@ -32,18 +32,19 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
 
         ListingGetter listingGetter = new ListingGetter();
+        //listingGetter.initUpload();
         Bundle bundle = new Bundle();
 
 
         if(position == 0) // if the position is 0 we are returning the First tab
         {
-            Food foodTab = new Food();
+            Food foodTab = new Food();//
             Calendar mCalendar = Calendar.getInstance();
-            int day = mCalendar.get(Calendar.DAY_OF_WEEK);
-            ArrayList<Listing> foodList = listingGetter.getFoodListings(day);
-            Listing[] foodArray = foodList.toArray(new Listing[foodList.size()]);
-            bundle.putParcelableArray("LISTINGS",foodArray);
-            foodTab.setArguments(bundle);
+//            int day = mCalendar.get(Calendar.DAY_OF_WEEK);
+//            ArrayList<Listing> foodList = listingGetter.getFoodListings(day);
+//            Listing[] foodArray = foodList.toArray(new Listing[foodList.size()]);
+//            bundle.putParcelableArray("LISTINGS",foodArray);
+//            foodTab.setArguments(bundle);
             return foodTab;
         }
         else             // As we are having 2 mTabs if the position is now 0 it must be 1 so we are returning second tab
@@ -51,10 +52,10 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
             Drinks drinksTab = new Drinks();
             Calendar mCalendar = Calendar.getInstance();
             int day = mCalendar.get(Calendar.DAY_OF_WEEK);
-            ArrayList<Listing> drinksList = listingGetter.getDrinkListings(day);
-            Listing[] drinksArray = drinksList.toArray(new Listing[drinksList.size()]);
-            bundle.putParcelableArray("LISTINGS",drinksArray);
-            drinksTab.setArguments(bundle);
+            //ArrayList<Listing> drinksList = listingGetter.getDrinkListings(day);
+            //Listing[] drinksArray = drinksList.toArray(new Listing[drinksList.size()]);
+            //bundle.putParcelableArray("LISTINGS",drinksArray);
+            //drinksTab.setArguments(bundle);
             return drinksTab;
         }
 

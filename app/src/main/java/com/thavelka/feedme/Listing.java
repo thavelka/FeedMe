@@ -15,6 +15,11 @@ public class Listing implements Parcelable{
 
     public Listing () {};
 
+    public Listing (Restaurant restaurant, String description) {
+        mRestaurant = restaurant;
+        mDescription = description;
+    }
+
     public Listing (Restaurant restaurant, int[] days, String description, boolean isFood) {
         mRestaurant = restaurant;
         mDays = days;

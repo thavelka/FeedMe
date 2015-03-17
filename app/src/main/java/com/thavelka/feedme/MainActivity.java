@@ -1,5 +1,6 @@
 package com.thavelka.feedme;
 
+import android.media.tv.TvContract;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -8,16 +9,23 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.parse.GetCallback;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.software.shell.fab.ActionButton;
 
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -26,6 +34,8 @@ import java.util.Locale;
 // Credit to Akash Bangad from android4devs.com for help with the material design layout
 
 public class MainActivity extends ActionBarActivity {
+
+    public static final String TAG = MainActivity.class.getSimpleName();
 
     //Declaring titles and icons for testing in drawer layout
 
@@ -38,6 +48,7 @@ public class MainActivity extends ActionBarActivity {
     String NAME = "Tim Havelka";
     String EMAIL = "tim.havelka@gmail.com";
     int PROFILE = R.drawable.tim;
+    protected ProgressBar mProgressBar;
 
     RecyclerView mRecyclerView;                           // Declaring RecyclerView
     RecyclerView.Adapter mAdapter;                        // Declaring Adapter For Recycler View
@@ -54,6 +65,7 @@ public class MainActivity extends ActionBarActivity {
     int mTabCount =2;
     String dayOfWeek;
 
+
     ListingGetter mListingGetter;
     public static final String LISTINGS = "LISTINGS";
 
@@ -61,12 +73,14 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        mProgressBar.setVisibility(View.VISIBLE);
+
 
 
 
 
         // Creating toolbar to be used as the activity's actionbar
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -139,13 +153,9 @@ public class MainActivity extends ActionBarActivity {
         actionButton.setButtonColorPressed(getResources().getColor(R.color.fab_material_purple_900));
         actionButton.setImageResource(R.drawable.fab_plus_icon);
 
-
-
-
-
+        mProgressBar.setVisibility(View.INVISIBLE);
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
