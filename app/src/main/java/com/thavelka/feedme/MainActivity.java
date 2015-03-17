@@ -54,10 +54,7 @@ public class MainActivity extends ActionBarActivity {
     RecyclerView.Adapter mAdapter;                        // Declaring Adapter For Recycler View
     RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
     DrawerLayout mDrawerLayout;                                  // Declaring DrawerLayout
-
     ActionBarDrawerToggle mDrawerToggle;                  // Declaring Action Bar mDrawerLayout Toggle
-
-
     ViewPager mViewPager;
     ViewPagerAdapter mViewPagerAdapter;
     SlidingTabLayout mTabs;
@@ -65,19 +62,12 @@ public class MainActivity extends ActionBarActivity {
     int mTabCount =2;
     String dayOfWeek;
 
-
-    ListingGetter mListingGetter;
-    public static final String LISTINGS = "LISTINGS";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mProgressBar.setVisibility(View.VISIBLE);
-
-
-
 
 
         // Creating toolbar to be used as the activity's actionbar
@@ -154,6 +144,35 @@ public class MainActivity extends ActionBarActivity {
         actionButton.setImageResource(R.drawable.fab_plus_icon);
 
         mProgressBar.setVisibility(View.INVISIBLE);
+
+    }
+
+    public void uploadNewListing(final String name, final int[] days, final String description, final boolean isFood) {
+
+        final ArrayList<Integer> daysList = new ArrayList<Integer>(days.length);
+        for (int i : days) {
+            daysList.add(i);
+        }
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Restaurant");
+        query.whereStartsWith("name", name);
+        query.getFirstInBackground(new GetCallback<ParseObject>() {
+            public void done(ParseObject object, ParseException e) {
+                if (object == null) {
+                    Log.d(TAG, "Failed to find restaurant.");
+                } else {
+                    Log.d(TAG, "Retrieved the restaurant.");
+                    ParseObject listing = new ParseObject("Listing");
+                    String objId = object.getObjectId();
+                    listing.put("restaurant", ParseObject.createWithoutData("Restaurant", objId));
+                    listing.put("days", daysList);
+                    listing.put("description", description);
+                    listing.put("isFood", isFood);
+                    listing.saveInBackground();
+                }
+            }
+        });
+
 
     }
 
