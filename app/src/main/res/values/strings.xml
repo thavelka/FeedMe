@@ -5,5 +5,8 @@
     <string name="drawer_close">Close navigation drawer</string>
 
     <string name="empty_list_text">No items to display</string>
+    <string name="title_activity_new_listing">New Post</string>
+
+    <string name="hello_world">Hello world!</string>
 
 </resources>

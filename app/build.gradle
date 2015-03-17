@@ -29,5 +29,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:21.0.+'
     compile 'org.apache.commons:commons-lang3:3.0'
     compile 'com.github.shell-software:fab:1.0.5'
+    compile 'com.jakewharton:butterknife:6.1.0'
 
 }

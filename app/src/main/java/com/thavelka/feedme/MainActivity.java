@@ -1,5 +1,6 @@
 package com.thavelka.feedme;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -29,11 +30,9 @@ public class MainActivity extends ActionBarActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
 
-    //Declaring titles and icons for testing in drawer layout
+    // View and member variable declarations
     protected ProgressBar mProgressBar;
     protected RecyclerView mRecyclerView;
-
-    //String and int resources for user data for testing drawer layout
     protected RecyclerView.Adapter mAdapter;
     protected RecyclerView.LayoutManager mLayoutManager;
     protected DrawerLayout mDrawerLayout;
@@ -41,9 +40,11 @@ public class MainActivity extends ActionBarActivity {
     protected ViewPager mViewPager;
     protected ViewPagerAdapter mViewPagerAdapter;
     protected SlidingTabLayout mTabs;
-    protected CharSequence mTabTitles[] = {"Food", "Drinks"};
-    protected int mTabCount = 2;
+    protected CharSequence mTabTitles[] = {"Food", "Drinks"}; // Set tab names
+    protected int mTabCount = 2; // Set number of tabs
     protected String dayOfWeek;
+
+    // Test values for nav drawer
     String TITLES[] = {"Home", "Favorites", "Notifications", "Settings"};
     int ICONS[] = {R.mipmap.ic_home_grey600_24dp, R.mipmap.ic_favorite_grey600_24dp,
             R.mipmap.ic_notifications_grey600_24dp, R.mipmap.ic_settings_grey600_24dp};
@@ -58,16 +59,18 @@ public class MainActivity extends ActionBarActivity {
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mProgressBar.setVisibility(View.VISIBLE);
 
-
+        // SETTING UP TOOLBAR
         // Creating toolbar to be used as the activity's actionbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Getting name of day of week to use as title
         Calendar mCalendar = Calendar.getInstance();
         dayOfWeek = mCalendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
-
         getSupportActionBar().setTitle(dayOfWeek);
 
+        // SETTING UP NAV DRAWER
+        // Set up RecyclerView
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
         mAdapter = new DrawerAdapter(TITLES, ICONS, NAME, EMAIL, PROFILE);
@@ -75,7 +78,7 @@ public class MainActivity extends ActionBarActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-
+        // Set Drawer layout
         mDrawerLayout = (DrawerLayout) findViewById(R.id.DrawerLayout);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
 
@@ -101,7 +104,7 @@ public class MainActivity extends ActionBarActivity {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
 
-
+        //SETTING UP VIEW PAGER + SLIDING TABS
         // Creating The ViewPagerAdapter and Passing Fragment Manager, mTabTitles fot the Tabs and Number Of Tabs.
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), mTabTitles, mTabCount);
 
@@ -124,10 +127,19 @@ public class MainActivity extends ActionBarActivity {
         // Setting the ViewPager For the SlidingTabsLayout
         mTabs.setViewPager(mViewPager);
 
+        // SETTING UP FLOATING ACTION BUTTON
+        // Create button using ActionButton library
         ActionButton actionButton = (ActionButton) findViewById(R.id.action_button);
         actionButton.setButtonColor(getResources().getColor(R.color.fab_material_purple_500));
         actionButton.setButtonColorPressed(getResources().getColor(R.color.fab_material_purple_900));
         actionButton.setImageResource(R.drawable.fab_plus_icon);
+        actionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, NewListingActivity.class);
+                startActivity(intent);
+            }
+        });
 
         mProgressBar.setVisibility(View.INVISIBLE);
 
