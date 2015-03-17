@@ -1,6 +1,5 @@
 package com.thavelka.feedme;
 
-import android.app.Activity;
 import android.app.Application;
 
 import com.parse.Parse;
@@ -9,7 +8,7 @@ import com.parse.ParseObject;
 /**
  * Created by tim on 3/15/15.
  */
-public class FeedMeApplication extends Application{
+public class FeedMeApplication extends Application {
 
     @Override
     public void onCreate() {

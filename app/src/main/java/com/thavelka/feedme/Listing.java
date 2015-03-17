@@ -1,12 +1,8 @@
 package com.thavelka.feedme;
 
-import com.parse.GetCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
-
-import java.util.List;
 
 @ParseClassName("Listing")
 public class Listing extends ParseObject {

@@ -7,9 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.parse.GetCallback;
-import com.parse.ParseObject;
-
 import java.util.List;
 
 /**
@@ -63,7 +60,7 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
             mDescriptionLabel = (TextView) itemView.findViewById(R.id.description);
         }
 
-        public void bindObject (Listing listing) {
+        public void bindObject(Listing listing) {
 
             // Grabs name and address from object's restaurant pointer
             // Sets TextView with values

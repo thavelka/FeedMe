@@ -1,6 +1,5 @@
 package com.thavelka.feedme;
 
-import android.media.tv.TvContract;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -14,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -22,45 +20,36 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.software.shell.fab.ActionButton;
 
-import java.text.DateFormatSymbols;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
-
-// Credit to Akash Bangad from android4devs.com for help with the material design layout
 
 public class MainActivity extends ActionBarActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
 
     //Declaring titles and icons for testing in drawer layout
-
-    String TITLES[] = {"Home","Favorites","Notifications","Settings"};
-    int ICONS[] = {R.mipmap.ic_home_grey600_24dp,R.mipmap.ic_favorite_grey600_24dp,
-            R.mipmap.ic_notifications_grey600_24dp,R.mipmap.ic_settings_grey600_24dp};
+    protected ProgressBar mProgressBar;
+    protected RecyclerView mRecyclerView;
 
     //String and int resources for user data for testing drawer layout
-
-    String NAME = "Tim Havelka";
-    String EMAIL = "tim.havelka@gmail.com";
-    int PROFILE = R.drawable.tim;
-
-    protected ProgressBar mProgressBar;
-    protected RecyclerView mRecyclerView;                           // Declaring RecyclerView
-    protected RecyclerView.Adapter mAdapter;                        // Declaring Adapter For Recycler View
-    protected RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
-    protected DrawerLayout mDrawerLayout;                                  // Declaring DrawerLayout
-    protected ActionBarDrawerToggle mDrawerToggle;                  // Declaring Action Bar mDrawerLayout Toggle
+    protected RecyclerView.Adapter mAdapter;
+    protected RecyclerView.LayoutManager mLayoutManager;
+    protected DrawerLayout mDrawerLayout;
+    protected ActionBarDrawerToggle mDrawerToggle;
     protected ViewPager mViewPager;
     protected ViewPagerAdapter mViewPagerAdapter;
     protected SlidingTabLayout mTabs;
-    protected CharSequence mTabTitles[]={"Food","Drinks"};
-    protected int mTabCount =2;
+    protected CharSequence mTabTitles[] = {"Food", "Drinks"};
+    protected int mTabCount = 2;
     protected String dayOfWeek;
+    String TITLES[] = {"Home", "Favorites", "Notifications", "Settings"};
+    int ICONS[] = {R.mipmap.ic_home_grey600_24dp, R.mipmap.ic_favorite_grey600_24dp,
+            R.mipmap.ic_notifications_grey600_24dp, R.mipmap.ic_settings_grey600_24dp};
+    String NAME = "Tim Havelka";
+    String EMAIL = "tim.havelka@gmail.com";
+    int PROFILE = R.drawable.tim;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,14 +70,14 @@ public class MainActivity extends ActionBarActivity {
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
-        mAdapter = new DrawerAdapter(TITLES,ICONS,NAME,EMAIL,PROFILE);
+        mAdapter = new DrawerAdapter(TITLES, ICONS, NAME, EMAIL, PROFILE);
         mRecyclerView.setAdapter(mAdapter);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.DrawerLayout);
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar,R.string.drawer_open,R.string.drawer_close){
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
 
             @Override
             public void onDrawerOpened(View drawerView) {
@@ -108,16 +97,13 @@ public class MainActivity extends ActionBarActivity {
             }
 
 
-
         }; // mDrawerLayout Toggle Object Made
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
 
 
-
-
         // Creating The ViewPagerAdapter and Passing Fragment Manager, mTabTitles fot the Tabs and Number Of Tabs.
-        mViewPagerAdapter =  new ViewPagerAdapter(getSupportFragmentManager(), mTabTitles, mTabCount);
+        mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), mTabTitles, mTabCount);
 
         // Assigning ViewPager View and setting the mViewPagerAdapter
         mViewPager = (ViewPager) findViewById(R.id.pager);

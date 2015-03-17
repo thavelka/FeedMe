@@ -1,7 +1,6 @@
 package com.thavelka.feedme;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -11,40 +10,33 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-
-import static android.widget.Toast.LENGTH_LONG;
 
 
 public class Food extends Fragment {
 
     public static final String TAG = Food.class.getSimpleName();
 
-    RecyclerView mRecyclerView;                           // Declaring RecyclerView
-    RecyclerView.Adapter mAdapter;                        // Declaring Adapter For Recycler View
+    RecyclerView mRecyclerView;
+    RecyclerView.Adapter mAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v =inflater.inflate(R.layout.food,container,false);
-        mRecyclerView = (RecyclerView) v.findViewById(R.id.foodRecyclerView); // Assigning the RecyclerView Object to the xml View
+        View v = inflater.inflate(R.layout.food, container, false);
+        mRecyclerView = (RecyclerView) v.findViewById(R.id.foodRecyclerView);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
 
-        mRecyclerView.setHasFixedSize(true);                            // Letting the system know that the list objects are of fixed size
+        mRecyclerView.setHasFixedSize(true);
 
         final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
 
-        mRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
+        mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         getListings(getDay());
 
