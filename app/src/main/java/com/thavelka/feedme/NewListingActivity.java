@@ -1,21 +1,27 @@
 package com.thavelka.feedme;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.RadioButton;
 
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 
@@ -64,6 +70,36 @@ public class NewListingActivity extends ActionBarActivity {
         setContentView(R.layout.activity_new_listing);
         ButterKnife.inject(this);
 
+        mSubmitButton.setFocusableInTouchMode(true);
+
+        FrameLayout touchInterceptor = (FrameLayout) findViewById(R.id.touchInterceptor);
+        touchInterceptor.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    if (mRestaurantField.isFocused()) {
+                        Rect outRect = new Rect();
+                        mRestaurantField.getGlobalVisibleRect(outRect);
+                        if (!outRect.contains((int) event.getRawX(), (int) event.getRawY())) {
+                            mRestaurantField.clearFocus();
+                            InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                        }
+                    }
+                    if (mDescriptionField.isFocused()) {
+                        Rect outRect = new Rect();
+                        mDescriptionField.getGlobalVisibleRect(outRect);
+                        if (!outRect.contains((int) event.getRawX(), (int) event.getRawY())) {
+                            mDescriptionField.clearFocus();
+                            InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                        }
+                    }
+                }
+                return false;
+            }
+        });
+
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,12 +132,15 @@ public class NewListingActivity extends ActionBarActivity {
                 }
 
                 uploadNewListing(mName, mDays, mDescription, mIsFood);
-                Intent intent = new Intent(NewListingActivity.this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+
             }
         });
+    }
+
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mDescriptionField.getWindowToken(), 0);
     }
 
 
@@ -135,6 +174,10 @@ public class NewListingActivity extends ActionBarActivity {
             public void done(ParseObject object, ParseException e) {
                 if (object == null) {
                     Log.d(TAG, "Failed to find restaurant.");
+                    Intent intent = new Intent(NewListingActivity.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
                 } else {
                     Log.d(TAG, "Retrieved the restaurant.");
                     Listing listing = new Listing();
@@ -143,7 +186,16 @@ public class NewListingActivity extends ActionBarActivity {
                     listing.put("days", days);
                     listing.put("description", description);
                     listing.put("isFood", isFood);
-                    listing.saveInBackground();
+                    listing.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            Intent intent = new Intent(NewListingActivity.this, MainActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        }
+                    });
+
 
                 }
             }

@@ -27,12 +27,20 @@ public class Drinks extends Fragment {
     RecyclerView.Adapter mAdapter;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public void onResume() {
+        super.onResume();
+        getListings(getDay());
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater,
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.drinks, container, false);
 
 
         mRecyclerView = (RecyclerView) v.findViewById(R.id.drinksRecyclerView);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+        mRecyclerView.addItemDecoration
+                (new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
 
         mRecyclerView.setHasFixedSize(true);
 
@@ -46,6 +54,7 @@ public class Drinks extends Fragment {
         return v;
     }
 
+    // Returns day of week as an int (Sun = 1, Mon = 2 ... Sat = 7)
     public Integer getDay() {
         Calendar cal = Calendar.getInstance();
         return cal.get(Calendar.DAY_OF_WEEK);
@@ -54,16 +63,16 @@ public class Drinks extends Fragment {
     public void getListings(Integer day) {
 
         ParseQuery<Listing> query = ParseQuery.getQuery(Listing.class);
-        //query.whereEqualTo("isFood", true);
-        //query.whereEqualTo("days", day);
+        query.whereEqualTo("isFood", false); // Set constraints for query
+        query.whereEqualTo("days", day);
         query.findInBackground(new FindCallback<Listing>() {
             public void done(List<Listing> listings, ParseException e) {
 
                 if (e == null) {
-
+                    // If listings found, create and set adapter
                     mAdapter = new ParseAdapter(getActivity(), listings);
-
                     mRecyclerView.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
                     Log.d(TAG, "got objects");
                 } else {
                     Log.d(TAG, e.getMessage());
@@ -72,4 +81,5 @@ public class Drinks extends Fragment {
         });
 
     }
+
 }

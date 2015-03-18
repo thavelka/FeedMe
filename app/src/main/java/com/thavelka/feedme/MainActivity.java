@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.parse.GetCallback;
+import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -56,8 +57,7 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-        mProgressBar.setVisibility(View.VISIBLE);
+        ParseAnalytics.trackAppOpened(getIntent());
 
         // SETTING UP TOOLBAR
         // Creating toolbar to be used as the activity's actionbar
@@ -141,7 +141,6 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        mProgressBar.setVisibility(View.INVISIBLE);
 
     }
 

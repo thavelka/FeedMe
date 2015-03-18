@@ -1,87 +1,79 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:fab="http://schemas.android.com/apk/res-auto"
-                android:orientation="vertical"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_height="fill_parent"
+                android:orientation="vertical">
 
-<LinearLayout
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
 
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar"/>
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar"/>
 
-    <android.support.v4.widget.DrawerLayout
+        <android.support.v4.widget.DrawerLayout
 
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/DrawerLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:elevation="7dp">
+            android:id="@+id/DrawerLayout"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="7dp">
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical">
 
 
-
-            <com.thavelka.feedme.SlidingTabLayout
-                android:id="@+id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:elevation="4dp"
-                android:background="@color/primary"/>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <android.support.v4.view.ViewPager
-                    android:id="@+id/pager"
-
-                    android:layout_height="match_parent"
+                <com.thavelka.feedme.SlidingTabLayout
+                    android:id="@+id/tabs"
                     android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    />
-                <com.software.shell.fab.ActionButton
-                    android:id="@+id/action_button"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="@dimen/fab_margin"
-                    android:layout_marginBottom="@dimen/fab_margin"
-                    />
+                    android:background="@color/primary"
+                    android:elevation="4dp"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <android.support.v4.view.ViewPager
+                        android:id="@+id/pager"
+
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        />
+
+                    <com.software.shell.fab.ActionButton
+                        android:id="@+id/action_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginBottom="@dimen/fab_margin"
+                        android:layout_marginRight="@dimen/fab_margin"
+                        />
                 </RelativeLayout>
 
 
-        </LinearLayout>
+            </LinearLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="320dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="left"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="320dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
 
-            android:background="#ffffff"
-            android:scrollbars="vertical">
+                android:background="#ffffff"
+                android:scrollbars="vertical">
 
-        </android.support.v7.widget.RecyclerView>
-
-
-    </android.support.v4.widget.DrawerLayout>
+            </android.support.v7.widget.RecyclerView>
 
 
-</LinearLayout>
+        </android.support.v4.widget.DrawerLayout>
 
 
-
-    <ProgressBar
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/progressBar"
-        android:layout_centerInParent="true"/>
+    </LinearLayout>
 
 </RelativeLayout>
