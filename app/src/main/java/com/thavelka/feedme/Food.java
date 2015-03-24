@@ -3,6 +3,7 @@ package com.thavelka.feedme;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +26,7 @@ public class Food extends Fragment {
 
     RecyclerView mRecyclerView;
     RecyclerView.Adapter mAdapter;
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     public void onResume() {
@@ -36,6 +38,14 @@ public class Food extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.food, container, false);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.foodRefresher);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getListings(getDay());
+            }
+        });
         mRecyclerView = (RecyclerView) v.findViewById(R.id.foodRecyclerView);
         mRecyclerView.addItemDecoration(new DividerItemDecoration
                 (getActivity(), DividerItemDecoration.VERTICAL_LIST));
@@ -73,6 +83,7 @@ public class Food extends Fragment {
                 } else {
                     Log.d(TAG, e.getMessage());
                 }
+                mSwipeRefreshLayout.setRefreshing(false);
             }
         });
 
