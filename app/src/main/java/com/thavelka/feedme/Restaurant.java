@@ -14,4 +14,8 @@ public class Restaurant extends ParseObject {
         return getString("address");
     }
 
+    public String getImage() {
+        return getString("imageUrl");
+    }
+
 }

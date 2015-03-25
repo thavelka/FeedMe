@@ -13,6 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -94,12 +96,14 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
         TextView mDirectionsButton;
 
 
-        public ParseViewHolder(View itemView) {
+        public ParseViewHolder(final View itemView) {
             super(itemView);
 
             // Define views to be filled
             ButterKnife.inject(this, itemView);
             mCompressedLayout.setOnClickListener(this);
+
+
         }
 
         public static void expand(final View v) {
@@ -181,7 +185,7 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
             v.startAnimation(a);
         }
 
-        public void bindObject(Listing listing) {
+        public void bindObject(final Listing listing) {
 
             // Grabs name and address from object's restaurant pointer
             // Sets TextView with values
@@ -192,6 +196,9 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
             mNameExpanded.setText(listing.getName());
             mAddressExpanded.setText(listing.getAddress());
             mDescriptionExpanded.setText(listing.getDescription());
+            Picasso.with(itemView.getContext()).load(listing.getImageUrl()).into(mImageExpanded);
+
+
         }
 
         @Override
@@ -202,7 +209,7 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
                 collapse(mExpandedLayout);
             }
         }
-    }
 
+    }
 
 }

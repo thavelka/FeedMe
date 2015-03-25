@@ -9,6 +9,7 @@ public class Listing extends ParseObject {
 
     protected String mName;
     protected String mAddress;
+    protected String mImageUrl;
 
     public String getName() {
         try {
@@ -26,6 +27,15 @@ public class Listing extends ParseObject {
             e.printStackTrace();
         }
         return mAddress;
+    }
+
+    public String getImageUrl() {
+        try {
+            mImageUrl = getParseObject("restaurant").fetchIfNeeded().getString("imageUrl");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return mImageUrl;
     }
 
     public String getDescription() {

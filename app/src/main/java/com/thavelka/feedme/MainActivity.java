@@ -1,6 +1,10 @@
 package com.thavelka.feedme;
 
+import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -13,7 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.parse.GetCallback;
 import com.parse.ParseAnalytics;
@@ -32,7 +36,7 @@ public class MainActivity extends ActionBarActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
 
     // View and member variable declarations
-    protected ProgressBar mProgressBar;
+
     protected RecyclerView mRecyclerView;
     protected RecyclerView.Adapter mAdapter;
     protected RecyclerView.LayoutManager mLayoutManager;
@@ -58,6 +62,12 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ParseAnalytics.trackAppOpened(getIntent());
+
+        String consumerKey = "XZD_PVM-IOn85-1-_Qq0gg";
+        String consumerSecret = "Tx71U5GScIAUgs_DBWUkSDTlG08";
+        String token = "tO1R_J3s2LdVMEbYfjUzuVS5DBmqoKcu";
+        String tokenSecret = "62WQJQAEigy1lkGyRZRlamq4inI";
+
 
         // SETTING UP TOOLBAR
         // Creating toolbar to be used as the activity's actionbar
@@ -193,5 +203,29 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager manager = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+        boolean isAvailable = false;
+        if (networkInfo != null && networkInfo.isConnected()) {
+            isAvailable = true;
+        } else {
+            Toast.makeText(this, getString(R.string.network_unavailable_message),
+                    Toast.LENGTH_LONG).show();
+        }
+        return isAvailable;
+    }
+
+    private boolean isLocationAvailable() {
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            return true;
+        } else {
+            Toast.makeText(this, "Location Unavailable", Toast.LENGTH_LONG).show();
+            return false;
+        }
     }
 }
