@@ -7,47 +7,46 @@
                 android:weightSum="1">
 
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:orientation="vertical"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/name"
+            android:id="@+id/nameCompressed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#ffffff"
-            android:text="Tim Havelka"
-            android:textSize="14sp"
-            android:textStyle="bold"
-
             android:layout_gravity="center_horizontal"
+            android:text="Tim Havelka"
+            android:textColor="#ffffff"
+            android:textSize="14sp"
+
+            android:textStyle="bold"
             />
 
         <TextView
             android:id="@+id/email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#ffffff"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="5dp"
             android:text="tim.havelka@gmail.com"
+            android:textColor="#ffffff"
             android:textSize="14sp"
-            android:textStyle="normal"
 
-            android:layout_gravity="center_horizontal"/>
+            android:textStyle="normal"/>
     </LinearLayout>
 
     <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/circleView"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:src="@drawable/tim"
+        android:layout_centerHorizontal="true"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="38dp"
-        android:id="@+id/circleView"
-        android:layout_centerHorizontal="true"/>
+        android:src="@drawable/tim"/>
 </RelativeLayout>
