@@ -22,7 +22,7 @@
         android:textSize="20sp"/>
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/imageCompressed"
         android:layout_width="match_parent"
         android:layout_height="165dp"
         android:layout_below="@+id/resultText"

@@ -9,15 +9,28 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:elevation="4dp"
-        android:padding="8dp">
+        android:paddingBottom="4dp"
+        android:paddingLeft="8dp"
+        android:paddingTop="4dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageCompressed"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/blurbg"/>
 
         <TextView
             android:id="@+id/nameCompressed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/imageCompressed"
+            android:layout_toRightOf="@+id/imageCompressed"
             android:paddingBottom="4dp"
             android:text="Restaurant"
             android:textSize="18dp"
@@ -27,9 +40,9 @@
             android:id="@+id/addressCompressed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@id/nameCompressed"
+            android:layout_below="@+id/nameCompressed"
+            android:layout_toEndOf="@+id/imageCompressed"
+            android:layout_toRightOf="@+id/imageCompressed"
             android:paddingBottom="4dp"
             android:text="Address"
             android:textSize="14dp"/>
@@ -38,9 +51,9 @@
             android:id="@+id/descriptionCompressed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@id/addressCompressed"
+            android:layout_below="@+id/addressCompressed"
+            android:layout_toEndOf="@+id/imageCompressed"
+            android:layout_toRightOf="@+id/imageCompressed"
             android:maxLines="1"
             android:singleLine="true"
             android:text="Description"

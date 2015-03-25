@@ -19,6 +19,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by tim on 3/16/15.
@@ -78,6 +79,8 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
         TextView mAddressCompressed;
         @InjectView(R.id.descriptionCompressed)
         TextView mDescriptionCompressed;
+        @InjectView(R.id.imageCompressed)
+        CircleImageView mImageCompressed;
         @InjectView(R.id.expanded)
         LinearLayout mExpandedLayout;
         @InjectView(R.id.nameExpanded)
@@ -189,6 +192,7 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
 
             // Grabs name and address from object's restaurant pointer
             // Sets TextView with values
+            Picasso.with(itemView.getContext()).load(listing.getImageUrl()).into(mImageCompressed);
             mNameCompressed.setText(listing.getName());
             mAddressCompressed.setText(listing.getAddress());
             mDescriptionCompressed.setText(listing.getDescription());
