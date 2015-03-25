@@ -8,11 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * Created by tim on 3/16/15.
@@ -64,25 +68,37 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
     public static class ParseViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         // Declare views to be filled
-        public TextView mNameLabel;
-        public TextView mAddressLabel;
-        public TextView mDescriptionLabel;
+        @InjectView(R.id.compressed)
         RelativeLayout mCompressedLayout;
+        @InjectView(R.id.nameCompressed)
+        TextView mNameCompressed;
+        @InjectView(R.id.addressCompressed)
+        TextView mAddressCompressed;
+        @InjectView(R.id.descriptionCompressed)
+        TextView mDescriptionCompressed;
+        @InjectView(R.id.expanded)
         LinearLayout mExpandedLayout;
-        private int mOriginalHeight = 0;
-        private double mExpandedHeight = 0;
-        private boolean mIsViewExpanded = false;
+        @InjectView(R.id.nameExpanded)
+        TextView mNameExpanded;
+        @InjectView(R.id.addressExpanded)
+        TextView mAddressExpanded;
+        @InjectView(R.id.descriptionExpanded)
+        TextView mDescriptionExpanded;
+        @InjectView(R.id.imageExpanded)
+        ImageView mImageExpanded;
+        @InjectView(R.id.favoriteButton)
+        TextView mFavoriteButton;
+        @InjectView(R.id.shareButton)
+        TextView mShareButton;
+        @InjectView(R.id.directionsButton)
+        TextView mDirectionsButton;
 
 
         public ParseViewHolder(View itemView) {
             super(itemView);
 
             // Define views to be filled
-            mNameLabel = (TextView) itemView.findViewById(R.id.nameCompressed);
-            mAddressLabel = (TextView) itemView.findViewById(R.id.addressCompressed);
-            mDescriptionLabel = (TextView) itemView.findViewById(R.id.descriptionCompressed);
-            mCompressedLayout = (RelativeLayout) itemView.findViewById(R.id.compressed);
-            mExpandedLayout = (LinearLayout) itemView.findViewById(R.id.expanded);
+            ButterKnife.inject(this, itemView);
             mCompressedLayout.setOnClickListener(this);
         }
 
@@ -169,9 +185,13 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
 
             // Grabs name and address from object's restaurant pointer
             // Sets TextView with values
-            mNameLabel.setText(listing.getName());
-            mAddressLabel.setText(listing.getAddress());
-            mDescriptionLabel.setText(listing.getDescription());
+            mNameCompressed.setText(listing.getName());
+            mAddressCompressed.setText(listing.getAddress());
+            mDescriptionCompressed.setText(listing.getDescription());
+            // Enters data for detail pane, though it won't be visible yet
+            mNameExpanded.setText(listing.getName());
+            mAddressExpanded.setText(listing.getAddress());
+            mDescriptionExpanded.setText(listing.getDescription());
         }
 
         @Override
