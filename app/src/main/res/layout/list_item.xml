@@ -15,8 +15,8 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imageCompressed"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
@@ -134,38 +134,29 @@
             android:layout_height="fill_parent"
             android:orientation="horizontal">
 
-            <TextView
+            <Button
                 android:id="@+id/favoriteButton"
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:height="48dp"
-                android:gravity="center_vertical|center_horizontal"
-                android:padding="16dp"
-                android:text="FAVORITE"
-                android:textColor="@color/accent"
-                android:textStyle="bold"/>
+                android:text="Favorite"
+                android:textColor="@color/accent"/>
 
-            <TextView
+            <Button
                 android:id="@+id/shareButton"
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:height="48dp"
-                android:gravity="center_vertical|center_horizontal"
-                android:padding="16dp"
-                android:text="SHARE"
-                android:textColor="@color/accent"
-                android:textStyle="bold"/>
+                android:text="Share"
+                android:textColor="@color/accent"/>
 
-            <TextView
+            <Button
                 android:id="@+id/directionsButton"
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:height="48dp"
-                android:gravity="center_vertical|center_horizontal"
-                android:padding="16dp"
-                android:text="DIRECTIONS"
-                android:textColor="@color/accent"
-                android:textStyle="bold"/>
+                android:text="Directions"
+                android:textColor="@color/accent"/>
         </LinearLayout>
 
         <View

@@ -9,9 +9,8 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="network_unavailable_message">Network unavailable</string>
-    <string name="consumer_key">XZD_PVM-IOn85-1-_Qq0gg</string>
-    <string name="consumer_secret">Tx71U5GScIAUgs_DBWUkSDTlG08</string>
-    <string name="token">tO1R_J3s2LdVMEbYfjUzuVS5DBmqoKcu</string>
-    <string name="token_secret">62WQJQAEigy1lkGyRZRlamq4inI</string>
+    <string name="title_activity_login">Sign In</string>
+    <string name="title_activity_sign_up">Sign Up</string>
+    <string name="action_logout">Logout</string>
 
 </resources>

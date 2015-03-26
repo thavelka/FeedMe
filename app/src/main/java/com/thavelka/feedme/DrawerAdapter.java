@@ -20,20 +20,18 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
     private int mIcons[];       // Int Array to store the passed icons resource value from MainActivity.java
 
     private String name;        //String Resource for header View Name
-    private int profile;        //int Resource for header view profile picture
     private String email;       //String Resource for header view email
 
 
     // Creating a ViewHolder which extends the RecyclerView View Holder
     // ViewHolder are used to to store the inflated views in order to recycle them
 
-    DrawerAdapter(String Titles[], int Icons[], String Name, String Email, int Profile) { // Constructor takes info to display as params
+    DrawerAdapter(String Titles[], int Icons[], String Name, String Email) { // Constructor takes info to display as params
 
         mNavTitles = Titles;
         mIcons = Icons;
         name = Name;
         email = Email;
-        profile = Profile;
 
 
     }
@@ -80,8 +78,6 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
             holder.textView.setText(mNavTitles[position - 1]); // Setting the Text with the array of our mTabTitles
             holder.imageView.setImageResource(mIcons[position - 1]);// Setting the image with array of our icons
         } else {
-
-            holder.profile.setImageResource(profile);           // Similarly we set the resources for header view
             holder.Name.setText(name);
             holder.email.setText(email);
         }
@@ -112,7 +108,6 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
 
         TextView textView;
         ImageView imageView;
-        ImageView profile;
         TextView Name;
         TextView email;
 
@@ -132,7 +127,6 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
 
                 Name = (TextView) itemView.findViewById(R.id.nameCompressed);         // Creating Text View object from header.xml for name
                 email = (TextView) itemView.findViewById(R.id.email);       // Creating Text View object from header.xml for email
-                profile = (ImageView) itemView.findViewById(R.id.imageCompressed);// Creating Image view object from header.xml for profile pic
                 holderId = 0;                                                // Setting holder id = 0 as the object being populated are of type header view
             }
         }

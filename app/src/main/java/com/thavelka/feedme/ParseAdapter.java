@@ -1,8 +1,6 @@
 package com.thavelka.feedme;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -98,11 +97,11 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
         @InjectView(R.id.imageExpanded)
         ImageView mImageExpanded;
         @InjectView(R.id.favoriteButton)
-        TextView mFavoriteButton;
+        Button mFavoriteButton;
         @InjectView(R.id.shareButton)
-        TextView mShareButton;
+        Button mShareButton;
         @InjectView(R.id.directionsButton)
-        TextView mDirectionsButton;
+        Button mDirectionsButton;
 
 
         public ParseViewHolder(final View itemView) {
@@ -209,14 +208,12 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
             Picasso.with(itemView.getContext()).load(listing.getImageUrl()).into(mImageExpanded);
         }
 
-        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+
         @Override
         public void onClick(final View v) {
             if (mExpandedLayout.getVisibility() == View.GONE) {
-                mCompressedLayout.animate().zBy(8);
                 expand(mExpandedLayout);
             } else if (mExpandedLayout.getVisibility() == View.VISIBLE) {
-                mCompressedLayout.animate().zBy(-8);
                 collapse(mExpandedLayout);
             }
         }

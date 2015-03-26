@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.parse.ParseAnalytics;
+import com.parse.ParseUser;
 import com.software.shell.fab.ActionButton;
 
 import java.util.Calendar;
@@ -47,15 +48,25 @@ public class MainActivity extends ActionBarActivity {
     String TITLES[] = {"Home", "Favorites", "Notifications", "Settings"};
     int ICONS[] = {R.mipmap.ic_home_grey600_24dp, R.mipmap.ic_favorite_grey600_24dp,
             R.mipmap.ic_notifications_grey600_24dp, R.mipmap.ic_settings_grey600_24dp};
-    String NAME = "Tim Havelka";
-    String EMAIL = "tim.havelka@gmail.com";
-    int PROFILE = R.drawable.tim;
+    String NAME = "John Doe";
+    String EMAIL = "test@gmail.com";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ParseAnalytics.trackAppOpened(getIntent());
+
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if (currentUser != null) {
+            NAME = currentUser.getString("name");
+            EMAIL = currentUser.getEmail();
+        } else {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
 
 
         // SETTING UP TOOLBAR
@@ -72,7 +83,7 @@ public class MainActivity extends ActionBarActivity {
         // Set up RecyclerView
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
-        mAdapter = new DrawerAdapter(TITLES, ICONS, NAME, EMAIL, PROFILE);
+        mAdapter = new DrawerAdapter(TITLES, ICONS, NAME, EMAIL);
         mRecyclerView.setAdapter(mAdapter);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -159,7 +170,12 @@ public class MainActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_logout) {
+            ParseUser.logOut();
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
             return true;
         }
 
