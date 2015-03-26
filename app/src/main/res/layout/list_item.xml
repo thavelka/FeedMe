@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:elevation="2dp">
+                android:layout_height="wrap_content">
 
     <RelativeLayout
         android:id="@+id/compressed"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
         android:elevation="4dp"
         android:paddingBottom="4dp"
         android:paddingLeft="8dp"
@@ -67,7 +67,7 @@
         android:layout_below="@+id/compressed"
         android:elevation="4dp"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <RelativeLayout
             android:id="@+id/imageExpandedLayout"
@@ -120,7 +120,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/imageExpandedLayout"
-            android:elevation="4dp"
             android:padding="16dp"
             android:text="Detailed description Detailed description Detailed description Detailed description "/>
 
@@ -133,7 +132,6 @@
             android:id="@+id/buttonLayout"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:elevation="4dp"
             android:orientation="horizontal">
 
             <TextView
@@ -169,6 +167,10 @@
                 android:textColor="@color/accent"
                 android:textStyle="bold"/>
         </LinearLayout>
+
+        <View
+            android:id="@+id/divider2"
+            style="@style/BigDivider"/>
 
     </LinearLayout>
 
