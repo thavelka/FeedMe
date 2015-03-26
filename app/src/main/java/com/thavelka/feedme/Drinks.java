@@ -1,5 +1,8 @@
 package com.thavelka.feedme;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,11 +16,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -30,12 +36,12 @@ public class Drinks extends Fragment {
     SwipeRefreshLayout mSwipeRefreshLayout;
     ProgressBar mProgressBar;
     List<Listing> mListings;
+    TextView mEmptyText;
 
     @Override
     public void onResume() {
         super.onResume();
-        //getListings(getDay());
-        new ShowListings().execute(getDay());
+        getListings();
     }
 
     @Override
@@ -43,7 +49,9 @@ public class Drinks extends Fragment {
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.drinks, container, false);
 
+        mListings = Collections.emptyList();
         mProgressBar = (ProgressBar) v.findViewById(R.id.drinksProgress);
+        mEmptyText = (TextView) v.findViewById(R.id.emptyDrinksText);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.drinksRefresher);
         mSwipeRefreshLayout.setColorSchemeResources(
@@ -54,7 +62,7 @@ public class Drinks extends Fragment {
             @Override
             public void onRefresh() {
                 mProgressBar.setEnabled(false);
-                new ShowListings().execute(getDay());
+                getListings();
             }
         });
 
@@ -69,7 +77,7 @@ public class Drinks extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        new ShowListings().execute(getDay());
+        getListings();
 
         return v;
     }
@@ -80,11 +88,35 @@ public class Drinks extends Fragment {
         return cal.get(Calendar.DAY_OF_WEEK);
     }
 
+    private void getListings() {
+        if (isNetworkAvailable()) {
+            new ShowListings().execute(getDay());
+        } else {
+            mSwipeRefreshLayout.setRefreshing(false);
+            mProgressBar.setVisibility(View.GONE);
+            Toast.makeText(getActivity(), "Network unavailable", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager manager = (ConnectivityManager)
+                getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+        boolean isAvailable = false;
+        if (networkInfo != null && networkInfo.isConnected()) {
+            isAvailable = true;
+        } else {
+            isAvailable = false;
+        }
+        return isAvailable;
+    }
+
     private class ShowListings extends AsyncTask<Integer, Void, List<Listing>> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            mEmptyText.setVisibility(View.GONE);
             if (mProgressBar.isEnabled()) {
                 mProgressBar.setVisibility(View.VISIBLE);
             }
@@ -111,6 +143,9 @@ public class Drinks extends Fragment {
         protected void onPostExecute(List<Listing> listings) {
             super.onPostExecute(listings);
             mRecyclerView.setAdapter(mAdapter);
+            if (listings.size() == 0) {
+                mEmptyText.setVisibility(View.VISIBLE);
+            }
             mSwipeRefreshLayout.setRefreshing(false);
             mProgressBar.setVisibility(View.GONE);
             mProgressBar.setEnabled(true);

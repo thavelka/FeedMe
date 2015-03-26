@@ -174,8 +174,7 @@ public class MainActivity extends ActionBarActivity {
         if (networkInfo != null && networkInfo.isConnected()) {
             isAvailable = true;
         } else {
-            Toast.makeText(this, getString(R.string.network_unavailable_message),
-                    Toast.LENGTH_LONG).show();
+            isAvailable = false;
         }
         return isAvailable;
     }

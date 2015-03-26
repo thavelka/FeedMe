@@ -26,5 +26,15 @@
         android:layout_centerVertical="true"
         android:indeterminate="true"/>
 
+    <TextView
+        android:id="@+id/emptyDrinksText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+        android:text="No deals for today :("
+        android:visibility="gone"/>
+
 
 </RelativeLayout>
