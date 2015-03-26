@@ -1,5 +1,6 @@
 package com.thavelka.feedme;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,8 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
@@ -27,11 +28,14 @@ public class Drinks extends Fragment {
     RecyclerView mRecyclerView;
     RecyclerView.Adapter mAdapter;
     SwipeRefreshLayout mSwipeRefreshLayout;
+    ProgressBar mProgressBar;
+    List<Listing> mListings;
 
     @Override
     public void onResume() {
         super.onResume();
-        getListings(getDay());
+        //getListings(getDay());
+        new ShowListings().execute(getDay());
     }
 
     @Override
@@ -39,11 +43,18 @@ public class Drinks extends Fragment {
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.drinks, container, false);
 
+        mProgressBar = (ProgressBar) v.findViewById(R.id.drinksProgress);
+
         mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.drinksRefresher);
+        mSwipeRefreshLayout.setColorSchemeResources(
+                R.color.refresh_progress_1,
+                R.color.refresh_progress_2,
+                R.color.refresh_progress_3);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getListings(getDay());
+                mProgressBar.setEnabled(false);
+                new ShowListings().execute(getDay());
             }
         });
 
@@ -58,7 +69,7 @@ public class Drinks extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        getListings(getDay());
+        new ShowListings().execute(getDay());
 
         return v;
     }
@@ -69,26 +80,47 @@ public class Drinks extends Fragment {
         return cal.get(Calendar.DAY_OF_WEEK);
     }
 
-    public void getListings(Integer day) {
+    private class ShowListings extends AsyncTask<Integer, Void, List<Listing>> {
 
-        ParseQuery<Listing> query = ParseQuery.getQuery(Listing.class);
-        query.whereEqualTo("isFood", false); // Set constraints for query
-        query.whereEqualTo("days", day);
-        query.findInBackground(new FindCallback<Listing>() {
-            public void done(List<Listing> listings, ParseException e) {
-
-                if (e == null) {
-                    // If listings found, create and set adapter
-                    mAdapter = new ParseAdapter(getActivity(), listings);
-                    mRecyclerView.setAdapter(mAdapter);
-                    mAdapter.notifyDataSetChanged();
-                    Log.d(TAG, "got objects");
-                } else {
-                    Log.d(TAG, e.getMessage());
-                }
-                mSwipeRefreshLayout.setRefreshing(false);
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            if (mProgressBar.isEnabled()) {
+                mProgressBar.setVisibility(View.VISIBLE);
             }
-        });
+        }
+
+        @Override
+        protected List<Listing> doInBackground(Integer... params) {
+            ParseQuery<Listing> query = ParseQuery.getQuery(Listing.class);
+            query.whereEqualTo("isFood", false); // Set constraints for query
+            query.whereEqualTo("days", params[0]);
+            query.include("restaurant");
+            try {
+                mListings = query.find();
+                Log.d(TAG, "got objects");
+                mAdapter = new ParseAdapter(getActivity(), mListings);
+                return mListings;
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(List<Listing> listings) {
+            super.onPostExecute(listings);
+            mRecyclerView.setAdapter(mAdapter);
+            mSwipeRefreshLayout.setRefreshing(false);
+            mProgressBar.setVisibility(View.GONE);
+            mProgressBar.setEnabled(true);
+
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+        }
 
     }
 

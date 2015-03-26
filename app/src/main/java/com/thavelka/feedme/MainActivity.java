@@ -13,20 +13,14 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.parse.GetCallback;
 import com.parse.ParseAnalytics;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.software.shell.fab.ActionButton;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -62,11 +56,6 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ParseAnalytics.trackAppOpened(getIntent());
-
-        String consumerKey = "XZD_PVM-IOn85-1-_Qq0gg";
-        String consumerSecret = "Tx71U5GScIAUgs_DBWUkSDTlG08";
-        String token = "tO1R_J3s2LdVMEbYfjUzuVS5DBmqoKcu";
-        String tokenSecret = "62WQJQAEigy1lkGyRZRlamq4inI";
 
 
         // SETTING UP TOOLBAR
@@ -154,34 +143,6 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
-    public void uploadNewListing(final String name, final int[] days, final String description, final boolean isFood) {
-
-        final ArrayList<Integer> daysList = new ArrayList<Integer>(days.length);
-        for (int i : days) {
-            daysList.add(i);
-        }
-
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Restaurant");
-        query.whereStartsWith("name", name);
-        query.getFirstInBackground(new GetCallback<ParseObject>() {
-            public void done(ParseObject object, ParseException e) {
-                if (object == null) {
-                    Log.d(TAG, "Failed to find restaurant.");
-                } else {
-                    Log.d(TAG, "Retrieved the restaurant.");
-                    ParseObject listing = new ParseObject("Listing");
-                    String objId = object.getObjectId();
-                    listing.put("restaurant", ParseObject.createWithoutData("Restaurant", objId));
-                    listing.put("days", daysList);
-                    listing.put("description", description);
-                    listing.put("isFood", isFood);
-                    listing.saveInBackground();
-                }
-            }
-        });
-
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

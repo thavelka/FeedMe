@@ -1,5 +1,6 @@
 package com.thavelka.feedme;
 
+import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -30,16 +32,17 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHolder> {
 
     public static final String TAG = ParseAdapter.class.getSimpleName();
-    private List<Listing> mObjects;
+    List<Listing> mObjects = Collections.emptyList();
+    Context mContext;
 
     public ParseAdapter(FragmentActivity activity, List<Listing> objects) {
 
         // Get list of objects to adapt
         mObjects = objects;
+        mContext = activity;
 
 
     }
-
 
     @Override
     public ParseViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
@@ -62,6 +65,7 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
             holder.quickCollapse(holder.mExpandedLayout);
         }
     }
+
 
     @Override
     public int getItemCount() {

@@ -65,9 +65,9 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/compressed"
-        android:elevation="1dp"
+        android:elevation="4dp"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <RelativeLayout
             android:id="@+id/imageExpandedLayout"
@@ -120,6 +120,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/imageExpandedLayout"
+            android:elevation="4dp"
             android:padding="16dp"
             android:text="Detailed description Detailed description Detailed description Detailed description "/>
 
@@ -132,6 +133,7 @@
             android:id="@+id/buttonLayout"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:elevation="4dp"
             android:orientation="horizontal">
 
             <TextView
