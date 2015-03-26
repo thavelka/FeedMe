@@ -15,6 +15,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.parse.ParseObject;
+import com.parse.ParseRelation;
+import com.parse.ParseUser;
 import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
@@ -111,7 +114,6 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
             ButterKnife.inject(this, itemView);
             mCompressedLayout.setOnClickListener(this);
 
-
         }
 
         public static void expand(final View v) {
@@ -206,6 +208,15 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
             mAddressExpanded.setText(listing.getAddress());
             mDescriptionExpanded.setText(listing.getDescription());
             Picasso.with(itemView.getContext()).load(listing.getImageUrl()).into(mImageExpanded);
+            mFavoriteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ParseUser user = ParseUser.getCurrentUser();
+                    ParseRelation<ParseObject> relation = user.getRelation("favorites");
+                    relation.add(listing);
+                    user.saveInBackground();
+                }
+            });
         }
 
 
