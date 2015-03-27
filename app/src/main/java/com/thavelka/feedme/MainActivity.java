@@ -10,12 +10,11 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.parse.ParseAnalytics;
@@ -31,12 +30,13 @@ public class MainActivity extends ActionBarActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
 
     // View and member variable declarations
-
-    protected RecyclerView mRecyclerView;
-    protected RecyclerView.Adapter mAdapter;
-    protected RecyclerView.LayoutManager mLayoutManager;
     protected DrawerLayout mDrawerLayout;
     protected ActionBarDrawerToggle mDrawerToggle;
+    protected LinearLayout mHomeRow;
+    protected LinearLayout mFavoritesRow;
+    protected LinearLayout mNotificationsRow;
+    protected LinearLayout mSettingsRow;
+
     protected ViewPager mViewPager;
     protected ViewPagerAdapter mViewPagerAdapter;
     protected SlidingTabLayout mTabs;
@@ -44,12 +44,8 @@ public class MainActivity extends ActionBarActivity {
     protected int mTabCount = 2; // Set number of tabs
     protected String dayOfWeek;
 
-    // Test values for nav drawer
-    String TITLES[] = {"Home", "Favorites", "Notifications", "Settings"};
-    int ICONS[] = {R.mipmap.ic_home_grey600_24dp, R.mipmap.ic_favorite_grey600_24dp,
-            R.mipmap.ic_notifications_grey600_24dp, R.mipmap.ic_settings_grey600_24dp};
-    String NAME = "John Doe";
-    String EMAIL = "test@gmail.com";
+    String NAME;
+    String EMAIL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,13 +76,24 @@ public class MainActivity extends ActionBarActivity {
         getSupportActionBar().setTitle(dayOfWeek);
 
         // SETTING UP NAV DRAWER
-        // Set up RecyclerView
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        mRecyclerView.setHasFixedSize(true);
-        mAdapter = new DrawerAdapter(TITLES, ICONS, NAME, EMAIL);
-        mRecyclerView.setAdapter(mAdapter);
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        mHomeRow = (LinearLayout) findViewById(R.id.homeRow);
+        mFavoritesRow = (LinearLayout) findViewById(R.id.favoritesRow);
+        mNotificationsRow = (LinearLayout) findViewById(R.id.notificationsRow);
+        mSettingsRow = (LinearLayout) findViewById(R.id.settingsRow);
+        mHomeRow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDrawerLayout.closeDrawers();
+            }
+        });
+        mFavoritesRow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, FavoritesActivity.class);
+                startActivity(intent);
+                mDrawerLayout.closeDrawers();
+            }
+        });
 
         // Set Drawer layout
         mDrawerLayout = (DrawerLayout) findViewById(R.id.DrawerLayout);

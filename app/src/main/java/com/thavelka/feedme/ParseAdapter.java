@@ -1,7 +1,6 @@
 package com.thavelka.feedme;
 
 import android.content.Context;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +13,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
@@ -38,13 +39,14 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
     public static final String TAG = ParseAdapter.class.getSimpleName();
     List<Listing> mObjects = Collections.emptyList();
     Context mContext;
+    boolean mIsFavorite;
 
-    public ParseAdapter(FragmentActivity activity, List<Listing> objects) {
+    public ParseAdapter(Context context, List<Listing> objects, boolean isFavorite) throws ParseException {
 
         // Get list of objects to adapt
         mObjects = objects;
-        mContext = activity;
-
+        mContext = context;
+        mIsFavorite = isFavorite;
 
     }
 
@@ -59,6 +61,7 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
 
     @Override
     public void onBindViewHolder(ParseViewHolder parseViewHolder, int i) {
+
         parseViewHolder.bindObject(mObjects.get(i));
     }
 
@@ -76,7 +79,7 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
         return mObjects.size();
     }
 
-    public static class ParseViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ParseViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         // Declare views to be filled
         @InjectView(R.id.compressed)
@@ -116,7 +119,7 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
 
         }
 
-        public static void expand(final View v) {
+        public void expand(final View v) {
             v.measure(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             final int targetHeight = v.getMeasuredHeight();
 
@@ -143,7 +146,7 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
             v.startAnimation(a);
         }
 
-        public static void collapse(final View v) {
+        public void collapse(final View v) {
             final int initialHeight = v.getMeasuredHeight();
 
             Animation a = new Animation() {
@@ -169,7 +172,7 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
             v.startAnimation(a);
         }
 
-        public static void quickCollapse(final View v) {
+        public void quickCollapse(final View v) {
             final int initialHeight = v.getMeasuredHeight();
 
             Animation a = new Animation() {
@@ -196,7 +199,6 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
         }
 
         public void bindObject(final Listing listing) {
-
             // Grabs name and address from object's restaurant pointer
             // Sets TextView with values
             Picasso.with(itemView.getContext()).load(listing.getImageUrl()).into(mImageCompressed);
@@ -207,13 +209,32 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
             mNameExpanded.setText(listing.getName());
             mAddressExpanded.setText(listing.getAddress());
             mDescriptionExpanded.setText(listing.getDescription());
+            if (mIsFavorite) {
+                mFavoriteButton.setText("Unfavorite");
+            }
             Picasso.with(itemView.getContext()).load(listing.getImageUrl()).into(mImageExpanded);
             mFavoriteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     ParseUser user = ParseUser.getCurrentUser();
                     ParseRelation<ParseObject> relation = user.getRelation("favorites");
-                    relation.add(listing);
+
+                    if (mFavoriteButton.getText().toString() == "Unfavorite") {
+                        relation.remove(listing);
+                        Log.d(TAG, "Removed listing from favorites");
+                        Toast.makeText(mContext, "Removed from favorites", Toast.LENGTH_SHORT).show();
+                        mObjects.remove(getPosition());
+                        notifyItemRemoved(getPosition());
+                        notifyItemRangeChanged(getPosition(), mObjects.size());
+
+
+                    } else {
+                        relation.add(listing);
+                        Log.d(TAG, "Added listing to favorites");
+                        Toast.makeText(mContext, "Added to favorites", Toast.LENGTH_SHORT).show();
+                    }
+
                     user.saveInBackground();
                 }
             });
@@ -229,6 +250,7 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
             }
         }
 
-    }
 
+    }
 }
+

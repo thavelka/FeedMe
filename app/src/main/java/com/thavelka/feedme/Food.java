@@ -75,9 +75,6 @@ public class Food extends Fragment {
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mAdapter = new ParseAdapter(getActivity(), mListings);
-        mRecyclerView.setAdapter(mAdapter);
-
         getListings();
         return v;
     }
@@ -130,8 +127,8 @@ public class Food extends Fragment {
             query.include("restaurant");
             try {
                 mListings = query.find();
-                Log.d(TAG, "got objects");
-                mAdapter = new ParseAdapter(getActivity(), mListings);
+                Log.d(TAG, "got " + mListings.size() + " objects");
+                mAdapter = new ParseAdapter(getActivity(), mListings, false);
                 return mListings;
             } catch (ParseException e) {
                 e.printStackTrace();
