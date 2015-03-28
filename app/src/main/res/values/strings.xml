@@ -13,5 +13,6 @@
     <string name="title_activity_sign_up">Sign Up</string>
     <string name="action_logout">Logout</string>
     <string name="title_activity_favorites">Favorites</string>
+    <string name="title_activity_base">BaseActivity</string>
 
 </resources>
