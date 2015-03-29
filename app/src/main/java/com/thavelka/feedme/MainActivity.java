@@ -1,10 +1,6 @@
 package com.thavelka.feedme;
 
-import android.content.Context;
 import android.content.Intent;
-import android.location.LocationManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -15,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.parse.ParseAnalytics;
 import com.parse.ParseUser;
@@ -187,28 +182,5 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager manager = (ConnectivityManager)
-                getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
-        boolean isAvailable = false;
-        if (networkInfo != null && networkInfo.isConnected()) {
-            isAvailable = true;
-        } else {
-            isAvailable = false;
-        }
-        return isAvailable;
-    }
-
-    private boolean isLocationAvailable() {
-        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            return true;
-        } else {
-            Toast.makeText(this, "Location Unavailable", Toast.LENGTH_LONG).show();
-            return false;
-        }
     }
 }
