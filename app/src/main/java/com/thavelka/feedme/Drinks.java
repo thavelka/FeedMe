@@ -38,6 +38,11 @@ public class Drinks extends Fragment {
     List<Listing> mListings;
     TextView mEmptyText;
 
+    public static Drinks newInstance() {
+        Drinks fragment = new Drinks();
+        return fragment;
+    }
+
     @Override
     public void onResume() {
         super.onResume();

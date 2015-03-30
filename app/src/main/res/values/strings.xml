@@ -14,4 +14,14 @@
     <string name="action_logout">Logout</string>
     <string name="title_activity_favorites">Favorites</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_base">FeedMe</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="title_section1">Home</string>
+    <string name="title_section2">Favorites</string>
+    <string name="title_section3">Settings</string>
+    <string name="action_example">action example</string>
+
 </resources>

@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -17,6 +15,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -147,28 +146,6 @@ public class NewListingActivity extends ActionBarActivity {
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_new_listing, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     public void uploadNewListing(final String name, final ArrayList<Integer> days, final String description, final boolean isFood) {
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Restaurant");
@@ -177,7 +154,8 @@ public class NewListingActivity extends ActionBarActivity {
             public void done(ParseObject object, ParseException e) {
                 if (object == null) {
                     Log.d(TAG, "Failed to find restaurant.");
-                    Intent intent = new Intent(NewListingActivity.this, MainActivity.class);
+                    Toast.makeText(NewListingActivity.this, "Unable to find restaurant", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(NewListingActivity.this, BaseActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
@@ -192,7 +170,8 @@ public class NewListingActivity extends ActionBarActivity {
                     listing.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
-                            Intent intent = new Intent(NewListingActivity.this, MainActivity.class);
+                            Toast.makeText(NewListingActivity.this, "Post added successfully", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(NewListingActivity.this, BaseActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);

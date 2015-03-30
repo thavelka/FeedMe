@@ -1,20 +1,21 @@
 package com.thavelka.feedme;
 
+
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,15 +25,16 @@ import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 
-public class FavoritesActivity extends ActionBarActivity {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class FavoritesFragment extends Fragment {
 
-    public static final String TAG = FavoritesActivity.class.getSimpleName();
+    public static final String TAG = FavoritesFragment.class.getSimpleName();
     protected DrawerLayout mDrawerLayout;
     protected ActionBarDrawerToggle mDrawerToggle;
     protected LinearLayout mHomeRow;
@@ -45,93 +47,53 @@ public class FavoritesActivity extends ActionBarActivity {
     TextView mEmptyText;
     String dayOfWeek;
 
+    public static FavoritesFragment newInstance() {
+        return new FavoritesFragment();
+    }
+
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_favorites);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View root = inflater.inflate(R.layout.fragment_favorites, container, false);
 
-        // SETTING UP NAV DRAWER
-        mHomeRow = (LinearLayout) findViewById(R.id.homeRow);
-        mFavoritesRow = (LinearLayout) findViewById(R.id.favoritesRow);
-        mNotificationsRow = (LinearLayout) findViewById(R.id.notificationsRow);
-        mSettingsRow = (LinearLayout) findViewById(R.id.settingsRow);
-        mHomeRow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FavoritesActivity.this, MainActivity.class);
-                startActivity(intent);
-                mDrawerLayout.closeDrawers();
-            }
-        });
-        mFavoritesRow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDrawerLayout.closeDrawers();
-            }
-        });
-
-        // Set Drawer layout
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.DrawerLayout);
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                // Runs when drawer opened
-                getSupportActionBar().setTitle("FeedMe");
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                // Runs when drawer closes
-                Calendar mCalendar = Calendar.getInstance();
-                dayOfWeek = mCalendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
-
-                getSupportActionBar().setTitle(dayOfWeek);
-            }
-
-
-        }; // mDrawerLayout Toggle Object Made
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-        mDrawerToggle.syncState();
-
+        getActivity().setTitle("Favorites");
         mListings = Collections.emptyList();
-        mEmptyText = (TextView) findViewById(R.id.emptyFavoritesText);
-        mRecyclerView = (RecyclerView) findViewById(R.id.favoritesRecyclerView);
+        mEmptyText = (TextView) root.findViewById(R.id.emptyFavoritesText);
+        mRecyclerView = (RecyclerView) root.findViewById(R.id.favoritesRecyclerView);
         mRecyclerView.addItemDecoration(new DividerItemDecoration
-                (this, DividerItemDecoration.VERTICAL_LIST));
+                (getActivity(), DividerItemDecoration.VERTICAL_LIST));
 
         mRecyclerView.setHasFixedSize(true);
 
-        final LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+        final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         getFavorites();
         try {
-            mAdapter = new ParseAdapter(this, mListings, true);
+            mAdapter = new ParseAdapter(getActivity(), mListings, true);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         mRecyclerView.setAdapter(mAdapter);
 
-    }
 
+        return root;
+    }
 
     private void getFavorites() {
         if (isNetworkAvailable()) {
             new ShowListings().execute();
         } else {
-            Toast.makeText(this, "Network unavailable", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Network unavailable", Toast.LENGTH_LONG).show();
         }
     }
 
     private boolean isNetworkAvailable() {
         ConnectivityManager manager = (ConnectivityManager)
-                getSystemService(Context.CONNECTIVITY_SERVICE);
+                getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
         boolean isAvailable = false;
         if (networkInfo != null && networkInfo.isConnected()) {
@@ -159,7 +121,7 @@ public class FavoritesActivity extends ActionBarActivity {
             try {
                 mListings = query.find();
                 Log.d(TAG, "got " + mListings.size() + " objects");
-                mAdapter = new ParseAdapter(FavoritesActivity.this, mListings, true);
+                mAdapter = new ParseAdapter(getActivity(), mListings, true);
                 return mListings;
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -183,5 +145,6 @@ public class FavoritesActivity extends ActionBarActivity {
         }
 
     }
+
 
 }
