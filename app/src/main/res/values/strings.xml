@@ -23,5 +23,6 @@
     <string name="title_section2">Favorites</string>
     <string name="title_section3">Settings</string>
     <string name="action_example">action example</string>
+    <string name="send_to">Share deal with...</string>
 
 </resources>

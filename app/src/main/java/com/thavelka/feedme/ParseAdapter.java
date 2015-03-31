@@ -1,6 +1,8 @@
 package com.thavelka.feedme;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -236,6 +238,30 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
                     }
 
                     user.saveInBackground();
+                }
+            });
+
+            mShareButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String toSend = "Join me for " + listing.getDescription() + " at " + listing.getName() + " today!";
+                    Intent sendIntent = new Intent();
+                    sendIntent.setAction(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, toSend);
+                    sendIntent.setType("text/plain");
+                    mContext.startActivity(Intent.createChooser(sendIntent, mContext.getResources().getText(R.string.send_to)));
+                }
+            });
+
+            mDirectionsButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Uri gmmIntentUri = Uri.parse("geo:0,0?sq=" + listing.getAddress() + " College Station, TX" + "(" + listing.getName() + ")");
+                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    if (mapIntent.resolveActivity(mContext.getPackageManager()) != null) {
+                        mContext.startActivity(mapIntent);
+                    }
                 }
             });
         }
