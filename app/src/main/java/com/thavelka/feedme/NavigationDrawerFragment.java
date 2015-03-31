@@ -9,12 +9,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+
+import com.parse.ParseUser;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -36,6 +39,10 @@ public class NavigationDrawerFragment extends Fragment {
      */
     private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
     protected String dayOfWeek;
+    private String NAME = ParseUser.getCurrentUser().getString("name");
+    private String EMAIL = ParseUser.getCurrentUser().getEmail();
+    private String[] TITLES = {"Home", "Favorites", "Settings"};
+    private int[] ICONS = {R.mipmap.ic_home_grey600_24dp, R.mipmap.ic_favorite_grey600_24dp, R.mipmap.ic_settings_grey600_24dp};
     /**
      * A pointer to the current callbacks instance (the Activity).
      */
@@ -47,7 +54,8 @@ public class NavigationDrawerFragment extends Fragment {
     private android.support.v7.app.ActionBarDrawerToggle mDrawerToggle;
 
     private DrawerLayout mDrawerLayout;
-    private ListView mDrawerListView;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mDrawerAdapter;
     private View mFragmentContainerView;
 
     private int mCurrentSelectedPosition = 0;
@@ -78,29 +86,46 @@ public class NavigationDrawerFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         Calendar mCalendar = Calendar.getInstance();
         dayOfWeek = mCalendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
+        setHasOptionsMenu(true);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            if (isDrawerOpen()) {
+                mDrawerLayout.closeDrawer(mFragmentContainerView);
+            } else {
+                mDrawerLayout.openDrawer(mFragmentContainerView);
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
-        mDrawerListView = (ListView) root.findViewById(R.id.itemList);
-        mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectItem(position);
-            }
-        });
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
-                getActivity(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                new String[]{
-                        getString(R.string.title_section1),
-                        getString(R.string.title_section2),
-                        getString(R.string.title_section3),
-                }));
-        mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+        final View root = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
+        mRecyclerView = (RecyclerView) root.findViewById(R.id.drawerRecyclerView);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration
+                (getActivity(), DividerItemDecoration.VERTICAL_LIST));
+
+        mRecyclerView.setHasFixedSize(true);
+
+        final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mDrawerAdapter = new DrawerAdapter(TITLES, ICONS, NAME, EMAIL);
+        mRecyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        selectItem(position);
+                    }
+                })
+        );
+        mRecyclerView.setAdapter(mDrawerAdapter);
         return root;
     }
 
@@ -144,7 +169,7 @@ public class NavigationDrawerFragment extends Fragment {
             }
         };
 
-
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
         // Defer code dependent on restoration of previous instance state.
         mDrawerLayout.post(new Runnable() {
             @Override
@@ -153,14 +178,14 @@ public class NavigationDrawerFragment extends Fragment {
             }
         });
 
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
 
-    private void selectItem(int position) {
+
+    protected void selectItem(int position) {
         mCurrentSelectedPosition = position;
-        if (mDrawerListView != null) {
-            mDrawerListView.setItemChecked(position, true);
-        }
+//        if (mRecyclerView != null) {
+//            mRecyclerView.setItemChecked(position, true);
+//        }
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
@@ -190,6 +215,7 @@ public class NavigationDrawerFragment extends Fragment {
         super.onSaveInstanceState(outState);
         outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
     }
+
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {

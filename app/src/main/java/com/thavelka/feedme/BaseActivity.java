@@ -77,13 +77,16 @@ public class BaseActivity extends ActionBarActivity
                 fragment = MainFragment.newInstance();
                 break;
             case 1:
-                fragment = FavoritesFragment.newInstance();
-                break;
-            case 2:
                 fragment = MainFragment.newInstance();
                 break;
+            case 2:
+                fragment = FavoritesFragment.newInstance();
+                break;
+            case 3:
+                fragment = SettingsFragment.newInstance();
+                break;
             default:
-                fragment = null;
+                fragment = MainFragment.newInstance();
         }
 
         FragmentManager fragmentManager = getSupportFragmentManager();

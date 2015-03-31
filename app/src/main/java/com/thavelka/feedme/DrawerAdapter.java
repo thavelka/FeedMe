@@ -22,7 +22,6 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
     private String name;        //String Resource for header View Name
     private String email;       //String Resource for header view email
 
-
     // Creating a ViewHolder which extends the RecyclerView View Holder
     // ViewHolder are used to to store the inflated views in order to recycle them
 
@@ -129,8 +128,8 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
                 email = (TextView) itemView.findViewById(R.id.email);       // Creating Text View object from header.xml for email
                 holderId = 0;                                                // Setting holder id = 0 as the object being populated are of type header view
             }
-        }
 
+        }
 
     }
 
