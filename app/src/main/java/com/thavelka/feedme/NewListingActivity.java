@@ -1,25 +1,20 @@
 package com.thavelka.feedme;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Rect;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.RadioButton;
-import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -39,11 +34,9 @@ public class NewListingActivity extends ActionBarActivity {
     public static final String TAG = NewListingActivity.class.getSimpleName();
 
     @InjectView(R.id.restaurantField)
-    EditText mRestaurantField;
+    AutoCompleteTextView mRestaurantField;
     @InjectView(R.id.descriptionField)
     EditText mDescriptionField;
-    @InjectView(R.id.locationSpinner)
-    Spinner mLocationSpinner;
     @InjectView(R.id.sundayBox)
     CheckBox mSundayBox;
     @InjectView(R.id.mondayBox)
@@ -70,6 +63,8 @@ public class NewListingActivity extends ActionBarActivity {
     ArrayList<Integer> mDays = new ArrayList<>();
     boolean mIsFood;
     List<ParseObject> mLocations;
+    ArrayList<String> mRestaurants = new ArrayList<>();
+    ArrayAdapter<String> mAdapter;
 
 
     @Override
@@ -79,38 +74,7 @@ public class NewListingActivity extends ActionBarActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ButterKnife.inject(this);
-
-        new GetLocations().execute();
-
-        mSubmitButton.setFocusableInTouchMode(true);
-
-        FrameLayout touchInterceptor = (FrameLayout) findViewById(R.id.touchInterceptor);
-        touchInterceptor.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    if (mRestaurantField.isFocused()) {
-                        Rect outRect = new Rect();
-                        mRestaurantField.getGlobalVisibleRect(outRect);
-                        if (!outRect.contains((int) event.getRawX(), (int) event.getRawY())) {
-                            mRestaurantField.clearFocus();
-                            InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                        }
-                    }
-                    if (mDescriptionField.isFocused()) {
-                        Rect outRect = new Rect();
-                        mDescriptionField.getGlobalVisibleRect(outRect);
-                        if (!outRect.contains((int) event.getRawX(), (int) event.getRawY())) {
-                            mDescriptionField.clearFocus();
-                            InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                        }
-                    }
-                }
-                return false;
-            }
-        });
+        getRestaurants();
 
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,34 +107,16 @@ public class NewListingActivity extends ActionBarActivity {
                     mIsFood = true;
                 }
 
-                int spinnerPosition = mLocationSpinner.getSelectedItemPosition();
-                ParseObject listingLocation = mLocations.get(spinnerPosition);
-
-                uploadNewListing(mName, mDays, mDescription, mIsFood, listingLocation);
+                uploadNewListing(mName, mDays, mDescription, mIsFood);
 
             }
         });
     }
 
-
-    public void addItemsToSpinner(List<ParseObject> locations) {
-
-        List<String> list = new ArrayList<>();
-        for (ParseObject i : locations) {
-            String locationName = i.getString("city") + ", " + i.get("state");
-            list.add(locationName);
-        }
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, list);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mLocationSpinner.setAdapter(dataAdapter);
-    }
-
-    public void uploadNewListing(final String name, final ArrayList<Integer> days, final String description, final boolean isFood, final ParseObject listingLocation) {
+    public void uploadNewListing(final String name, final ArrayList<Integer> days, final String description, final boolean isFood) {
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Restaurant");
-        query.whereStartsWith("name", name);
-        query.whereEqualTo("location", ParseUser.getCurrentUser().getParseObject("location"));
+        query.whereEqualTo("name", name);
         query.getFirstInBackground(new GetCallback<ParseObject>() {
             public void done(ParseObject object, ParseException e) {
                 if (object == null) {
@@ -188,7 +134,8 @@ public class NewListingActivity extends ActionBarActivity {
                     listing.put("days", days);
                     listing.put("description", description);
                     listing.put("isFood", isFood);
-                    listing.put("location", ParseObject.createWithoutData("Location", listingLocation.getObjectId()));
+                    listing.put("location", ParseUser.getCurrentUser().getParseObject("location"));
+                    listing.put("isApproved", false);
                     listing.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
@@ -208,37 +155,25 @@ public class NewListingActivity extends ActionBarActivity {
 
     }
 
-    private class GetLocations extends AsyncTask<Void, Void, List<ParseObject>> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected List<ParseObject> doInBackground(Void... params) {
-            ParseQuery query = ParseQuery.getQuery("Location");
-            try {
-                mLocations = query.find();
-                Log.d(TAG, "got " + mLocations.size() + " objects");
-                return mLocations;
-            } catch (ParseException e) {
-                e.printStackTrace();
+    private void getRestaurants() {
+        ParseQuery<Restaurant> query = ParseQuery.getQuery("Restaurant");
+        query.whereEqualTo("location", ParseUser.getCurrentUser().getParseObject("location"));
+        query.setLimit(1000);
+        query.findInBackground(new FindCallback<Restaurant>() {
+            @Override
+            public void done(List<Restaurant> restaurants, ParseException e) {
+                for (Restaurant i : restaurants) {
+                    mRestaurants.add(i.getString("name"));
+                }
+                setUpAdapter(mRestaurants);
             }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(final List<ParseObject> locations) {
-            super.onPostExecute(locations);
-            addItemsToSpinner(locations);
-
-        }
-
-        @Override
-        protected void onCancelled() {
-            super.onCancelled();
-        }
-
+        });
     }
+
+    private void setUpAdapter(ArrayList<String> names) {
+        mAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_dropdown_item_1line, names);
+        mRestaurantField.setAdapter(mAdapter);
+    }
+
 }
