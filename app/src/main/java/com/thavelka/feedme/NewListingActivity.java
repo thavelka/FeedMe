@@ -24,6 +24,7 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.ArrayList;
@@ -169,6 +170,7 @@ public class NewListingActivity extends ActionBarActivity {
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Restaurant");
         query.whereStartsWith("name", name);
+        query.whereEqualTo("location", ParseUser.getCurrentUser().getParseObject("location"));
         query.getFirstInBackground(new GetCallback<ParseObject>() {
             public void done(ParseObject object, ParseException e) {
                 if (object == null) {
