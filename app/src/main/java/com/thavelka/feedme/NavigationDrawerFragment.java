@@ -1,10 +1,8 @@
 package com.thavelka.feedme;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -17,6 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.util.Calendar;
@@ -32,20 +32,20 @@ public class NavigationDrawerFragment extends Fragment {
      * Remember the position of the selected item.
      */
     private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
-    /**
-     * Per the design guidelines, you should show the drawer on launch until the user manually
-     * expands it. This shared preference tracks this.
-     */
-    private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
     protected String dayOfWeek;
     private String NAME = "NAME";
     private String EMAIL = "EMAIL";
+    private String CITY_STATE;
+    private String IMAGE_URL;
     private String[] TITLES = {"Home", "Favorites", "Settings"};
-    private int[] ICONS = {R.mipmap.ic_home_grey600_24dp, R.mipmap.ic_favorite_grey600_24dp, R.mipmap.ic_settings_grey600_24dp};
+    private int[] ICONS = {R.mipmap.ic_home_grey600_24dp, R.mipmap.ic_favorite_grey600_24dp,
+            R.mipmap.ic_settings_grey600_24dp};
     /**
      * A pointer to the current callbacks instance (the Activity).
      */
     private NavigationDrawerCallbacks mCallbacks;
+    private RecyclerView.Adapter drawerAdapter;
+    private RecyclerView recyclerView;
 
     /**
      * Helper component that ties the action bar to the navigation drawer.
@@ -53,12 +53,9 @@ public class NavigationDrawerFragment extends Fragment {
     private android.support.v7.app.ActionBarDrawerToggle mDrawerToggle;
 
     private DrawerLayout mDrawerLayout;
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mDrawerAdapter;
     private View mFragmentContainerView;
 
     private int mCurrentSelectedPosition = 0;
-    private boolean mFromSavedInstanceState;
 
     public NavigationDrawerFragment() {
     }
@@ -69,11 +66,9 @@ public class NavigationDrawerFragment extends Fragment {
 
         // Read in the flag indicating whether or not the user has demonstrated awareness of the
         // drawer. See PREF_USER_LEARNED_DRAWER for details.
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-//        mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
+        //        mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
         if (savedInstanceState != null) {
             mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
-            mFromSavedInstanceState = true;
         }
 
         // Select either the default item (0) or the last selected item.
@@ -84,7 +79,8 @@ public class NavigationDrawerFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Calendar mCalendar = Calendar.getInstance();
-        dayOfWeek = mCalendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
+        dayOfWeek = mCalendar.getDisplayName
+                (Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
         setHasOptionsMenu(true);
     }
 
@@ -108,19 +104,29 @@ public class NavigationDrawerFragment extends Fragment {
         if (ParseUser.getCurrentUser() != null) {
             NAME = ParseUser.getCurrentUser().getString("name");
             EMAIL = ParseUser.getCurrentUser().getEmail();
+            ParseObject LOCATION = ParseUser.getCurrentUser().getParseObject("location");
+            try {
+                CITY_STATE = LOCATION.fetchIfNeeded().getString("city") + ", "
+                        + LOCATION.fetchIfNeeded().getString("state");
+                IMAGE_URL = LOCATION.fetchIfNeeded().getString("imageUrl");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
         }
-        mRecyclerView = (RecyclerView) root.findViewById(R.id.drawerRecyclerView);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration
+        recyclerView = (RecyclerView) root.findViewById(R.id.drawerRecyclerView);
+        recyclerView.addItemDecoration(new DividerItemDecoration
                 (getActivity(), DividerItemDecoration.VERTICAL_LIST));
 
-        mRecyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(true);
 
         final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
 
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mDrawerAdapter = new DrawerAdapter(TITLES, ICONS, NAME, EMAIL);
-        mRecyclerView.addOnItemTouchListener(
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        drawerAdapter = new DrawerAdapter
+                (getActivity(), TITLES, ICONS, NAME, EMAIL, CITY_STATE, IMAGE_URL);
+        recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
@@ -128,7 +134,7 @@ public class NavigationDrawerFragment extends Fragment {
                     }
                 })
         );
-        mRecyclerView.setAdapter(mDrawerAdapter);
+        recyclerView.setAdapter(drawerAdapter);
         return root;
     }
 
@@ -156,7 +162,8 @@ public class NavigationDrawerFragment extends Fragment {
 
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the navigation drawer and the action bar app icon.
-        mDrawerToggle = new android.support.v7.app.ActionBarDrawerToggle(getActivity(), mDrawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+        mDrawerToggle = new android.support.v7.app.ActionBarDrawerToggle
+                (getActivity(), mDrawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
@@ -168,6 +175,7 @@ public class NavigationDrawerFragment extends Fragment {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
+                updateDrawer();
                 getActionBar().setTitle("FeedMe");
             }
         };
@@ -227,19 +235,29 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-    /**
-     * Per the navigation drawer design guidelines, updates the action bar to show the global app
-     * 'context', rather than just what's in the current screen.
-     */
-    private void showGlobalContextActionBar() {
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-
-    }
-
     protected ActionBar getActionBar() {
         return ((ActionBarActivity) getActivity()).getSupportActionBar();
+    }
+
+    public void updateDrawer() {
+        if (ParseUser.getCurrentUser() != null) {
+            NAME = ParseUser.getCurrentUser().getString("name");
+            EMAIL = ParseUser.getCurrentUser().getEmail();
+            ParseObject LOCATION = ParseUser.getCurrentUser().getParseObject("location");
+            try {
+                CITY_STATE = LOCATION.fetchIfNeeded().getString("city") + ", "
+                        + LOCATION.fetchIfNeeded().getString("state");
+                IMAGE_URL = LOCATION.fetchIfNeeded().getString("imageUrl");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            drawerAdapter = new DrawerAdapter
+                    (getActivity(), TITLES, ICONS, NAME, EMAIL, CITY_STATE, IMAGE_URL);
+            recyclerView.setAdapter(drawerAdapter);
+        }
+
+
     }
 
     /**

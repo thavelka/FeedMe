@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.Calendar;
 import java.util.Collections;
@@ -37,11 +38,6 @@ public class Drinks extends Fragment {
     ProgressBar mProgressBar;
     List<Listing> mListings;
     TextView mEmptyText;
-
-    public static Drinks newInstance() {
-        Drinks fragment = new Drinks();
-        return fragment;
-    }
 
     @Override
     public void onResume() {
@@ -107,12 +103,8 @@ public class Drinks extends Fragment {
         ConnectivityManager manager = (ConnectivityManager)
                 getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
-        boolean isAvailable = false;
-        if (networkInfo != null && networkInfo.isConnected()) {
-            isAvailable = true;
-        } else {
-            isAvailable = false;
-        }
+        boolean isAvailable;
+        isAvailable = networkInfo != null && networkInfo.isConnected();
         return isAvailable;
     }
 
@@ -132,6 +124,7 @@ public class Drinks extends Fragment {
             ParseQuery<Listing> query = ParseQuery.getQuery(Listing.class);
             query.whereEqualTo("isFood", false); // Set constraints for query
             query.whereEqualTo("days", params[0]);
+            query.whereEqualTo("location", ParseUser.getCurrentUser().getParseObject("location"));
             query.include("restaurant");
             try {
                 mListings = query.find();

@@ -5,9 +5,6 @@ import android.app.Application;
 import com.parse.Parse;
 import com.parse.ParseObject;
 
-/**
- * Created by tim on 3/15/15.
- */
 public class FeedMeApplication extends Application {
 
     @Override

@@ -50,12 +50,12 @@ public class SettingsFragment extends Fragment {
 
     public void addItemsToSpinner(List<ParseObject> locations) {
 
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         for (ParseObject i : locations) {
             String locationName = i.getString("city") + ", " + i.get("state");
             list.add(locationName);
         }
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(),
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mLocationSpinner.setAdapter(dataAdapter);
@@ -71,6 +71,7 @@ public class SettingsFragment extends Fragment {
                 user.put("location", ParseObject.createWithoutData("Location", userLocation.getObjectId()));
                 user.saveInBackground();
                 Toast.makeText(getActivity(), "Settings saved", Toast.LENGTH_SHORT).show();
+
             }
         });
 

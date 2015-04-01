@@ -24,7 +24,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="32dp"
-            android:hint="Username"/>
+            android:hint="@string/usernameLabel"/>
 
         <EditText
             android:id="@+id/passwordField"
@@ -34,7 +34,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="24dp"
             android:ems="10"
-            android:hint="Password"
+            android:hint="@string/passwordLabel"
             android:inputType="textPassword"/>
 
         <Button
@@ -44,7 +44,7 @@
             android:layout_below="@+id/passwordField"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="24dp"
-            android:text="Sign In"/>
+            android:text="@string/signinLabel"/>
 
         <TextView
             android:id="@+id/signUpLink"
@@ -53,6 +53,6 @@
             android:layout_below="@+id/loginButton"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="24dp"
-            android:text="Need an account?"/>
+            android:text="@string/createAccountPromptLabel"/>
     </RelativeLayout>
 </LinearLayout>

@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.Calendar;
 import java.util.Collections;
@@ -37,10 +38,6 @@ public class Food extends Fragment {
     ProgressBar mProgressBar;
     List<Listing> mListings;
     TextView mEmptyText;
-
-    public static Food newInstance() {
-        return new Food();
-    }
 
     @Override
     public void onResume() {
@@ -124,6 +121,7 @@ public class Food extends Fragment {
             ParseQuery<Listing> query = ParseQuery.getQuery(Listing.class);
             query.whereEqualTo("isFood", true); // Set constraints for query
             query.whereEqualTo("days", params[0]);
+            query.whereEqualTo("location", ParseUser.getCurrentUser().getParseObject("location"));
             query.include("restaurant");
             try {
                 mListings = query.find();

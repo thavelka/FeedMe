@@ -73,12 +73,12 @@ public class SignUpActivity extends ActionBarActivity {
 
     public void addItemsToSpinner(List<ParseObject> locations) {
 
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         for (ParseObject i : locations) {
             String locationName = i.getString("city") + ", " + i.get("state");
             list.add(locationName);
         }
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mLocationSpinner.setAdapter(dataAdapter);
