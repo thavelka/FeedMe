@@ -39,8 +39,7 @@ public class Food extends Fragment {
     TextView mEmptyText;
 
     public static Food newInstance() {
-        Food fragment = new Food();
-        return fragment;
+        return new Food();
     }
 
     @Override
@@ -104,12 +103,8 @@ public class Food extends Fragment {
         ConnectivityManager manager = (ConnectivityManager)
                 getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
-        boolean isAvailable = false;
-        if (networkInfo != null && networkInfo.isConnected()) {
-            isAvailable = true;
-        } else {
-            isAvailable = false;
-        }
+        boolean isAvailable;
+        isAvailable = networkInfo != null && networkInfo.isConnected();
         return isAvailable;
     }
 

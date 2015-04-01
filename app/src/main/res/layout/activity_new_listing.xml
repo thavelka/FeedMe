@@ -36,6 +36,16 @@
             android:hint="Description"
             android:inputType="textMultiLine"/>
 
+        <Spinner
+            android:id="@+id/locationSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/descriptionField"
+            android:layout_marginTop="16dp"
+            android:spinnerMode="dropdown"/>
+
         <Button
             android:id="@+id/submitButton"
             android:layout_width="wrap_content"
@@ -48,7 +58,7 @@
             android:id="@+id/gridLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/descriptionField"
+            android:layout_below="@+id/locationSpinner"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="24dp"
             android:columnCount="7"
@@ -229,8 +239,12 @@
             android:id="@+id/touchInterceptor"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_above="@+id/submitButton">
+            android:layout_above="@+id/submitButton"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:visibility="gone">
         </FrameLayout>
+
     </RelativeLayout>
 
 </LinearLayout>

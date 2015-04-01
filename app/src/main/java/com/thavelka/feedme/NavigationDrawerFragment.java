@@ -28,7 +28,6 @@ import java.util.Locale;
  * design guidelines</a> for a complete explanation of the behaviors implemented here.
  */
 public class NavigationDrawerFragment extends Fragment {
-
     /**
      * Remember the position of the selected item.
      */
@@ -39,8 +38,8 @@ public class NavigationDrawerFragment extends Fragment {
      */
     private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
     protected String dayOfWeek;
-    private String NAME = ParseUser.getCurrentUser().getString("name");
-    private String EMAIL = ParseUser.getCurrentUser().getEmail();
+    private String NAME = "NAME";
+    private String EMAIL = "EMAIL";
     private String[] TITLES = {"Home", "Favorites", "Settings"};
     private int[] ICONS = {R.mipmap.ic_home_grey600_24dp, R.mipmap.ic_favorite_grey600_24dp, R.mipmap.ic_settings_grey600_24dp};
     /**
@@ -106,6 +105,10 @@ public class NavigationDrawerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
+        if (ParseUser.getCurrentUser() != null) {
+            NAME = ParseUser.getCurrentUser().getString("name");
+            EMAIL = ParseUser.getCurrentUser().getEmail();
+        }
         mRecyclerView = (RecyclerView) root.findViewById(R.id.drawerRecyclerView);
         mRecyclerView.addItemDecoration(new DividerItemDecoration
                 (getActivity(), DividerItemDecoration.VERTICAL_LIST));

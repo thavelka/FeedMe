@@ -19,8 +19,8 @@ public class BaseActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     Toolbar mToolbar;
-    String NAME;
-    String EMAIL;
+    String NAME = "NAME";
+    String EMAIL = "EMAIL";
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -36,10 +36,8 @@ public class BaseActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
-
         // CHECK USER LOGGED IN
         ParseAnalytics.trackAppOpened(getIntent());
-
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {
             // Allow user to continue, send user's info to header in drawer

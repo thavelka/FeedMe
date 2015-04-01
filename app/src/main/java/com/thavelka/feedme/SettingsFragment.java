@@ -111,6 +111,4 @@ public class SettingsFragment extends Fragment {
     }
 
 
-
-
 }

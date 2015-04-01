@@ -3,6 +3,7 @@ package com.thavelka.feedme;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -10,11 +11,13 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.parse.GetCallback;
@@ -24,6 +27,7 @@ import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -37,6 +41,8 @@ public class NewListingActivity extends ActionBarActivity {
     EditText mRestaurantField;
     @InjectView(R.id.descriptionField)
     EditText mDescriptionField;
+    @InjectView(R.id.locationSpinner)
+    Spinner mLocationSpinner;
     @InjectView(R.id.sundayBox)
     CheckBox mSundayBox;
     @InjectView(R.id.mondayBox)
@@ -62,6 +68,7 @@ public class NewListingActivity extends ActionBarActivity {
     String mDescription;
     ArrayList<Integer> mDays = new ArrayList<>();
     boolean mIsFood;
+    List<ParseObject> mLocations;
 
 
     @Override
@@ -71,6 +78,8 @@ public class NewListingActivity extends ActionBarActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ButterKnife.inject(this);
+
+        new GetLocations().execute();
 
         mSubmitButton.setFocusableInTouchMode(true);
 
@@ -133,7 +142,10 @@ public class NewListingActivity extends ActionBarActivity {
                     mIsFood = true;
                 }
 
-                uploadNewListing(mName, mDays, mDescription, mIsFood);
+                int spinnerPosition = mLocationSpinner.getSelectedItemPosition();
+                ParseObject listingLocation = mLocations.get(spinnerPosition);
+
+                uploadNewListing(mName, mDays, mDescription, mIsFood, listingLocation);
 
             }
         });
@@ -145,8 +157,20 @@ public class NewListingActivity extends ActionBarActivity {
         imm.hideSoftInputFromWindow(mDescriptionField.getWindowToken(), 0);
     }
 
+    public void addItemsToSpinner(List<ParseObject> locations) {
 
-    public void uploadNewListing(final String name, final ArrayList<Integer> days, final String description, final boolean isFood) {
+        List<String> list = new ArrayList<String>();
+        for (ParseObject i : locations) {
+            String locationName = i.getString("city") + ", " + i.get("state");
+            list.add(locationName);
+        }
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, list);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mLocationSpinner.setAdapter(dataAdapter);
+    }
+
+    public void uploadNewListing(final String name, final ArrayList<Integer> days, final String description, final boolean isFood, final ParseObject listingLocation) {
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Restaurant");
         query.whereStartsWith("name", name);
@@ -167,6 +191,7 @@ public class NewListingActivity extends ActionBarActivity {
                     listing.put("days", days);
                     listing.put("description", description);
                     listing.put("isFood", isFood);
+                    listing.put("location", ParseObject.createWithoutData("Location", listingLocation.getObjectId()));
                     listing.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
@@ -183,6 +208,40 @@ public class NewListingActivity extends ActionBarActivity {
             }
         });
 
+
+    }
+
+    private class GetLocations extends AsyncTask<Void, Void, List<ParseObject>> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected List<ParseObject> doInBackground(Void... params) {
+            ParseQuery query = ParseQuery.getQuery("Location");
+            try {
+                mLocations = query.find();
+                Log.d(TAG, "got " + mLocations.size() + " objects");
+                return mLocations;
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(final List<ParseObject> locations) {
+            super.onPostExecute(locations);
+            addItemsToSpinner(locations);
+
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+        }
 
     }
 }
