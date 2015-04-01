@@ -24,7 +24,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="32dp"
-            android:hint="Username"/>
+            android:hint="@string/usernameLabel"/>
 
         <EditText
             android:id="@+id/fullNameField"
@@ -33,7 +33,7 @@
             android:layout_below="@id/usernameField"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="24dp"
-            android:hint="Full name"
+            android:hint="@string/fullNameLabel"
             android:inputType="textPersonName"/>
 
         <EditText
@@ -44,7 +44,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="24dp"
             android:ems="10"
-            android:hint="Password"
+            android:hint="@string/passwordLabel"
             android:inputType="textPassword"/>
 
         <EditText
@@ -54,17 +54,26 @@
             android:layout_below="@id/passwordField"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="24dp"
-            android:hint="Email Address"
+            android:hint="@string/emailLabel"
             android:inputType="textEmailAddress"/>
 
         <Button
             android:id="@+id/signUpButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/locationSpinner"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="24dp"
+            android:text="@string/signUpLabel"/>
+
+        <Spinner
+            android:id="@+id/locationSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/emailField"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="24dp"
-            android:text="Sign Up"/>
+            android:spinnerMode="dropdown"/>
 
     </RelativeLayout>
 </LinearLayout>

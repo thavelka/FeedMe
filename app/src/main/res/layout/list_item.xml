@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -32,8 +33,8 @@
             android:layout_toEndOf="@+id/imageCompressed"
             android:layout_toRightOf="@+id/imageCompressed"
             android:paddingBottom="4dp"
-            android:text="Restaurant"
-            android:textSize="18dp"
+            android:text="@string/restaurantLabel"
+            android:textSize="18sp"
             android:textStyle="bold"/>
 
         <TextView
@@ -44,8 +45,8 @@
             android:layout_toEndOf="@+id/imageCompressed"
             android:layout_toRightOf="@+id/imageCompressed"
             android:paddingBottom="4dp"
-            android:text="Address"
-            android:textSize="14dp"/>
+            android:text="@string/addressLabel"
+            android:textSize="14sp"/>
 
         <TextView
             android:id="@+id/descriptionCompressed"
@@ -56,8 +57,8 @@
             android:layout_toRightOf="@+id/imageCompressed"
             android:maxLines="1"
             android:singleLine="true"
-            android:text="Description"
-            android:textSize="14dp"/>
+            android:text="@string/descriptionLabel"
+            android:textSize="14sp"/>
     </RelativeLayout>
 
     <LinearLayout
@@ -79,7 +80,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="165dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/blurbg"/>
+                android:src="@drawable/blurbg"
+                tools:ignore="ContentDescription"/>
 
             <ImageView
                 android:id="@+id/shadow"
@@ -87,7 +89,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/imageExpanded"
                 android:scaleType="fitXY"
-                android:src="@drawable/shadow"/>
+                android:src="@drawable/shadow"
+                tools:ignore="ContentDescription"/>
 
             <TextView
                 android:id="@+id/nameExpanded"
@@ -97,7 +100,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginLeft="16dp"
-                android:text="Restaurant Name"
+                android:text="@string/placeholderRestaurantName"
                 android:textColor="#ffffffff"
                 android:textSize="24sp"/>
 
@@ -110,7 +113,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="16dp"
-                android:text="5555 Address Street (2 mi)"
+                android:text="@string/placeholderAddress"
                 android:textColor="#ffffffff"
                 android:textSize="16sp"/>
         </RelativeLayout>
@@ -119,14 +122,13 @@
             android:id="@+id/descriptionExpanded"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/imageExpandedLayout"
             android:padding="16dp"
-            android:text="Detailed description Detailed description Detailed description Detailed description "/>
+            android:text="@string/placeholderDescription"/>
 
         <View
             android:id="@+id/divider"
             style="@style/Divider"
-            android:layout_below="@id/descriptionExpanded"/>
+            />
 
         <LinearLayout
             android:id="@+id/buttonLayout"
@@ -139,7 +141,7 @@
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Favorite"
+                android:text="@string/favoriteLabel"
                 android:textColor="@color/accent"/>
 
             <Button
@@ -147,7 +149,7 @@
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Share"
+                android:text="@string/shareLabel"
                 android:textColor="@color/accent"/>
 
             <Button
@@ -155,7 +157,7 @@
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Directions"
+                android:text="@string/directionsLabel"
                 android:textColor="@color/accent"/>
         </LinearLayout>
 

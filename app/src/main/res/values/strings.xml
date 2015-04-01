@@ -14,4 +14,51 @@
     <string name="action_logout">Logout</string>
     <string name="title_activity_favorites">Favorites</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_base">FeedMe</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="title_section1">Home</string>
+    <string name="title_section2">Favorites</string>
+    <string name="title_section3">Settings</string>
+    <string name="action_example">action example</string>
+    <string name="send_to">Share deal with…</string>
+    <string name="usernameLabel">Username</string>
+    <string name="passwordLabel">Password</string>
+    <string name="signinLabel">Sign In</string>
+    <string name="createAccountPromptLabel">Need an account?</string>
+    <string name="restaurantLabel">Restaurant</string>
+    <string name="descriptionLabel">Description</string>
+    <string name="submitLabel">Submit</string>
+    <string name="sunAbbr">Sun</string>
+    <string name="monAbbr">Mon</string>
+    <string name="tueAbbr">Tue</string>
+    <string name="wedAbbr">Wed</string>
+    <string name="thuAbbr">Thu</string>
+    <string name="friAbbr">Fri</string>
+    <string name="satAbbr">Sat</string>
+    <string name="foodButtonLabel">Food</string>
+    <string name="drinkButtonLabel">Drink</string>
+    <string name="fullNameLabel">Full name</string>
+    <string name="emailLabel">Email Address</string>
+    <string name="signUpLabel">Sign Up</string>
+    <string name="emptyDealText">No deals for today :(</string>
+    <string name="emptyFavoriteText">No favorites</string>
+    <string name="locationLabel">Location</string>
+    <string name="saveButtonLabel">Save</string>
+    <string name="usernameTestLabel">User\'s Name</string>
+    <string name="emailTestLabel">user@email.com</string>
+    <string name="rowIconDescriptionText">row icon</string>
+    <string name="placeholderText">Placeholder Text</string>
+    <string name="addressLabel">Address</string>
+    <string name="placeholderRestaurantName">Restaurant Name</string>
+    <string name="placeholderAddress">5555 Address Street (2 mi)</string>
+    <string name="placeholderDescription">Detailed description Detailed description Detailed description Detailed description</string>
+    <string name="favoriteLabel">Favorite</string>
+    <string name="shareLabel">Share</string>
+    <string name="directionsLabel">Directions</string>
+    <string name="termLabel">Term</string>
+    <string name="resultLabel">result</string>
+
 </resources>

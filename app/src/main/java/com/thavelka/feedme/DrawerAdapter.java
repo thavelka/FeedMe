@@ -1,5 +1,7 @@
 package com.thavelka.feedme;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 
-// Credit to Akash Bangad from android4devs.com for this Drawer Adapter
 
 public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder> {
 
@@ -19,20 +21,25 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
     private String mNavTitles[]; // String Array to store the passed titles Value from MainActivity.java
     private int mIcons[];       // Int Array to store the passed icons resource value from MainActivity.java
 
-    private String name;        //String Resource for header View Name
-    private String email;       //String Resource for header view email
+    private String mName;        //String Resource for header View Name
+    private String mEmail;       //String Resource for header view mEmail
+    private String mLocation;
+    private String mImageUrl;
+    private Context mContext;
 
 
     // Creating a ViewHolder which extends the RecyclerView View Holder
     // ViewHolder are used to to store the inflated views in order to recycle them
 
-    DrawerAdapter(String Titles[], int Icons[], String Name, String Email) { // Constructor takes info to display as params
+    DrawerAdapter(Context context, String Titles[], int Icons[], String Name, String Email, String location, String imageUrl) { // Constructor takes info to display as params
 
+        mContext = context;
         mNavTitles = Titles;
         mIcons = Icons;
-        name = Name;
-        email = Email;
-
+        mName = Name;
+        mEmail = Email;
+        mLocation = location;
+        mImageUrl = imageUrl;
 
     }
 
@@ -42,9 +49,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
         if (viewType == TYPE_ITEM) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_row, parent, false); //Inflating the layout
 
-            ViewHolder vhItem = new ViewHolder(v, viewType); //Creating ViewHolder and passing the object of type view
-
-            return vhItem; // Returning the created object
+            return new ViewHolder(v, viewType); // Returning the created object
 
             //inflate your layout and pass it to view holder
 
@@ -52,9 +57,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
 
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.header, parent, false); //Inflating the layout
 
-            ViewHolder vhHeader = new ViewHolder(v, viewType); //Creating ViewHolder and passing the object of type view
-
-            return vhHeader; //returning the object created
+            return new ViewHolder(v, viewType); //returning the object created
 
 
         }
@@ -78,8 +81,13 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
             holder.textView.setText(mNavTitles[position - 1]); // Setting the Text with the array of our mTabTitles
             holder.imageView.setImageResource(mIcons[position - 1]);// Setting the image with array of our icons
         } else {
-            holder.Name.setText(name);
-            holder.email.setText(email);
+            Drawable shadow = mContext.getResources().getDrawable(R.drawable.shadow);
+            shadow.setAlpha(90);
+            holder.Name.setText(mName);
+            holder.email.setText(mEmail);
+            holder.location.setText(mLocation);
+            Picasso.with(mContext).load(mImageUrl).into(holder.headerImage);
+            holder.shadow.setImageDrawable(shadow);
         }
     }
 
@@ -108,8 +116,11 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
 
         TextView textView;
         ImageView imageView;
+        ImageView headerImage;
+        ImageView shadow;
         TextView Name;
         TextView email;
+        TextView location;
 
 
         public ViewHolder(View itemView, int ViewType) {                 // Creating ViewHolder Constructor with View and viewType As a parameter
@@ -124,13 +135,15 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
                 holderId = 1;                                               // setting holder id as 1 as the object being populated are of type item row
             } else {
 
-
-                Name = (TextView) itemView.findViewById(R.id.nameCompressed);         // Creating Text View object from header.xml for name
-                email = (TextView) itemView.findViewById(R.id.email);       // Creating Text View object from header.xml for email
+                headerImage = (ImageView) itemView.findViewById(R.id.headerImage);
+                shadow = (ImageView) itemView.findViewById(R.id.shadow);
+                Name = (TextView) itemView.findViewById(R.id.headerName);         // Creating Text View object from header.xml for mName
+                email = (TextView) itemView.findViewById(R.id.headerEmail);       // Creating Text View object from header.xml for mEmail
+                location = (TextView) itemView.findViewById(R.id.userLocation);
                 holderId = 0;                                                // Setting holder id = 0 as the object being populated are of type header view
             }
-        }
 
+        }
 
     }
 

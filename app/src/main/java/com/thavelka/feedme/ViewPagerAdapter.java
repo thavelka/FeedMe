@@ -1,19 +1,18 @@
 package com.thavelka.feedme;
 
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
 
 // Holds info needed to set up pager and sliding tabs
-public class ViewPagerAdapter extends FragmentStatePagerAdapter {
+public class ViewPagerAdapter extends FragmentPagerAdapter {
 
-    CharSequence Titles[]; // Stores names of Tabs
-    int tabCount; // Number of Tabs
+    protected CharSequence mTabTitles[] = {"Food", "Drinks"}; // Set tab names
+    protected int mTabCount = 2; // Set number of tabs
 
-    public ViewPagerAdapter(FragmentManager fm, CharSequence mTitles[], int mTabCountSum) {
+    public ViewPagerAdapter(FragmentManager fm) {
         super(fm);
-        this.Titles = mTitles;
-        this.tabCount = mTabCountSum;
     }
 
     @Override
@@ -30,12 +29,12 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     // Returns title of tab at current position
     public CharSequence getPageTitle(int position) {
-        return Titles[position];
+        return mTabTitles[position];
     }
 
     @Override
     // Return number of tabs
     public int getCount() {
-        return tabCount;
+        return mTabCount;
     }
 }

@@ -1,6 +1,10 @@
 package com.thavelka.feedme;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,10 +32,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-/**
- * Created by tim on 3/16/15.
- */
-
 // Custom ParseObject Adapter for Recycler View
 // Customized for Listing subclass
 public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHolder> {
@@ -55,8 +55,7 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
         View view = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.list_item, viewGroup, false);
 
-        ParseViewHolder viewHolder = new ParseViewHolder(view);
-        return viewHolder;
+        return new ParseViewHolder(view);
     }
 
     @Override
@@ -77,6 +76,15 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
     @Override
     public int getItemCount() {
         return mObjects.size();
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager manager = (ConnectivityManager)
+                mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+        boolean isAvailable;
+        isAvailable = networkInfo != null && networkInfo.isConnected();
+        return isAvailable;
     }
 
     public class ParseViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -220,7 +228,7 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
                     ParseUser user = ParseUser.getCurrentUser();
                     ParseRelation<ParseObject> relation = user.getRelation("favorites");
 
-                    if (mFavoriteButton.getText().toString() == "Unfavorite") {
+                    if (mFavoriteButton.getText().toString().equals("Unfavorite")) {
                         relation.remove(listing);
                         Log.d(TAG, "Removed listing from favorites");
                         Toast.makeText(mContext, "Removed from favorites", Toast.LENGTH_SHORT).show();
@@ -236,6 +244,34 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
                     }
 
                     user.saveInBackground();
+                }
+            });
+
+            mShareButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String toSend = "Join me for " + listing.getDescription() + " at " + listing.getName() + " today!";
+                    Intent sendIntent = new Intent();
+                    sendIntent.setAction(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, toSend);
+                    sendIntent.setType("text/plain");
+                    mContext.startActivity(Intent.createChooser(sendIntent, mContext.getResources().getText(R.string.send_to)));
+                }
+            });
+
+            mDirectionsButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String address = listing.getAddress();
+                    String label = " (" + listing.getName() + ")";
+                    Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + address + label);
+                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    if (mapIntent.resolveActivity(mContext.getPackageManager()) != null && isNetworkAvailable()) {
+                        mContext.startActivity(mapIntent);
+                    } else {
+                        Toast.makeText(mContext, "Unable to load maps application", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }
