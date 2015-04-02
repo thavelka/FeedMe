@@ -121,7 +121,9 @@ public class Food extends Fragment {
             ParseQuery<Listing> query = ParseQuery.getQuery(Listing.class);
             query.whereEqualTo("isFood", true); // Set constraints for query
             query.whereEqualTo("days", params[0]);
-            query.whereEqualTo("location", ParseUser.getCurrentUser().getParseObject("location"));
+            if (ParseUser.getCurrentUser() != null) {
+                query.whereEqualTo("location", ParseUser.getCurrentUser().getParseObject("location"));
+            }
             query.whereEqualTo("isApproved", true);
             query.include("restaurant");
             try {

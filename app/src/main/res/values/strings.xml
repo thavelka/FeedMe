@@ -60,5 +60,6 @@
     <string name="directionsLabel">Directions</string>
     <string name="termLabel">Term</string>
     <string name="resultLabel">result</string>
+    <string name="reportButtonLabel">Report</string>
 
 </resources>

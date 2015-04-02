@@ -274,6 +274,8 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
                     }
                 }
             });
+
+
         }
 
 

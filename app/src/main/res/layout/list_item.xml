@@ -159,6 +159,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/directionsLabel"
                 android:textColor="@color/accent"/>
+
         </LinearLayout>
 
         <View
