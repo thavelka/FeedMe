@@ -1,6 +1,8 @@
 package com.thavelka.feedme;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -13,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -116,6 +119,8 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
         Button mShareButton;
         @InjectView(R.id.directionsButton)
         Button mDirectionsButton;
+        @InjectView(R.id.reportButton)
+        Button mReportButton;
 
 
         public ParseViewHolder(final View itemView) {
@@ -272,6 +277,39 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
                     } else {
                         Toast.makeText(mContext, "Unable to load maps application", Toast.LENGTH_SHORT).show();
                     }
+                }
+            });
+
+            mReportButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
+
+                    alert.setTitle("Report Listing");
+                    alert.setMessage("What's wrong with this listing? Please be specific.");
+
+// Set an EditText view to get user input
+                    final EditText input = new EditText(mContext);
+                    alert.setView(input);
+
+                    alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            String value = input.getText().toString();
+                            ParseObject report = new ParseObject("Report");
+                            report.put("listing", ParseObject.createWithoutData("Listing", listing.getObjectId()));
+                            report.put("description", value);
+                            report.saveInBackground();
+                            Toast.makeText(mContext, "Thank you!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            Toast.makeText(mContext, "Cancelled", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    alert.show();
                 }
             });
 

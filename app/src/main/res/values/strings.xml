@@ -61,5 +61,7 @@
     <string name="termLabel">Term</string>
     <string name="resultLabel">result</string>
     <string name="reportButtonLabel">Report</string>
+    <string name="title_activity_initial">InitialActivity</string>
+    <string name="reportLabel">Report</string>
 
 </resources>

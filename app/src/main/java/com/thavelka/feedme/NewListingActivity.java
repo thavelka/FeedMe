@@ -117,6 +117,7 @@ public class NewListingActivity extends ActionBarActivity {
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Restaurant");
         query.whereEqualTo("name", name);
+        query.whereEqualTo("location", ParseUser.getCurrentUser().getParseObject("location"));
         query.getFirstInBackground(new GetCallback<ParseObject>() {
             public void done(ParseObject object, ParseException e) {
                 if (object == null) {
