@@ -11,7 +11,6 @@ import android.widget.ImageView;
 
 import com.parse.ParseAnalytics;
 import com.parse.ParseUser;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
@@ -22,8 +21,6 @@ public class InitialActivity extends ActionBarActivity {
 
     @InjectView(R.id.tutorialImage1)
     ImageView mTutorial1;
-    @InjectView(R.id.tutorialImage2)
-    ImageView mTutorial2;
     @InjectView(R.id.nextButton)
     Button mButton;
 
@@ -47,69 +44,15 @@ public class InitialActivity extends ActionBarActivity {
             if (isFirstTime()) {
                 mCount = 0;
                 Picasso.with(InitialActivity.this).load(R.drawable.tutorial1).into(mTutorial1);
-                Picasso.with(InitialActivity.this).load(R.drawable.tutorial1).into(mTutorial2);
                 mButton.setVisibility(View.VISIBLE);
                 mButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (mCount == 0) {
-                            Picasso.with(InitialActivity.this).load(R.drawable.tutorial2).into(mTutorial1, new Callback() {
-                                @Override
-                                public void onSuccess() {
-                                    Picasso.with(InitialActivity.this).load(R.drawable.tutorial2).into(mTutorial2);
-                                }
-
-                                @Override
-                                public void onError() {
-
-                                }
-                            });
-
-                        } else if (mCount == 1) {
-                            Picasso.with(InitialActivity.this).load(R.drawable.tutorial3).into(mTutorial1, new Callback() {
-                                @Override
-                                public void onSuccess() {
-                                    Picasso.with(InitialActivity.this).load(R.drawable.tutorial3).into(mTutorial2);
-                                }
-
-                                @Override
-                                public void onError() {
-
-                                }
-                            });
-                        } else if (mCount == 2) {
-                            Picasso.with(InitialActivity.this).load(R.drawable.tutorial4).into(mTutorial1, new Callback() {
-                                @Override
-                                public void onSuccess() {
-                                    Picasso.with(InitialActivity.this).load(R.drawable.tutorial4).into(mTutorial2);
-                                }
-
-                                @Override
-                                public void onError() {
-
-                                }
-                            });
-                        } else if (mCount == 3) {
-                            Picasso.with(InitialActivity.this).load(R.drawable.tutorial5).into(mTutorial1, new Callback() {
-                                @Override
-                                public void onSuccess() {
-                                    Picasso.with(InitialActivity.this).load(R.drawable.tutorial5).into(mTutorial2);
-                                }
-
-                                @Override
-                                public void onError() {
-
-                                }
-                            });
-                        } else if (mCount == 4) {
-                            Intent intent = new Intent(InitialActivity.this, SignUpActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                        }
-                        mCount++;
-
-
+                        // Send user to signup
+                        Intent intent = new Intent(InitialActivity.this, SignUpActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
                     }
                 });
             } else {
@@ -134,9 +77,9 @@ public class InitialActivity extends ActionBarActivity {
         boolean ranBefore = preferences.getBoolean("RanBefore", false);
         if (!ranBefore) {
             // first time
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean("RanBefore", true);
-            editor.apply();
+            //SharedPreferences.Editor editor = preferences.edit();
+            //editor.putBoolean("RanBefore", true);
+            //editor.apply();
         }
         return !ranBefore;
     }
