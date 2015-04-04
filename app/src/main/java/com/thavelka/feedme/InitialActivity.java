@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import com.parse.ParseAnalytics;
 import com.parse.ParseUser;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
@@ -43,7 +44,17 @@ public class InitialActivity extends ActionBarActivity {
         } else {
             if (isFirstTime()) {
                 mCount = 0;
-                Picasso.with(InitialActivity.this).load(R.drawable.tutorial1).into(mTutorial1);
+                Picasso.with(InitialActivity.this).load(R.drawable.tutorial1).into(mTutorial1, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        mButton.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onError() {
+
+                    }
+                });
                 mButton.setVisibility(View.VISIBLE);
                 mButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -77,11 +88,13 @@ public class InitialActivity extends ActionBarActivity {
         boolean ranBefore = preferences.getBoolean("RanBefore", false);
         if (!ranBefore) {
             // first time
-            //SharedPreferences.Editor editor = preferences.edit();
-            //editor.putBoolean("RanBefore", true);
-            //editor.apply();
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("RanBefore", true);
+            editor.apply();
+
         }
         return !ranBefore;
+
     }
 
 
