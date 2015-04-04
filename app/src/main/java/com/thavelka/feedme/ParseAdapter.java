@@ -1,11 +1,14 @@
 package com.thavelka.feedme;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +16,8 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -116,6 +121,8 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
         Button mShareButton;
         @InjectView(R.id.directionsButton)
         Button mDirectionsButton;
+        @InjectView(R.id.reportButton)
+        Button mReportButton;
 
 
         public ParseViewHolder(final View itemView) {
@@ -274,6 +281,53 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
                     }
                 }
             });
+
+            mReportButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
+
+                    alert.setTitle("Report Listing");
+                    alert.setMessage("What's wrong with this listing? Please be specific.");
+
+// Set an EditText view to get user input
+                    final EditText input = new EditText(mContext);
+                    input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                    FrameLayout container = new FrameLayout(mContext);
+                    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    params.leftMargin = 48;
+                    params.rightMargin = 48;
+                    params.topMargin = 48;
+                    params.bottomMargin = 16;
+                    input.setLayoutParams(params);
+                    container.addView(input);
+                    alert.setView(container);
+
+
+                    alert.setPositiveButton("Send", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            String value = input.getText().toString();
+                            ParseObject report = new ParseObject("Report");
+                            report.put("listing", ParseObject.createWithoutData("Listing", listing.getObjectId()));
+                            report.put("description", value);
+                            report.saveInBackground();
+                            Toast.makeText(mContext, "Thank you!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            Toast.makeText(mContext, "Cancelled", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    alert.show();
+
+
+                }
+            });
+
+
         }
 
 

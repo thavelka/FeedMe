@@ -159,6 +159,16 @@
                 android:layout_height="wrap_content"
                 android:text="@string/directionsLabel"
                 android:textColor="@color/accent"/>
+
+            <Button
+                android:id="@+id/reportButton"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Report"
+                android:textColor="#ffd0d0d0"
+                android:textSize="10sp"/>
+
         </LinearLayout>
 
         <View

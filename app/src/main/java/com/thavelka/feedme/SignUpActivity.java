@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseException;
@@ -42,6 +43,8 @@ public class SignUpActivity extends ActionBarActivity {
     Spinner mLocationSpinner;
     @InjectView(R.id.signUpButton)
     Button mSignUpButton;
+    @InjectView(R.id.loginLink)
+    TextView mLoginLink;
 
 
     List<ParseObject> mLocations;
@@ -66,6 +69,16 @@ public class SignUpActivity extends ActionBarActivity {
                 int spinnerPosition = mLocationSpinner.getSelectedItemPosition();
                 ParseObject userLocation = mLocations.get(spinnerPosition);
                 signUpUser(username, fullname, password, email, userLocation);
+            }
+        });
+
+        mLoginLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
         });
 

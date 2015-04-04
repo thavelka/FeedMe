@@ -60,5 +60,10 @@
     <string name="directionsLabel">Directions</string>
     <string name="termLabel">Term</string>
     <string name="resultLabel">result</string>
+    <string name="reportButtonLabel">Report</string>
+    <string name="title_activity_initial">InitialActivity</string>
+    <string name="reportLabel">Report</string>
+    <string name="nextButtonLabel">Next</string>
+    <string name="lastButtonText">Let\'s go!</string>
 
 </resources>
