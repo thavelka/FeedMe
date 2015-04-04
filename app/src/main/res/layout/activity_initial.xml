@@ -1,8 +1,11 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    android:id="@+id/relativeLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/primary"
+                android:padding="0dp"
                 tools:context="com.thavelka.feedme.InitialActivity">
 
     <TextView
@@ -16,5 +19,31 @@
         android:text="FeedMe"
         android:textColor="@android:color/white"
         android:textSize="48sp"/>
+
+    <ImageView
+        android:id="@+id/tutorialImage2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:visibility="visible"
+        />
+
+    <ImageView
+        android:id="@+id/tutorialImage1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:visibility="visible"
+        />
+
+    <Button
+        android:id="@+id/nextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="48dp"
+        android:text="Next"
+        android:visibility="gone"/>
 
 </RelativeLayout>

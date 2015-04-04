@@ -26,6 +26,7 @@ public class MainFragment extends Fragment {
     protected SlidingTabLayout mTabs;
     protected String dayOfWeek;
 
+
     public static MainFragment newInstance() {
         return new MainFragment();
     }
@@ -78,5 +79,6 @@ public class MainFragment extends Fragment {
 
         return root;
     }
+
 
 }

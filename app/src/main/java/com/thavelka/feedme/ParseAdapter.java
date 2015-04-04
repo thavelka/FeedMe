@@ -8,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -290,9 +292,19 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
 
 // Set an EditText view to get user input
                     final EditText input = new EditText(mContext);
-                    alert.setView(input);
+                    input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                    FrameLayout container = new FrameLayout(mContext);
+                    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    params.leftMargin = 48;
+                    params.rightMargin = 48;
+                    params.topMargin = 48;
+                    params.bottomMargin = 16;
+                    input.setLayoutParams(params);
+                    container.addView(input);
+                    alert.setView(container);
 
-                    alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+                    alert.setPositiveButton("Send", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             String value = input.getText().toString();
                             ParseObject report = new ParseObject("Report");
@@ -310,6 +322,8 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
                     });
 
                     alert.show();
+
+
                 }
             });
 

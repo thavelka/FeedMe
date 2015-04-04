@@ -32,6 +32,7 @@ public class BaseActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
+
         // CHECK USER LOGGED IN
         ParseAnalytics.trackAppOpened(getIntent());
         ParseUser currentUser = ParseUser.getCurrentUser();
@@ -47,6 +48,7 @@ public class BaseActivity extends ActionBarActivity
             startActivity(intent);
         }
 
+
         // SETTING UP TOOLBAR
         // Creating toolbar to be used as the activity's actionbar
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -59,6 +61,8 @@ public class BaseActivity extends ActionBarActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+
     }
 
     @Override
@@ -128,5 +132,6 @@ public class BaseActivity extends ActionBarActivity
 
         return super.onOptionsItemSelected(item);
     }
+
 
 }
