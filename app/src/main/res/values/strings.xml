@@ -45,7 +45,7 @@
     <string name="signUpLabel">Sign Up</string>
     <string name="emptyDealText">No deals for today :(</string>
     <string name="emptyFavoriteText">No favorites</string>
-    <string name="locationLabel">Location</string>
+    <string name="locationLabel">Change location</string>
     <string name="saveButtonLabel">Save</string>
     <string name="usernameTestLabel">User\'s Name</string>
     <string name="emailTestLabel">user@email.com</string>
@@ -65,5 +65,8 @@
     <string name="reportLabel">Report</string>
     <string name="nextButtonLabel">Next</string>
     <string name="lastButtonText">Let\'s go!</string>
+    <string name="submittedToast">Submitted for approval</string>
+    <string name="topContributors">Top Contributors</string>
+    <string name="spinnerPrompt">Choose City</string>
 
 </resources>

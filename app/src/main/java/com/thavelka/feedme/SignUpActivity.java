@@ -104,6 +104,8 @@ public class SignUpActivity extends ActionBarActivity {
         user.setEmail(email);
         user.put("name", fullname);
         user.put("location", ParseObject.createWithoutData("Location", userLocation.getObjectId()));
+        user.put("score", 0);
+        user.put("show", true);
 
         user.signUpInBackground(new SignUpCallback() {
             public void done(ParseException e) {

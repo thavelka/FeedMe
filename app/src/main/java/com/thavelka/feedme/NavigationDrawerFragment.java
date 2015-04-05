@@ -35,10 +35,11 @@ public class NavigationDrawerFragment extends Fragment {
     protected String dayOfWeek;
     private String NAME = "NAME";
     private String EMAIL = "EMAIL";
+    private int SCORE = 0;
     private String CITY_STATE;
     private String IMAGE_URL;
-    private String[] TITLES = {"Home", "Favorites", "Settings"};
-    private int[] ICONS = {R.mipmap.ic_home_grey600_24dp, R.mipmap.ic_favorite_grey600_24dp,
+    private String[] TITLES = {"Home", "Favorites", "Leaderboard", "Settings"};
+    private int[] ICONS = {R.mipmap.ic_home_grey600_24dp, R.mipmap.ic_favorite_grey600_24dp, R.mipmap.ic_star_grey600_24dp,
             R.mipmap.ic_settings_grey600_24dp};
     /**
      * A pointer to the current callbacks instance (the Activity).
@@ -102,8 +103,10 @@ public class NavigationDrawerFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         if (ParseUser.getCurrentUser() != null) {
-            NAME = ParseUser.getCurrentUser().getString("name");
-            EMAIL = ParseUser.getCurrentUser().getEmail();
+            ParseUser currentUser = ParseUser.getCurrentUser();
+            NAME = currentUser.getString("name");
+            EMAIL = currentUser.getEmail();
+            SCORE = currentUser.getInt("score");
             ParseObject LOCATION = ParseUser.getCurrentUser().getParseObject("location");
             try {
                 CITY_STATE = LOCATION.fetchIfNeeded().getString("city") + ", "
@@ -125,7 +128,7 @@ public class NavigationDrawerFragment extends Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         drawerAdapter = new DrawerAdapter
-                (getActivity(), TITLES, ICONS, NAME, EMAIL, CITY_STATE, IMAGE_URL);
+                (getActivity(), TITLES, ICONS, NAME, EMAIL, SCORE, CITY_STATE, IMAGE_URL);
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
@@ -241,9 +244,11 @@ public class NavigationDrawerFragment extends Fragment {
 
     public void updateDrawer() {
         if (ParseUser.getCurrentUser() != null) {
-            NAME = ParseUser.getCurrentUser().getString("name");
-            EMAIL = ParseUser.getCurrentUser().getEmail();
-            ParseObject LOCATION = ParseUser.getCurrentUser().getParseObject("location");
+            ParseUser currentUser = ParseUser.getCurrentUser();
+            NAME = currentUser.getString("name");
+            EMAIL = currentUser.getEmail();
+            SCORE = currentUser.getInt("score");
+            ParseObject LOCATION = currentUser.getParseObject("location");
             try {
                 CITY_STATE = LOCATION.fetchIfNeeded().getString("city") + ", "
                         + LOCATION.fetchIfNeeded().getString("state");
@@ -253,7 +258,7 @@ public class NavigationDrawerFragment extends Fragment {
             }
 
             drawerAdapter = new DrawerAdapter
-                    (getActivity(), TITLES, ICONS, NAME, EMAIL, CITY_STATE, IMAGE_URL);
+                    (getActivity(), TITLES, ICONS, NAME, EMAIL, SCORE, CITY_STATE, IMAGE_URL);
             recyclerView.setAdapter(drawerAdapter);
         }
 

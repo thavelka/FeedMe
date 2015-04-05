@@ -23,6 +23,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
 
     private String mName;        //String Resource for header View Name
     private String mEmail;       //String Resource for header view mEmail
+    private int mScore;
     private String mLocation;
     private String mImageUrl;
     private Context mContext;
@@ -31,13 +32,14 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
     // Creating a ViewHolder which extends the RecyclerView View Holder
     // ViewHolder are used to to store the inflated views in order to recycle them
 
-    DrawerAdapter(Context context, String Titles[], int Icons[], String Name, String Email, String location, String imageUrl) { // Constructor takes info to display as params
+    DrawerAdapter(Context context, String Titles[], int Icons[], String Name, String Email, int Score, String location, String imageUrl) { // Constructor takes info to display as params
 
         mContext = context;
         mNavTitles = Titles;
         mIcons = Icons;
         mName = Name;
         mEmail = Email;
+        mScore = Score;
         mLocation = location;
         mImageUrl = imageUrl;
 
@@ -83,7 +85,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
         } else {
             Drawable shadow = mContext.getResources().getDrawable(R.drawable.shadow);
             shadow.setAlpha(90);
-            holder.Name.setText(mName);
+            holder.Name.setText(mName + " (" + mScore + ')');
             holder.email.setText(mEmail);
             holder.location.setText(mLocation);
             Picasso.with(mContext).load(mImageUrl).into(holder.headerImage);

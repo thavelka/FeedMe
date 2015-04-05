@@ -8,19 +8,28 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.parse.CountCallback;
 import com.parse.ParseAnalytics;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 
 public class BaseActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
+    private static final String TAG = BaseActivity.class.getSimpleName();
+
     Toolbar mToolbar;
     String NAME = "NAME";
     String EMAIL = "EMAIL";
+    int SCORE = 0;
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -35,11 +44,28 @@ public class BaseActivity extends ActionBarActivity
 
         // CHECK USER LOGGED IN
         ParseAnalytics.trackAppOpened(getIntent());
-        ParseUser currentUser = ParseUser.getCurrentUser();
+        final ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {
             // Allow user to continue, send user's info to header in drawer
             NAME = currentUser.getString("name");
             EMAIL = currentUser.getEmail();
+
+            // Update user's score
+            ParseRelation<ParseObject> relation = currentUser.getRelation("posts");
+            ParseQuery<ParseObject> query = relation.getQuery();
+            query.whereEqualTo("isApproved", true);
+            query.setLimit(1000);
+
+            query.countInBackground(new CountCallback() {
+                @Override
+                public void done(int i, ParseException e) {
+                    Log.d(TAG, "Found " + i + " posts by user");
+                    SCORE = i;
+                    currentUser.put("score", i);
+                    currentUser.saveInBackground();
+                }
+            });
+
         } else {
             // Send user to login activity
             Intent intent = new Intent(BaseActivity.this, LoginActivity.class);
@@ -80,6 +106,9 @@ public class BaseActivity extends ActionBarActivity
                 fragment = FavoritesFragment.newInstance();
                 break;
             case 3:
+                fragment = ScoreFragment.newInstance();
+                break;
+            case 4:
                 fragment = SettingsFragment.newInstance();
                 break;
             default:

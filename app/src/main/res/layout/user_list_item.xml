@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal"
+              android:padding="16dp">
+
+    <TextView
+        android:id="@+id/nameText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:singleLine="true"
+        android:text="New Text"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/scoreText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:gravity="right"
+        android:text="New Text"
+        android:textSize="18sp"/>
+</LinearLayout>

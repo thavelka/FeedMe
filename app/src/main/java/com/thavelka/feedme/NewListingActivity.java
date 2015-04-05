@@ -19,6 +19,7 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -129,7 +130,7 @@ public class NewListingActivity extends ActionBarActivity {
                     startActivity(intent);
                 } else {
                     Log.d(TAG, "Retrieved the restaurant.");
-                    Listing listing = new Listing();
+                    final Listing listing = new Listing();
                     String objId = object.getObjectId();
                     listing.put("restaurant", ParseObject.createWithoutData("Restaurant", objId));
                     listing.put("days", days);
@@ -140,7 +141,11 @@ public class NewListingActivity extends ActionBarActivity {
                     listing.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
-                            Toast.makeText(NewListingActivity.this, "Post added successfully", Toast.LENGTH_SHORT).show();
+                            ParseUser user = ParseUser.getCurrentUser();
+                            ParseRelation<ParseObject> relation = user.getRelation("posts");
+                            relation.add(listing);
+                            user.saveInBackground();
+                            Toast.makeText(NewListingActivity.this, getString(R.string.submittedToast), Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(NewListingActivity.this, BaseActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
