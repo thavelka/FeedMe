@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.parse.ParseException;
@@ -28,8 +29,10 @@ import java.util.List;
 public class SettingsFragment extends Fragment {
 
     public final static String TAG = SettingsFragment.class.getSimpleName();
+    ParseUser mCurrentUser;
     List<ParseObject> mLocations;
     Spinner mLocationSpinner;
+    Switch mOptOutSwitch;
     Button mSaveButton;
 
     public static SettingsFragment newInstance() {
@@ -41,8 +44,14 @@ public class SettingsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_settings, container, false);
         getActivity().setTitle("Settings");
+        mCurrentUser = ParseUser.getCurrentUser();
         mLocationSpinner = (Spinner) root.findViewById(R.id.locationSpinner);
         mSaveButton = (Button) root.findViewById(R.id.saveButton);
+        mOptOutSwitch = (Switch) root.findViewById(R.id.optOutSwitch);
+        boolean toCheck = mCurrentUser.getBoolean("show");
+        Log.d(TAG, "Show user = " + toCheck);
+        mOptOutSwitch.setChecked(toCheck);
+
         new GetLocations().execute();
         setSaveButtonListener();
         return root;
@@ -51,6 +60,7 @@ public class SettingsFragment extends Fragment {
     public void addItemsToSpinner(List<ParseObject> locations) {
 
         List<String> list = new ArrayList<>();
+        list.add(getString(R.string.spinnerPrompt)); // First string in array is prompt
         for (ParseObject i : locations) {
             String locationName = i.getString("city") + ", " + i.get("state");
             list.add(locationName);
@@ -59,6 +69,7 @@ public class SettingsFragment extends Fragment {
                 android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mLocationSpinner.setAdapter(dataAdapter);
+
     }
 
     public void setSaveButtonListener() {
@@ -66,9 +77,12 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ParseUser user = ParseUser.getCurrentUser();
-                int spinnerPosition = mLocationSpinner.getSelectedItemPosition();
-                ParseObject userLocation = mLocations.get(spinnerPosition);
-                user.put("location", ParseObject.createWithoutData("Location", userLocation.getObjectId()));
+                int spinnerPosition = mLocationSpinner.getSelectedItemPosition() - 1; // -1 to accommodate for prompt
+                if (spinnerPosition >= 0) { // Leaving prompt will give a -1 value
+                    ParseObject userLocation = mLocations.get(spinnerPosition);
+                    user.put("location", ParseObject.createWithoutData("Location", userLocation.getObjectId()));
+                }
+                user.put("show", mOptOutSwitch.isChecked());
                 user.saveInBackground();
                 Toast.makeText(getActivity(), "Settings saved", Toast.LENGTH_SHORT).show();
 

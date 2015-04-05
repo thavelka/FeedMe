@@ -1,0 +1,40 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/background_material_light"
+                tools:context="com.thavelka.feedme.ScoreFragment">
+
+
+    <LinearLayout
+        android:id="@+id/listHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="8dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/locationTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:gravity="center_horizontal"
+            android:singleLine="true"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+
+        <View
+            style="@style/Divider"/>
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/scoreList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/listHeader"
+        android:background="@color/background_material_light"
+        android:elevation="4dp"
+        android:listSelector="@android:color/transparent"
+        android:overScrollMode="ifContentScrolls"/>
+
+</RelativeLayout>
