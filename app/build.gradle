@@ -8,8 +8,8 @@ android {
         applicationId "com.thavelka.feedme"
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 9
-        versionName "1.2.2"
+        versionCode 10
+        versionName "1.3.0"
     }
     buildTypes {
         release {

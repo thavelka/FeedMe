@@ -1,14 +1,9 @@
 package com.thavelka.feedme;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +11,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -25,9 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseRelation;
-import com.parse.ParseUser;
 import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
@@ -39,14 +29,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 // Custom ParseObject Adapter for Recycler View
 // Customized for Listing subclass
-public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHolder> {
+public class AdminListingAdapter extends RecyclerView.Adapter<AdminListingAdapter.ParseViewHolder> {
 
-    public static final String TAG = ParseAdapter.class.getSimpleName();
+    public static final String TAG = AdminListingAdapter.class.getSimpleName();
     List<Listing> mObjects = Collections.emptyList();
     Context mContext;
     boolean mIsFavorite;
 
-    public ParseAdapter(Context context, List<Listing> objects, boolean isFavorite) throws ParseException {
+    public AdminListingAdapter(Context context, List<Listing> objects, boolean isFavorite) throws ParseException {
 
         // Get list of objects to adapt
         mObjects = objects;
@@ -115,10 +105,10 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
         TextView mDescriptionExpanded;
         @InjectView(R.id.imageExpanded)
         ImageView mImageExpanded;
-        @InjectView(R.id.favoriteButton)
-        Button mFavoriteButton;
-        @InjectView(R.id.shareButton)
-        Button mShareButton;
+        @InjectView(R.id.favoriteButton) // Hijacking favorite button to use as approve button
+                Button mApproveButton;
+        @InjectView(R.id.shareButton)  // Hijacking share button to use as delete button
+                Button mDeleteButton;
         @InjectView(R.id.directionsButton)
         Button mDirectionsButton;
         @InjectView(R.id.reportButton)
@@ -214,8 +204,11 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
         }
 
         public void bindObject(final Listing listing) {
+            // Hides buttons when in admin mode
+            mDirectionsButton.setVisibility(View.GONE);
+            mReportButton.setVisibility(View.GONE);
             // Grabs name and address from object's restaurant pointer
-            // Sets TextView with values
+            // Sets TextViews with values
             Picasso.with(itemView.getContext()).load(listing.getImageUrl()).into(mImageCompressed);
             mNameCompressed.setText(listing.getName());
             mAddressCompressed.setText(listing.getAddress());
@@ -224,106 +217,30 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
             mNameExpanded.setText(listing.getName());
             mAddressExpanded.setText(listing.getAddress());
             mDescriptionExpanded.setText(listing.getDescription());
-            if (mIsFavorite) {
-                mFavoriteButton.setText("Unfavorite");
-            }
+            mApproveButton.setText("Approve");
+            mDeleteButton.setText("Delete");
+
             Picasso.with(itemView.getContext()).load(listing.getImageUrl()).into(mImageExpanded);
-            mFavoriteButton.setOnClickListener(new View.OnClickListener() {
+            mApproveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    ParseUser user = ParseUser.getCurrentUser();
-                    ParseRelation<ParseObject> relation = user.getRelation("favorites");
-
-                    if (mFavoriteButton.getText().toString().equals("Unfavorite")) {
-                        relation.remove(listing);
-                        Log.d(TAG, "Removed listing from favorites");
-                        Toast.makeText(mContext, "Removed from favorites", Toast.LENGTH_SHORT).show();
-                        mObjects.remove(getPosition());
-                        notifyItemRemoved(getPosition());
-                        notifyItemRangeChanged(getPosition(), mObjects.size());
-
-
-                    } else {
-                        relation.add(listing);
-                        Log.d(TAG, "Added listing to favorites");
-                        Toast.makeText(mContext, "Added to favorites", Toast.LENGTH_SHORT).show();
-                    }
-
-                    user.saveInBackground();
+                    listing.put("isApproved", true);
+                    listing.saveInBackground();
+                    Toast.makeText(mContext, "Listing approved", Toast.LENGTH_SHORT).show();
+                    mObjects.remove(getPosition());
+                    notifyItemRemoved(getPosition());
+                    notifyItemRangeChanged(getPosition(), mObjects.size());
                 }
             });
 
-            mShareButton.setOnClickListener(new View.OnClickListener() {
+            mDeleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String toSend = "Join me for " + listing.getDescription() + " at " + listing.getName() + " today!";
-                    Intent sendIntent = new Intent();
-                    sendIntent.setAction(Intent.ACTION_SEND);
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, toSend);
-                    sendIntent.setType("text/plain");
-                    mContext.startActivity(Intent.createChooser(sendIntent, mContext.getResources().getText(R.string.send_to)));
-                }
-            });
-
-            mDirectionsButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String address = listing.getAddress();
-                    String label = " (" + listing.getName() + ")";
-                    Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + address + label);
-                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                    mapIntent.setPackage("com.google.android.apps.maps");
-                    if (mapIntent.resolveActivity(mContext.getPackageManager()) != null && isNetworkAvailable()) {
-                        mContext.startActivity(mapIntent);
-                    } else {
-                        Toast.makeText(mContext, "Unable to load maps application", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-
-            mReportButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
-
-                    alert.setTitle("Report Listing");
-                    alert.setMessage("What's wrong with this listing? Please be specific.");
-
-// Set an EditText view to get user input
-                    final EditText input = new EditText(mContext);
-                    input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-                    FrameLayout container = new FrameLayout(mContext);
-                    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    params.leftMargin = 48;
-                    params.rightMargin = 48;
-                    params.topMargin = 48;
-                    params.bottomMargin = 16;
-                    input.setLayoutParams(params);
-                    container.addView(input);
-                    alert.setView(container);
-
-
-                    alert.setPositiveButton("Send", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            String value = input.getText().toString();
-                            ParseObject report = new ParseObject("Report");
-                            report.put("listing", ParseObject.createWithoutData("Listing", listing.getObjectId()));
-                            report.put("description", value);
-                            report.saveInBackground();
-                            Toast.makeText(mContext, "Thank you!", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-                    alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            Toast.makeText(mContext, "Cancelled", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-                    alert.show();
-
-
+                    listing.deleteInBackground();
+                    Toast.makeText(mContext, "Listing Deleted", Toast.LENGTH_SHORT).show();
+                    mObjects.remove(getPosition());
+                    notifyItemRemoved(getPosition());
+                    notifyItemRangeChanged(getPosition(), mObjects.size());
                 }
             });
 
@@ -335,7 +252,6 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
         public void onClick(final View v) {
             if (mExpandedLayout.getVisibility() == View.GONE) {
                 expand(mExpandedLayout);
-
             } else if (mExpandedLayout.getVisibility() == View.VISIBLE) {
                 collapse(mExpandedLayout);
             }

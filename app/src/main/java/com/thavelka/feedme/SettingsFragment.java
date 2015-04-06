@@ -1,6 +1,7 @@
 package com.thavelka.feedme;
 
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -34,6 +35,7 @@ public class SettingsFragment extends Fragment {
     Spinner mLocationSpinner;
     Switch mOptOutSwitch;
     Button mSaveButton;
+    Button mAdminButton;
 
     public static SettingsFragment newInstance() {
         return new SettingsFragment();
@@ -42,7 +44,7 @@ public class SettingsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_settings, container, false);
+        final View root = inflater.inflate(R.layout.fragment_settings, container, false);
         getActivity().setTitle("Settings");
         mCurrentUser = ParseUser.getCurrentUser();
         mLocationSpinner = (Spinner) root.findViewById(R.id.locationSpinner);
@@ -51,6 +53,19 @@ public class SettingsFragment extends Fragment {
         boolean toCheck = mCurrentUser.getBoolean("show");
         Log.d(TAG, "Show user = " + toCheck);
         mOptOutSwitch.setChecked(toCheck);
+
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if (currentUser.getBoolean("isAdmin")) {
+            mAdminButton = (Button) root.findViewById(R.id.adminButton);
+            mAdminButton.setVisibility(View.VISIBLE);
+            mAdminButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), AdminActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
 
         new GetLocations().execute();
         setSaveButtonListener();

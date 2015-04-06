@@ -68,5 +68,7 @@
     <string name="submittedToast">Submitted for approval</string>
     <string name="topContributors">Top Contributors</string>
     <string name="spinnerPrompt">Choose City</string>
+    <string name="title_activity_admin">AdminActivity</string>
+    <string name="emptyAdminText">No new listings</string>
 
 </resources>
