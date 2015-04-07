@@ -67,8 +67,12 @@ public class SignUpActivity extends ActionBarActivity {
                 String password = mPasswordField.getText().toString();
                 String email = mEmailField.getText().toString();
                 int spinnerPosition = mLocationSpinner.getSelectedItemPosition();
-                ParseObject userLocation = mLocations.get(spinnerPosition);
+                if (spinnerPosition >= 0) {
+                    ParseObject userLocation = mLocations.get(spinnerPosition - 1);
                 signUpUser(username, fullname, password, email, userLocation);
+                } else {
+                    Toast.makeText(SignUpActivity.this, getString(R.string.cityPrompt), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -87,6 +91,7 @@ public class SignUpActivity extends ActionBarActivity {
     public void addItemsToSpinner(List<ParseObject> locations) {
 
         List<String> list = new ArrayList<>();
+        list.add(getString(R.string.spinnerPrompt)); // First string in array is prompt
         for (ParseObject i : locations) {
             String locationName = i.getString("city") + ", " + i.get("state");
             list.add(locationName);

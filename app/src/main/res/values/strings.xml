@@ -70,5 +70,6 @@
     <string name="spinnerPrompt">Choose City</string>
     <string name="title_activity_admin">AdminActivity</string>
     <string name="emptyAdminText">No new listings</string>
+    <string name="cityPrompt">Please select a city</string>
 
 </resources>

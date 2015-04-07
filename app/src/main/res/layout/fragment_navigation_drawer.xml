@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/background_material_light"
     android:choiceMode="singleChoice"
-    android:scrollbars="vertical"
+    android:overScrollMode="never"
+    android:scrollbars="none"
     tools:context=".NavigationDrawerFragment">
 
 </android.support.v7.widget.RecyclerView>
