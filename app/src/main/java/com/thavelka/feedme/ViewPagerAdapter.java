@@ -1,6 +1,7 @@
 package com.thavelka.feedme;
 
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -20,9 +21,19 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
         // Returns a fragment based on current position in pager
         if (position == 0) {
-            return new Food(); // Creates and returns Food fragment
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("isFood", true);
+            Fragment foodFragment = new ListingsFragment();
+            foodFragment.setArguments(bundle);
+            return foodFragment;
+            //return new Food(); // Creates and returns Food fragment
         } else {
-            return new Drinks(); // Creates and return Drinks fragment
+            //return new Drinks(); // Creates and return Drinks fragment
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("isFood", false);
+            Fragment drinksFragment = new ListingsFragment();
+            drinksFragment.setArguments(bundle);
+            return drinksFragment;
         }
     }
 
