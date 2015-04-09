@@ -104,6 +104,7 @@ public class SignUpActivity extends ActionBarActivity {
 
     protected void signUpUser(String username, String fullname, String password, String email, ParseObject userLocation) {
         ParseUser user = new ParseUser();
+        // TODO: VALIDATE PARAMS FOR NEW USER BEFORE CREATION
         user.setUsername(username);
         user.setPassword(password);
         user.setEmail(email);
