@@ -5,12 +5,12 @@
 
 
     <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/foodRefresher"
+        android:id="@+id/swipeRefresher"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/foodRecyclerView"
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical">
@@ -20,7 +20,7 @@
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <ProgressBar
-        android:id="@+id/foodProgress"
+        android:id="@+id/progress"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
         android:indeterminate="true"/>
 
     <TextView
-        android:id="@+id/emptyFoodText"
+        android:id="@+id/emptyText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"

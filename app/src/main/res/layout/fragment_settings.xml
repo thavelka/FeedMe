@@ -76,5 +76,13 @@
 
         <View
             style="@style/Divider"/>
+
+        <Button
+            android:id="@+id/adminButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="Admin Settings"
+            android:visibility="gone"/>
     </LinearLayout>
 </RelativeLayout>

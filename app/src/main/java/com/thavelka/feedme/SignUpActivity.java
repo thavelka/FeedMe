@@ -67,8 +67,12 @@ public class SignUpActivity extends ActionBarActivity {
                 String password = mPasswordField.getText().toString();
                 String email = mEmailField.getText().toString();
                 int spinnerPosition = mLocationSpinner.getSelectedItemPosition();
-                ParseObject userLocation = mLocations.get(spinnerPosition);
-                signUpUser(username, fullname, password, email, userLocation);
+                if (spinnerPosition >= 0) {
+                    ParseObject userLocation = mLocations.get(spinnerPosition - 1);
+                    signUpUser(username, fullname, password, email, userLocation);
+                } else {
+                    Toast.makeText(SignUpActivity.this, getString(R.string.cityPrompt), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -87,6 +91,7 @@ public class SignUpActivity extends ActionBarActivity {
     public void addItemsToSpinner(List<ParseObject> locations) {
 
         List<String> list = new ArrayList<>();
+        list.add(getString(R.string.spinnerPrompt)); // First string in array is prompt
         for (ParseObject i : locations) {
             String locationName = i.getString("city") + ", " + i.get("state");
             list.add(locationName);
@@ -99,6 +104,7 @@ public class SignUpActivity extends ActionBarActivity {
 
     protected void signUpUser(String username, String fullname, String password, String email, ParseObject userLocation) {
         ParseUser user = new ParseUser();
+        // TODO: VALIDATE PARAMS FOR NEW USER BEFORE CREATION
         user.setUsername(username);
         user.setPassword(password);
         user.setEmail(email);
@@ -106,6 +112,7 @@ public class SignUpActivity extends ActionBarActivity {
         user.put("location", ParseObject.createWithoutData("Location", userLocation.getObjectId()));
         user.put("score", 0);
         user.put("show", true);
+        user.put("isAdmin", false);
 
         user.signUpInBackground(new SignUpCallback() {
             public void done(ParseException e) {

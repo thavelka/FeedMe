@@ -132,6 +132,7 @@ public class NewListingActivity extends ActionBarActivity {
                     Log.d(TAG, "Retrieved the restaurant.");
                     final Listing listing = new Listing();
                     String objId = object.getObjectId();
+                    // TODO: VALIDATE PARAMS FOR NEW LISTING BEFORE SUBMISSION
                     listing.put("restaurant", ParseObject.createWithoutData("Restaurant", objId));
                     listing.put("days", days);
                     listing.put("description", description);

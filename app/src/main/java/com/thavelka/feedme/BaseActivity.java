@@ -51,6 +51,7 @@ public class BaseActivity extends ActionBarActivity
             EMAIL = currentUser.getEmail();
 
             // Update user's score
+
             ParseRelation<ParseObject> relation = currentUser.getRelation("posts");
             ParseQuery<ParseObject> query = relation.getQuery();
             query.whereEqualTo("isApproved", true);
@@ -61,7 +62,11 @@ public class BaseActivity extends ActionBarActivity
                 public void done(int i, ParseException e) {
                     Log.d(TAG, "Found " + i + " posts by user");
                     SCORE = i;
-                    currentUser.put("score", i);
+                    if (SCORE < 0) { // Parse count returns -1 if no results, set score to 0
+                        currentUser.put("score", 0);
+                    } else { // More than zero posts returns correct number
+                        currentUser.put("score", SCORE);
+                    }
                     currentUser.saveInBackground();
                 }
             });

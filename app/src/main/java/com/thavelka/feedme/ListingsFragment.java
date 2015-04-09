@@ -28,9 +28,9 @@ import java.util.Collections;
 import java.util.List;
 
 
-public class Food extends Fragment {
+public class ListingsFragment extends Fragment {
 
-    public static final String TAG = Food.class.getSimpleName();
+    public static final String TAG = ListingsFragment.class.getSimpleName();
 
     RecyclerView mRecyclerView;
     RecyclerView.Adapter mAdapter;
@@ -38,6 +38,7 @@ public class Food extends Fragment {
     ProgressBar mProgressBar;
     List<Listing> mListings;
     TextView mEmptyText;
+    boolean mIsFood;
 
     @Override
     public void onResume() {
@@ -48,13 +49,13 @@ public class Food extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.food, container, false);
-
+        mIsFood = getArguments().getBoolean("isFood");
+        View v = inflater.inflate(R.layout.fragment_listings, container, false);
         mListings = Collections.emptyList();
-        mProgressBar = (ProgressBar) v.findViewById(R.id.foodProgress);
-        mEmptyText = (TextView) v.findViewById(R.id.emptyFoodText);
+        mProgressBar = (ProgressBar) v.findViewById(R.id.progress);
+        mEmptyText = (TextView) v.findViewById(R.id.emptyText);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.foodRefresher);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipeRefresher);
         mSwipeRefreshLayout.setColorSchemeResources(
                 R.color.refresh_progress_1,
                 R.color.refresh_progress_2,
@@ -66,7 +67,7 @@ public class Food extends Fragment {
                 getListings();
             }
         });
-        mRecyclerView = (RecyclerView) v.findViewById(R.id.foodRecyclerView);
+        mRecyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
         mRecyclerView.addItemDecoration(new DividerItemDecoration
                 (getActivity(), DividerItemDecoration.VERTICAL_LIST));
 
@@ -119,7 +120,7 @@ public class Food extends Fragment {
         @Override
         protected List<Listing> doInBackground(Integer... params) {
             ParseQuery<Listing> query = ParseQuery.getQuery(Listing.class);
-            query.whereEqualTo("isFood", true); // Set constraints for query
+            query.whereEqualTo("isFood", mIsFood); // Set constraints for query
             query.whereEqualTo("days", params[0]);
             if (ParseUser.getCurrentUser() != null) {
                 query.whereEqualTo("location", ParseUser.getCurrentUser().getParseObject("location"));
