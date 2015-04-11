@@ -15,12 +15,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="© SkodaSoft 2015"
+            android:id="@+id/copyright"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="16dp"
+            android:elevation="1dp"/>
+
         <android.support.v4.view.ViewPager
             android:id="@+id/pager"
 
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            />
+            android:elevation="2dp"/>
 
         <com.software.shell.fab.ActionButton
             android:id="@+id/action_button"
@@ -32,7 +43,8 @@
             android:layout_marginBottom="@dimen/fab_margin"
             android:layout_marginEnd="@dimen/fab_margin"
             android:layout_marginRight="@dimen/fab_margin"
-            />
+            android:elevation="8dp"/>
+
     </RelativeLayout>
 
 

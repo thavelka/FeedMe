@@ -104,7 +104,7 @@ public class NavigationDrawerFragment extends Fragment {
         final View root = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         if (ParseUser.getCurrentUser() != null) {
             ParseUser currentUser = ParseUser.getCurrentUser();
-            NAME = currentUser.getString("name");
+            NAME = currentUser.getUsername();
             EMAIL = currentUser.getEmail();
             SCORE = currentUser.getInt("score");
             ParseObject LOCATION = ParseUser.getCurrentUser().getParseObject("location");
@@ -245,7 +245,7 @@ public class NavigationDrawerFragment extends Fragment {
     public void updateDrawer() {
         if (ParseUser.getCurrentUser() != null) {
             ParseUser currentUser = ParseUser.getCurrentUser();
-            NAME = currentUser.getString("name");
+            NAME = currentUser.getUsername();
             EMAIL = currentUser.getEmail();
             SCORE = currentUser.getInt("score");
             ParseObject LOCATION = currentUser.getParseObject("location");
