@@ -14,7 +14,8 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/rowIconDescriptionText"
         android:paddingLeft="16dp"
-        android:src="@drawable/ic_launcher"/>
+        android:src="@drawable/ic_launcher"
+        android:layout_gravity="center_vertical"/>
 
     <TextView
         android:id="@+id/rowText"
@@ -23,6 +24,7 @@
         android:paddingLeft="12dp"
         android:paddingTop="4dp"
         android:text="@string/placeholderText"
-        android:textAppearance="?android:attr/textAppearanceMedium"/>
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_gravity="center_vertical"/>
 
 </LinearLayout>
