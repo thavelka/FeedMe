@@ -1,40 +1,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#7B1FA2">
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/loginImage"
-        android:scaleType="centerCrop"
-        android:tint="#44000000"
-        android:tintMode="src_over"/>
-
-    <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginBottom="16dp"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:weightSum="1">
-
-    <include
-        layout="@layout/com_parse_ui_parse_login_app_logo"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight=".5"
-        android:layout_marginLeft="48dp"
-        android:layout_marginRight="48dp"
-        />
+    android:background="@android:color/transparent">
 
     <include layout="@layout/com_parse_ui_parse_login_form"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:layout_weight=".5"/>
-
-</LinearLayout>
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_weight=".5"
+         android:layout_alignParentBottom="true"
+         android:layout_alignParentStart="false"
+         android:layout_centerHorizontal="true"
+         android:layout_marginLeft="16dp"
+         android:layout_marginBottom="16dp"
+         android:layout_marginRight="16dp"/>
 
 </RelativeLayout>

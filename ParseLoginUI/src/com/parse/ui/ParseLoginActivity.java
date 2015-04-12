@@ -33,9 +33,13 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Window;
+import android.widget.ImageView;
 
 import com.parse.Parse;
 import com.parse.ParseFacebookUtils;
+import com.squareup.picasso.Picasso;
+
+import java.util.Random;
 
 /**
  * Encapsulates the Parse login flow. The user can log in by username/password,
@@ -77,8 +81,8 @@ public class ParseLoginActivity extends FragmentActivity implements
 
   // All login UI fragment transactions will happen within this parent layout element.
   // Change this if you are modifying this code to be hosted in your own activity.
-  private final int fragmentContainer = android.R.id.content;
-
+  private final int fragmentContainer = R.id.loginContainer;
+  private ImageView mLoginImage;
   private ProgressDialog progressDialog;
   private Bundle configOptions;
 
@@ -90,14 +94,18 @@ public class ParseLoginActivity extends FragmentActivity implements
     super.onCreate(savedInstanceState);
 
     this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+    setContentView(R.layout.com_parse_ui_parse_login_activity);
+    mLoginImage = (ImageView) findViewById(R.id.loginImage);
+    randomImage();
 
     // Combine options from incoming intent and the activity metadata
     configOptions = getMergedOptions();
 
     // Show the login form
     if (savedInstanceState == null) {
-      getSupportFragmentManager().beginTransaction().add(fragmentContainer,
-          ParseLoginFragment.newInstance(configOptions)).commit();
+      getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_to_left,
+              R.anim.enter_from_left, R.anim.exit_to_right).add(fragmentContainer,
+              ParseLoginFragment.newInstance(configOptions)).commit();
     }
   }
 
@@ -127,7 +135,7 @@ public class ParseLoginActivity extends FragmentActivity implements
     // so that if the user clicks the back button, they are brought back
     // to the login form.
     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-    transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
+    transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,  R.anim.enter_from_left, R.anim.exit_to_right);
     transaction.replace(fragmentContainer,
         ParseSignupFragment.newInstance(configOptions, username, password));
     transaction.addToBackStack(null);
@@ -143,6 +151,7 @@ public class ParseLoginActivity extends FragmentActivity implements
     // Keep the transaction on the back stack so that if the user clicks
     // the back button, they are brought back to the login form.
     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+    transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right,  R.anim.enter_from_right, R.anim.exit_to_left);
     transaction.replace(fragmentContainer, ParseLoginHelpFragment.newInstance(configOptions));
     transaction.addToBackStack(null);
     transaction.commit();
@@ -229,5 +238,48 @@ public class ParseLoginActivity extends FragmentActivity implements
     }
 
     return mergedOptions;
+  }
+
+  private void randomImage() {
+      Random rand = new Random();
+      int random = rand.nextInt(10);
+      int toLoad;
+      switch (random) {
+          case 0:
+              toLoad = R.drawable.img1;
+              break;
+          case 1:
+              toLoad = R.drawable.img2;
+              break;
+          case 2:
+              toLoad = R.drawable.img3;
+              break;
+          case 3:
+              toLoad = R.drawable.img4;
+              break;
+          case 4:
+              toLoad = R.drawable.img5;
+              break;
+          case 5:
+              toLoad = R.drawable.img6;
+              break;
+          case 6:
+              toLoad = R.drawable.img7;
+              break;
+          case 7:
+              toLoad = R.drawable.img8;
+              break;
+          case 8:
+              toLoad = R.drawable.img9;
+              break;
+          case 9:
+              toLoad = R.drawable.img10;
+              break;
+          default:
+              toLoad = R.drawable.img1;
+              break;
+
+      }
+      Picasso.with(this).load(toLoad).into(mLoginImage);
   }
 }

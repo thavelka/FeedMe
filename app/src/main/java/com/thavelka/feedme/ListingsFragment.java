@@ -68,12 +68,11 @@ public class ListingsFragment extends Fragment {
             }
         });
         mRecyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
-
-
+        mRecyclerView.addItemDecoration
+            (new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
         mRecyclerView.setHasFixedSize(true);
 
         final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setPadding(0,0,0,400);
         mRecyclerView.setClipToPadding(false);

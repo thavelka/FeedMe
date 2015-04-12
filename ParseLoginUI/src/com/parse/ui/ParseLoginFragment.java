@@ -22,15 +22,8 @@
 package com.parse.ui;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.renderscript.Allocation;
-import android.renderscript.Element;
-import android.renderscript.RenderScript;
-import android.renderscript.ScriptIntrinsicBlur;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,18 +34,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.List;
-import java.util.Random;
 
 
 /**
@@ -73,7 +57,6 @@ public class ParseLoginFragment extends ParseLoginFragmentBase {
 
   private View parseLogin;
   private Bitmap imageBitmap;
-  private ImageView loginImage;
   private EditText usernameField;
   private EditText passwordField;
   private TextView parseLoginHelpButton;
@@ -105,14 +88,12 @@ public class ParseLoginFragment extends ParseLoginFragmentBase {
 
     ImageView appLogo = (ImageView) v.findViewById(R.id.app_logo);
     parseLogin = v.findViewById(R.id.parse_login);
-    loginImage = (ImageView) v.findViewById(R.id.loginImage);
+
     usernameField = (EditText) v.findViewById(R.id.login_username_input);
     passwordField = (EditText) v.findViewById(R.id.login_password_input);
     parseLoginHelpButton = (Button) v.findViewById(R.id.parse_login_help);
     parseLoginButton = (Button) v.findViewById(R.id.parse_login_button);
     parseSignupButton = (Button) v.findViewById(R.id.parse_signup_button);
-
-    imageChanger();
 
 
     if (appLogo != null && config.getAppLogo() != null) {
@@ -280,137 +261,4 @@ public class ParseLoginFragment extends ParseLoginFragmentBase {
     onLoginSuccessListener.onLoginSuccess();
   }
 
-  private void imageChanger() {
-      ParseQuery<ParseObject> query = ParseQuery.getQuery("Restaurant");
-      query.findInBackground(new FindCallback<ParseObject>() {
-          @Override
-          public void done(List<ParseObject> objects, ParseException e) {
-              Random rand = new Random();
-              int  n = rand.nextInt(objects.size());
-              ParseObject randRest = objects.get(n);
-
-              final BlurredAsynctask task = new BlurredAsynctask(getActivity(), loginImage, 10);
-
-              task.execute(randRest.getString("imageUrl"));
-          }
-      });
-
-  }
-
-    public class BlurredAsynctask extends AsyncTask<String, Void, Bitmap> {
-
-        private Context context;
-
-        private ImageView iv;
-
-        private int radius;
-
-        public BlurredAsynctask(Context context, ImageView iv, int radius) {
-
-            this.context = context;
-
-            this.iv = iv;
-
-            this.radius = radius;
-
-        }
-
-        @Override
-
-        protected Bitmap doInBackground(String... params) {
-
-            URL url = null;
-
-            try {
-
-                url = new URL(params[0]);
-
-            } catch (MalformedURLException e) {
-
-
-                e.printStackTrace();
-
-                url = null;
-
-            }
-
-            try {
-
-                if (url != null) {
-
-                    Bitmap image = BitmapFactory.decodeStream(url.openConnection()
-
-                            .getInputStream());
-
-                    return image;
-
-                } else {
-
-                    return null;
-
-                }
-
-            } catch (IOException e) {
-
-                e.printStackTrace();
-
-                return null;
-
-            }
-
-        }
-
-        @Override
-
-        protected void onPostExecute(Bitmap result) {
-
-            super.onPostExecute(result);
-
-            if (result != null) {
-
-                Bitmap bm = CreateBlurredImage(result, radius);
-
-                iv.setImageBitmap(bm);
-
-            }
-
-        }
-
-        private Bitmap CreateBlurredImage(final Bitmap bm, int radius) {
-
-            Bitmap blurredBitmap;
-
-            RenderScript rs = RenderScript.create(context);
-
-            ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(rs,
-
-                    Element.U8_4(rs));
-
-            Allocation input;
-
-            input = Allocation.createFromBitmap(rs, bm,
-
-                    Allocation.MipmapControl.MIPMAP_FULL, Allocation.USAGE_SCRIPT);
-
-            script.setRadius(radius);
-
-            script.setInput(input);
-
-            blurredBitmap = Bitmap.createBitmap(bm.getWidth(), bm.getHeight(), Bitmap.Config.ARGB_8888);
-
-            Allocation output;
-
-            output = Allocation.createTyped(rs, input.getType());
-
-            script.forEach(output);
-
-            output.copyTo(blurredBitmap);
-
-            script.destroy();
-
-            return blurredBitmap;
-
-        }
-
-    }
 }
