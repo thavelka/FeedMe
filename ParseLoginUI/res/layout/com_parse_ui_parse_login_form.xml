@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:id="@+id/parse_login"
-    android:visibility="gone">
+    android:visibility="visible">
 
     <EditText
         android:id="@+id/login_username_input"

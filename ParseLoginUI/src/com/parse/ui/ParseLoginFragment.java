@@ -22,7 +22,15 @@
 package com.parse.ui;
 
 import android.app.Activity;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,13 +41,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-//import com.facebook.Request;
-//import com.facebook.Response;
-//import com.facebook.model.GraphUser;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
+import java.util.Random;
+
 
 /**
  * Fragment for the user login screen.
@@ -58,13 +72,13 @@ public class ParseLoginFragment extends ParseLoginFragmentBase {
   private static final String USER_OBJECT_NAME_FIELD = "name";
 
   private View parseLogin;
+  private Bitmap imageBitmap;
+  private ImageView loginImage;
   private EditText usernameField;
   private EditText passwordField;
   private TextView parseLoginHelpButton;
   private Button parseLoginButton;
   private Button parseSignupButton;
-  //private Button facebookLoginButton;
-  //private Button twitterLoginButton;
   private ParseLoginFragmentListener loginFragmentListener;
   private ParseOnLoginSuccessListener onLoginSuccessListener;
 
@@ -88,15 +102,18 @@ public class ParseLoginFragment extends ParseLoginFragmentBase {
 
     View v = inflater.inflate(R.layout.com_parse_ui_parse_login_fragment,
         parent, false);
+
     ImageView appLogo = (ImageView) v.findViewById(R.id.app_logo);
     parseLogin = v.findViewById(R.id.parse_login);
+    loginImage = (ImageView) v.findViewById(R.id.loginImage);
     usernameField = (EditText) v.findViewById(R.id.login_username_input);
     passwordField = (EditText) v.findViewById(R.id.login_password_input);
     parseLoginHelpButton = (Button) v.findViewById(R.id.parse_login_help);
     parseLoginButton = (Button) v.findViewById(R.id.parse_login_button);
     parseSignupButton = (Button) v.findViewById(R.id.parse_signup_button);
-    //facebookLoginButton = (Button) v.findViewById(R.id.facebook_login);
-    //twitterLoginButton = (Button) v.findViewById(R.id.twitter_login);
+
+    imageChanger();
+
 
     if (appLogo != null && config.getAppLogo() != null) {
       appLogo.setImageResource(config.getAppLogo());
@@ -104,12 +121,7 @@ public class ParseLoginFragment extends ParseLoginFragmentBase {
     if (allowParseLoginAndSignup()) {
       setUpParseLoginAndSignup();
     }
-//    if (allowFacebookLogin()) {
-//      setUpFacebookLogin();
-//    }
-//    if (allowTwitterLogin()) {
-//      setUpTwitterLogin();
-//    }
+
     return v;
   }
 
@@ -216,7 +228,7 @@ public class ParseLoginFragment extends ParseLoginFragmentBase {
         String username = usernameField.getText().toString();
         String password = passwordField.getText().toString();
 
-        loginFragmentListener.onSignUpClicked(username, password);
+       loginFragmentListener.onSignUpClicked(username, password);
       }
     });
 
@@ -232,127 +244,6 @@ public class ParseLoginFragment extends ParseLoginFragmentBase {
     });
   }
 
-//  private void setUpFacebookLogin() {
-//    facebookLoginButton.setVisibility(View.VISIBLE);
-//
-//    if (config.getFacebookLoginButtonText() != null) {
-//      facebookLoginButton.setText(config.getFacebookLoginButtonText());
-//    }
-//
-//    facebookLoginButton.setOnClickListener(new OnClickListener() {
-//      @Override
-//      public void onClick(View v) {
-//        loadingStart(true);
-//        ParseFacebookUtils.logIn(config.getFacebookLoginPermissions(),
-//            getActivity(), new LogInCallback() {
-//          @Override
-//          public void done(ParseUser user, ParseException e) {
-//            if (isActivityDestroyed()) {
-//              return;
-//            }
-//
-//            if (user == null) {
-//              loadingFinish();
-//              if (e != null) {
-//                showToast(R.string.com_parse_ui_facebook_login_failed_toast);
-//                debugLog(getString(R.string.com_parse_ui_login_warning_facebook_login_failed) +
-//                    e.toString());
-//              }
-//            } else if (user.isNew()) {
-//              Request.newMeRequest(ParseFacebookUtils.getSession(),
-//                  new Request.GraphUserCallback() {
-//                    @Override
-//                    public void onCompleted(GraphUser fbUser,
-//                                            Response response) {
-//                      /*
-//                        If we were able to successfully retrieve the Facebook
-//                        user's name, let's set it on the fullName field.
-//                      */
-//                      ParseUser parseUser = ParseUser.getCurrentUser();
-//                      if (fbUser != null && parseUser != null
-//                          && fbUser.getName().length() > 0) {
-//                        parseUser.put(USER_OBJECT_NAME_FIELD, fbUser.getName());
-//                        parseUser.saveInBackground(new SaveCallback() {
-//                          @Override
-//                          public void done(ParseException e) {
-//                            if (e != null) {
-//                              debugLog(getString(
-//                                  R.string.com_parse_ui_login_warning_facebook_login_user_update_failed) +
-//                                  e.toString());
-//                            }
-//                            loginSuccess();
-//                          }
-//                        });
-//                      }
-//                      loginSuccess();
-//                    }
-//                  }
-//              ).executeAsync();
-//            } else {
-//              loginSuccess();
-//            }
-//          }
-//        });
-//      }
-//    });
-//  }
-
-//  private void setUpTwitterLogin() {
-//    twitterLoginButton.setVisibility(View.VISIBLE);
-//
-//    if (config.getTwitterLoginButtonText() != null) {
-//      twitterLoginButton.setText(config.getTwitterLoginButtonText());
-//    }
-//
-//    twitterLoginButton.setOnClickListener(new OnClickListener() {
-//      @Override
-//      public void onClick(View v) {
-//        loadingStart(false); // Twitter login pop-up already has a spinner
-//        ParseTwitterUtils.logIn(getActivity(), new LogInCallback() {
-//          @Override
-//          public void done(ParseUser user, ParseException e) {
-//            if (isActivityDestroyed()) {
-//              return;
-//            }
-//
-//            if (user == null) {
-//              loadingFinish();
-//              if (e != null) {
-//                showToast(R.string.com_parse_ui_twitter_login_failed_toast);
-//                debugLog(getString(R.string.com_parse_ui_login_warning_twitter_login_failed) +
-//                    e.toString());
-//              }
-//            } else if (user.isNew()) {
-//              Twitter twitterUser = ParseTwitterUtils.getTwitter();
-//              if (twitterUser != null
-//                  && twitterUser.getScreenName().length() > 0) {
-//                /*
-//                  To keep this example simple, we put the users' Twitter screen name
-//                  into the name field of the Parse user object. If you want the user's
-//                  real name instead, you can implement additional calls to the
-//                  Twitter API to fetch it.
-//                */
-//                user.put(USER_OBJECT_NAME_FIELD, twitterUser.getScreenName());
-//                user.saveInBackground(new SaveCallback() {
-//                  @Override
-//                  public void done(ParseException e) {
-//                    if (e != null) {
-//                      debugLog(getString(
-//                          R.string.com_parse_ui_login_warning_twitter_login_user_update_failed) +
-//                          e.toString());
-//                    }
-//                    loginSuccess();
-//                  }
-//                });
-//              }
-//            } else {
-//              loginSuccess();
-//            }
-//          }
-//        });
-//      }
-//    });
-//  }
 
   private boolean allowParseLoginAndSignup() {
     if (!config.isParseLoginEnabled()) {
@@ -385,34 +276,141 @@ public class ParseLoginFragment extends ParseLoginFragmentBase {
     return result;
   }
 
-//  private boolean allowFacebookLogin() {
-//    if (!config.isFacebookLoginEnabled()) {
-//      return false;
-//    }
-//
-//    if (facebookLoginButton == null) {
-//      debugLog(R.string.com_parse_ui_login_warning_disabled_facebook_login);
-//      return false;
-//    } else {
-//      return true;
-//    }
-//  }
-//
-//  private boolean allowTwitterLogin() {
-//    if (!config.isTwitterLoginEnabled()) {
-//      return false;
-//    }
-//
-//    if (twitterLoginButton == null) {
-//      debugLog(R.string.com_parse_ui_login_warning_disabled_twitter_login);
-//      return false;
-//    } else {
-//      return true;
-//    }
-//  }
-
   private void loginSuccess() {
     onLoginSuccessListener.onLoginSuccess();
   }
 
+  private void imageChanger() {
+      ParseQuery<ParseObject> query = ParseQuery.getQuery("Restaurant");
+      query.findInBackground(new FindCallback<ParseObject>() {
+          @Override
+          public void done(List<ParseObject> objects, ParseException e) {
+              Random rand = new Random();
+              int  n = rand.nextInt(objects.size());
+              ParseObject randRest = objects.get(n);
+
+              final BlurredAsynctask task = new BlurredAsynctask(getActivity(), loginImage, 10);
+
+              task.execute(randRest.getString("imageUrl"));
+          }
+      });
+
+  }
+
+    public class BlurredAsynctask extends AsyncTask<String, Void, Bitmap> {
+
+        private Context context;
+
+        private ImageView iv;
+
+        private int radius;
+
+        public BlurredAsynctask(Context context, ImageView iv, int radius) {
+
+            this.context = context;
+
+            this.iv = iv;
+
+            this.radius = radius;
+
+        }
+
+        @Override
+
+        protected Bitmap doInBackground(String... params) {
+
+            URL url = null;
+
+            try {
+
+                url = new URL(params[0]);
+
+            } catch (MalformedURLException e) {
+
+
+                e.printStackTrace();
+
+                url = null;
+
+            }
+
+            try {
+
+                if (url != null) {
+
+                    Bitmap image = BitmapFactory.decodeStream(url.openConnection()
+
+                            .getInputStream());
+
+                    return image;
+
+                } else {
+
+                    return null;
+
+                }
+
+            } catch (IOException e) {
+
+                e.printStackTrace();
+
+                return null;
+
+            }
+
+        }
+
+        @Override
+
+        protected void onPostExecute(Bitmap result) {
+
+            super.onPostExecute(result);
+
+            if (result != null) {
+
+                Bitmap bm = CreateBlurredImage(result, radius);
+
+                iv.setImageBitmap(bm);
+
+            }
+
+        }
+
+        private Bitmap CreateBlurredImage(final Bitmap bm, int radius) {
+
+            Bitmap blurredBitmap;
+
+            RenderScript rs = RenderScript.create(context);
+
+            ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(rs,
+
+                    Element.U8_4(rs));
+
+            Allocation input;
+
+            input = Allocation.createFromBitmap(rs, bm,
+
+                    Allocation.MipmapControl.MIPMAP_FULL, Allocation.USAGE_SCRIPT);
+
+            script.setRadius(radius);
+
+            script.setInput(input);
+
+            blurredBitmap = Bitmap.createBitmap(bm.getWidth(), bm.getHeight(), Bitmap.Config.ARGB_8888);
+
+            Allocation output;
+
+            output = Allocation.createTyped(rs, input.getType());
+
+            script.forEach(output);
+
+            output.copyTo(blurredBitmap);
+
+            script.destroy();
+
+            return blurredBitmap;
+
+        }
+
+    }
 }

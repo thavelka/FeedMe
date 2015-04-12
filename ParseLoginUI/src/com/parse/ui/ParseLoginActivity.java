@@ -127,6 +127,7 @@ public class ParseLoginActivity extends FragmentActivity implements
     // so that if the user clicks the back button, they are brought back
     // to the login form.
     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+    transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
     transaction.replace(fragmentContainer,
         ParseSignupFragment.newInstance(configOptions, username, password));
     transaction.addToBackStack(null);
