@@ -2,17 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="@color/cardview_light_background"
+                android:elevation="2dp">
 
     <RelativeLayout
         android:id="@+id/compressed"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="?android:attr/selectableItemBackground"
-        android:elevation="4dp"
-        android:paddingBottom="4dp"
+        android:paddingBottom="8dp"
         android:paddingLeft="8dp"
-        android:paddingTop="4dp">
+        android:paddingTop="8dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imageCompressed"
@@ -23,7 +24,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="16dp"
-            android:src="@drawable/blurbg"/>
+            />
 
         <TextView
             android:id="@+id/nameCompressed"
@@ -66,7 +67,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/compressed"
-        android:elevation="4dp"
         android:orientation="vertical"
         android:visibility="gone">
 
@@ -80,7 +80,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="165dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/blurbg"
                 tools:ignore="ContentDescription"/>
 
             <ImageView
@@ -134,7 +133,8 @@
             android:id="@+id/buttonLayout"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            >
 
             <Button
                 android:id="@+id/favoriteButton"
@@ -142,7 +142,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/favoriteLabel"
-                android:textColor="@color/accent"/>
+                android:textColor="@color/accent"
+                android:singleLine="true"/>
 
             <Button
                 android:id="@+id/shareButton"
@@ -150,7 +151,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/shareLabel"
-                android:textColor="@color/accent"/>
+                android:textColor="@color/accent"
+                android:singleLine="true"/>
 
             <Button
                 android:id="@+id/directionsButton"
@@ -158,22 +160,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/directionsLabel"
-                android:textColor="@color/accent"/>
+                android:textColor="@color/accent"
+                android:singleLine="true"/>
 
             <Button
                 android:id="@+id/reportButton"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Report"
-                android:textColor="#ffd0d0d0"
+                android:text="@string/reportButtonText"
+                android:textColor="#ffc1c1c1"
+                android:layout_weight="1"
+                android:singleLine="true"
                 android:textSize="10sp"/>
 
         </LinearLayout>
 
-        <View
-            android:id="@+id/divider2"
-            style="@style/BigDivider"/>
+
 
     </LinearLayout>
 

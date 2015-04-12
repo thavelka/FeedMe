@@ -1,6 +1,7 @@
 package com.thavelka.feedme;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,12 +11,8 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 
 import com.software.shell.fab.ActionButton;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -31,11 +28,6 @@ public class MainFragment extends Fragment {
     protected ViewPagerAdapter mViewPagerAdapter;
     protected SlidingTabLayout mTabs;
     protected String dayOfWeek;
-    protected ImageView mTutorial1;
-    protected ImageView mTutorial2;
-    protected Button mButton;
-    int mCount = 0;
-
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -47,76 +39,11 @@ public class MainFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
 
         if (isFirstTime()) {
-            mCount = 0;
-            mTutorial1 = (ImageView) root.findViewById(R.id.tutorialImage1);
-            mTutorial2 = (ImageView) root.findViewById(R.id.tutorialImage2);
-            mButton = (Button) root.findViewById(R.id.nextButton);
-            Picasso.with(getActivity()).load(R.drawable.tutorial2).into(mTutorial1);
-            Picasso.with(getActivity()).load(R.drawable.tutorial2).into(mTutorial2);
-            mButton.setVisibility(View.VISIBLE);
-            mButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mCount == 0) {
-                        Picasso.with(getActivity()).load(R.drawable.tutorial3).into(mTutorial1, new Callback() {
-                            @Override
-                            public void onSuccess() {
-                                Picasso.with(getActivity()).load(R.drawable.tutorial3).into(mTutorial2);
-                            }
+            //show alert dialog
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage("FeedMe relies on the community to stay up-to-date. If you enjoy the app, be sure to add any new deals you find, and report inaccurate ones.")
+                    .setTitle("Welcome!").setPositiveButton("OK", null).show();
 
-                            @Override
-                            public void onError() {
-
-                            }
-                        });
-
-                    } else if (mCount == 1) {
-                        Picasso.with(getActivity()).load(R.drawable.tutorial4).into(mTutorial1, new Callback() {
-                            @Override
-                            public void onSuccess() {
-                                Picasso.with(getActivity()).load(R.drawable.tutorial4).into(mTutorial2);
-                            }
-
-                            @Override
-                            public void onError() {
-
-                            }
-                        });
-                    } else if (mCount == 2) {
-                        Picasso.with(getActivity()).load(R.drawable.tutorial5).into(mTutorial1, new Callback() {
-                            @Override
-                            public void onSuccess() {
-                                Picasso.with(getActivity()).load(R.drawable.tutorial5).into(mTutorial2);
-                            }
-
-                            @Override
-                            public void onError() {
-
-                            }
-                        });
-                    } else if (mCount == 3) {
-                        Picasso.with(getActivity()).load(R.drawable.tutorial6).into(mTutorial1, new Callback() {
-                            @Override
-                            public void onSuccess() {
-                                Picasso.with(getActivity()).load(R.drawable.tutorial6).into(mTutorial2);
-                            }
-
-                            @Override
-                            public void onError() {
-
-                            }
-                        });
-                        mButton.setText(getString(R.string.lastButtonText));
-                    } else if (mCount == 4) {
-                        mTutorial1.setVisibility(View.GONE);
-                        mTutorial2.setVisibility(View.GONE);
-                        mButton.setVisibility(View.GONE);
-                    }
-                    mCount++;
-
-
-                }
-            });
         }
 
         // Getting name of day of week to use as title

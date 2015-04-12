@@ -1,6 +1,5 @@
 package com.thavelka.feedme;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,6 +18,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.parse.ui.ParseLoginBuilder;
 
 
 public class BaseActivity extends ActionBarActivity
@@ -27,9 +27,6 @@ public class BaseActivity extends ActionBarActivity
     private static final String TAG = BaseActivity.class.getSimpleName();
 
     Toolbar mToolbar;
-    String NAME = "NAME";
-    String EMAIL = "EMAIL";
-    int SCORE = 0;
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -42,42 +39,31 @@ public class BaseActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
 
-        // CHECK USER LOGGED IN
+        // GET CURRENT USER
         ParseAnalytics.trackAppOpened(getIntent());
         final ParseUser currentUser = ParseUser.getCurrentUser();
-        if (currentUser != null) {
-            // Allow user to continue, send user's info to header in drawer
-            NAME = currentUser.getString("name");
-            EMAIL = currentUser.getEmail();
 
-            // Update user's score
+        // GET SCORE (number of approved posts by user)
+        ParseRelation<ParseObject> relation = currentUser.getRelation("posts");
+        ParseQuery<ParseObject> query = relation.getQuery();
+        query.whereEqualTo("isApproved", true);
+        query.setLimit(1000);
 
-            ParseRelation<ParseObject> relation = currentUser.getRelation("posts");
-            ParseQuery<ParseObject> query = relation.getQuery();
-            query.whereEqualTo("isApproved", true);
-            query.setLimit(1000);
-
-            query.countInBackground(new CountCallback() {
-                @Override
-                public void done(int i, ParseException e) {
-                    Log.d(TAG, "Found " + i + " posts by user");
-                    SCORE = i;
-                    if (SCORE < 0) { // Parse count returns -1 if no results, set score to 0
-                        currentUser.put("score", 0);
-                    } else { // More than zero posts returns correct number
-                        currentUser.put("score", SCORE);
-                    }
-                    currentUser.saveInBackground();
+        query.countInBackground(new CountCallback() {
+            @Override
+            public void done(int i, ParseException e) {
+                // i = count of approved posts returned by query
+                Log.d(TAG, "Found " + i + " posts by user");
+                if (i < 0) { // Parse count returns -1 if no results, set score to 0
+                    currentUser.put("score", 0);
+                } else { // More than zero posts returns correct number
+                    currentUser.put("score", i);
                 }
-            });
+                currentUser.saveInBackground();
+            }
+        });
 
-        } else {
-            // Send user to login activity
-            Intent intent = new Intent(BaseActivity.this, LoginActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        }
+
 
 
         // SETTING UP TOOLBAR
@@ -85,10 +71,9 @@ public class BaseActivity extends ActionBarActivity
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
+        // SETTING UP NAV DRAWER
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-
-        // Set up the drawer.
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
@@ -98,7 +83,7 @@ public class BaseActivity extends ActionBarActivity
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-        // update the main content by replacing fragments
+        // starts fragment corresponding to position of touched item
         Fragment fragment;
         switch (position) {
             case 0:
@@ -128,6 +113,7 @@ public class BaseActivity extends ActionBarActivity
 
     @SuppressWarnings("deprecation")
     public void restoreActionBar() {
+        // what to show in the bar when the drawer is open
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
@@ -136,10 +122,8 @@ public class BaseActivity extends ActionBarActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        // show different actionbar items if drawer open
         if (!mNavigationDrawerFragment.isDrawerOpen()) {
-            // Only show items in the action bar relevant to this screen
-            // if the drawer is not showing. Otherwise, let the drawer
-            // decide what to show in the action bar.
             getMenuInflater().inflate(R.menu.base, menu);
             restoreActionBar();
             return true;
@@ -149,18 +133,14 @@ public class BaseActivity extends ActionBarActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_logout) {
+            // signs user out, sends them to the login page
             ParseUser.logOut();
-            Intent intent = new Intent(BaseActivity.this, LoginActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            ParseLoginBuilder builder = new ParseLoginBuilder(this);
+            startActivityForResult(builder.build(), 0);
+            finish();
             return true;
         }
 

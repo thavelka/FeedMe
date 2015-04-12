@@ -307,11 +307,15 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
                     alert.setPositiveButton("Send", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             String value = input.getText().toString();
-                            ParseObject report = new ParseObject("Report");
-                            report.put("listing", ParseObject.createWithoutData("Listing", listing.getObjectId()));
-                            report.put("description", value);
-                            report.saveInBackground();
-                            Toast.makeText(mContext, "Thank you!", Toast.LENGTH_SHORT).show();
+                            if (value.length() > 5) {
+                                ParseObject report = new ParseObject("Report");
+                                report.put("listing", ParseObject.createWithoutData("Listing", listing.getObjectId()));
+                                report.put("description", value);
+                                report.saveInBackground();
+                                Toast.makeText(mContext, "Thank you!", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(mContext, "A description is needed", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
 
