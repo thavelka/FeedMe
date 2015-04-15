@@ -68,8 +68,6 @@ public class ListingsFragment extends Fragment {
             }
         });
         mRecyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
-        mRecyclerView.addItemDecoration
-            (new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
         mRecyclerView.setHasFixedSize(true);
 
         final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
@@ -130,7 +128,7 @@ public class ListingsFragment extends Fragment {
             try {
                 mListings = query.find();
                 Log.d(TAG, "got " + mListings.size() + " objects");
-                mAdapter = new ParseAdapter(getActivity(), mListings, false);
+                mAdapter = new MainListingAdapter(getActivity(), mListings, false);
                 return mListings;
             } catch (ParseException e) {
                 e.printStackTrace();

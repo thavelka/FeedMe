@@ -3,7 +3,8 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              tools:context="com.thavelka.feedme.NewListingActivity">
+              tools:context="com.thavelka.feedme.NewListingActivity"
+              android:background="@color/background_material_light">
 
     <include
         android:id="@+id/toolbar"

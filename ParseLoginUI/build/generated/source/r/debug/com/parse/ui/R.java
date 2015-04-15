@@ -17,6 +17,12 @@ public final class R {
         public static int abc_slide_in_top=0x7f040005;
         public static int abc_slide_out_bottom=0x7f040006;
         public static int abc_slide_out_top=0x7f040007;
+        public static int enter_from_bottom=0x7f040008;
+        public static int enter_from_left=0x7f040009;
+        public static int enter_from_right=0x7f04000a;
+        public static int exit_to_bottom=0x7f04000b;
+        public static int exit_to_left=0x7f04000c;
+        public static int exit_to_right=0x7f04000d;
     }
     public static final class attr {
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
@@ -1343,7 +1349,17 @@ containing a value of this type.
         public static int com_parse_ui_parse_login_button_background_selector=0x7f020040;
         public static int com_parse_ui_twitter_login_button_background_selector=0x7f020041;
         public static int com_parse_ui_twitter_login_logo=0x7f020042;
-        public static int logo=0x7f020043;
+        public static int img1=0x7f020043;
+        public static int img10=0x7f020044;
+        public static int img2=0x7f020045;
+        public static int img3=0x7f020046;
+        public static int img4=0x7f020047;
+        public static int img5=0x7f020048;
+        public static int img6=0x7f020049;
+        public static int img7=0x7f02004a;
+        public static int img8=0x7f02004b;
+        public static int img9=0x7f02004c;
+        public static int logo=0x7f02004d;
     }
     public static final class id {
         public static int action_bar=0x7f080031;
@@ -1361,11 +1377,12 @@ containing a value of this type.
         public static int action_mode_close_button=0x7f080020;
         public static int activity_chooser_view_content=0x7f080021;
         public static int always=0x7f080016;
-        public static int app_logo=0x7f08003f;
+        public static int appLogo=0x7f080040;
+        public static int app_logo=0x7f080042;
         public static int beginning=0x7f080013;
         public static int checkbox=0x7f080029;
         public static int collapseActionView=0x7f080017;
-        public static int create_account=0x7f080052;
+        public static int create_account=0x7f080054;
         public static int decor_content_parent=0x7f08002f;
         public static int default_activity_button=0x7f080024;
         public static int dialog=0x7f08001b;
@@ -1375,7 +1392,7 @@ containing a value of this type.
         public static int end=0x7f080014;
         public static int expand_activities_button=0x7f080022;
         public static int expanded_menu=0x7f080028;
-        public static int facebook_login=0x7f08004b;
+        public static int facebook_login=0x7f08004d;
         public static int home=0x7f080004;
         public static int homeAsUp=0x7f08000d;
         public static int icon=0x7f080026;
@@ -1383,22 +1400,23 @@ containing a value of this type.
         public static int image=0x7f080023;
         public static int listMode=0x7f080009;
         public static int list_item=0x7f080025;
-        public static int locationSpinner=0x7f080051;
-        public static int loginImage=0x7f080047;
-        public static int login_help_email_input=0x7f080049;
-        public static int login_help_instructions=0x7f080048;
-        public static int login_help_submit=0x7f08004a;
-        public static int login_password_input=0x7f080042;
-        public static int login_username_input=0x7f080041;
+        public static int locationSpinner=0x7f080053;
+        public static int loginContainer=0x7f080041;
+        public static int loginImage=0x7f08003f;
+        public static int login_help_email_input=0x7f08004b;
+        public static int login_help_instructions=0x7f08004a;
+        public static int login_help_submit=0x7f08004c;
+        public static int login_password_input=0x7f080045;
+        public static int login_username_input=0x7f080044;
         public static int middle=0x7f080015;
         public static int never=0x7f080019;
         public static int none=0x7f08000e;
         public static int normal=0x7f08000a;
-        public static int parse_buttons=0x7f080043;
-        public static int parse_login=0x7f080040;
-        public static int parse_login_button=0x7f080044;
-        public static int parse_login_help=0x7f080046;
-        public static int parse_signup_button=0x7f080045;
+        public static int parse_buttons=0x7f080046;
+        public static int parse_login=0x7f080043;
+        public static int parse_login_button=0x7f080047;
+        public static int parse_login_help=0x7f080049;
+        public static int parse_signup_button=0x7f080048;
         public static int progress_circular=0x7f080005;
         public static int progress_horizontal=0x7f080006;
         public static int radio=0x7f08002b;
@@ -1416,15 +1434,15 @@ containing a value of this type.
         public static int showCustom=0x7f08000f;
         public static int showHome=0x7f080010;
         public static int showTitle=0x7f080011;
-        public static int signup_confirm_password_input=0x7f080050;
-        public static int signup_email_input=0x7f08004e;
-        public static int signup_password_input=0x7f08004f;
-        public static int signup_username_input=0x7f08004d;
+        public static int signup_confirm_password_input=0x7f080052;
+        public static int signup_email_input=0x7f080050;
+        public static int signup_password_input=0x7f080051;
+        public static int signup_username_input=0x7f08004f;
         public static int split_action_bar=0x7f080007;
         public static int submit_area=0x7f08003c;
         public static int tabMode=0x7f08000b;
         public static int title=0x7f080027;
-        public static int twitter_login=0x7f08004c;
+        public static int twitter_login=0x7f08004e;
         public static int up=0x7f080008;
         public static int useLogo=0x7f080012;
         public static int withText=0x7f08001a;
@@ -1458,16 +1476,17 @@ containing a value of this type.
         public static int abc_search_dropdown_item_icons_2line=0x7f030013;
         public static int abc_search_view=0x7f030014;
         public static int abc_simple_dropdown_hint=0x7f030015;
-        public static int com_parse_ui_parse_login_app_logo=0x7f030016;
-        public static int com_parse_ui_parse_login_form=0x7f030017;
-        public static int com_parse_ui_parse_login_fragment=0x7f030018;
-        public static int com_parse_ui_parse_login_help_form=0x7f030019;
-        public static int com_parse_ui_parse_login_help_fragment=0x7f03001a;
-        public static int com_parse_ui_parse_login_third_party_section=0x7f03001b;
-        public static int com_parse_ui_parse_signup_form=0x7f03001c;
-        public static int com_parse_ui_parse_signup_fragment=0x7f03001d;
-        public static int spinner_item=0x7f03001e;
-        public static int support_simple_spinner_dropdown_item=0x7f03001f;
+        public static int com_parse_ui_parse_login_activity=0x7f030016;
+        public static int com_parse_ui_parse_login_app_logo=0x7f030017;
+        public static int com_parse_ui_parse_login_form=0x7f030018;
+        public static int com_parse_ui_parse_login_fragment=0x7f030019;
+        public static int com_parse_ui_parse_login_help_form=0x7f03001a;
+        public static int com_parse_ui_parse_login_help_fragment=0x7f03001b;
+        public static int com_parse_ui_parse_login_third_party_section=0x7f03001c;
+        public static int com_parse_ui_parse_signup_form=0x7f03001d;
+        public static int com_parse_ui_parse_signup_fragment=0x7f03001e;
+        public static int spinner_item=0x7f03001f;
+        public static int support_simple_spinner_dropdown_item=0x7f030020;
     }
     public static final class plurals {
         public static int com_parse_ui_password_too_short_toast=0x7f0a0000;

@@ -38,9 +38,9 @@ public class NavigationDrawerFragment extends Fragment {
     private int SCORE = 0;
     private String CITY_STATE;
     private String IMAGE_URL;
-    private String[] TITLES = {"Home", "Favorites", "Leaderboard", "Settings"};
+    private String[] TITLES = {"Home", "Favorites", "Leaderboard", "Settings", "Suggestions"};
     private int[] ICONS = {R.mipmap.ic_home_grey600_24dp, R.mipmap.ic_favorite_grey600_24dp, R.mipmap.ic_star_grey600_24dp,
-            R.mipmap.ic_settings_grey600_24dp};
+            R.mipmap.ic_settings_grey600_24dp, R.mipmap.ic_chat_grey600_24dp};
     /**
      * A pointer to the current callbacks instance (the Activity).
      */
@@ -118,8 +118,6 @@ public class NavigationDrawerFragment extends Fragment {
 
         }
         recyclerView = (RecyclerView) root.findViewById(R.id.drawerRecyclerView);
-        recyclerView.addItemDecoration(new DividerItemDecoration
-                (getActivity(), DividerItemDecoration.VERTICAL_LIST));
 
         recyclerView.setHasFixedSize(true);
 

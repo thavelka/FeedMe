@@ -52,8 +52,6 @@ public class FavoritesFragment extends Fragment {
         mListings = Collections.emptyList();
         mEmptyText = (TextView) root.findViewById(R.id.emptyFavoritesText);
         mRecyclerView = (RecyclerView) root.findViewById(R.id.favoritesRecyclerView);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration
-                (getActivity(), DividerItemDecoration.VERTICAL_LIST));
 
         mRecyclerView.setHasFixedSize(true);
 
@@ -63,7 +61,7 @@ public class FavoritesFragment extends Fragment {
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         getFavorites();
         try {
-            mAdapter = new ParseAdapter(getActivity(), mListings, true);
+            mAdapter = new MainListingAdapter(getActivity(), mListings, true);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -107,7 +105,7 @@ public class FavoritesFragment extends Fragment {
             try {
                 mListings = query.find();
                 Log.d(TAG, "got " + mListings.size() + " objects");
-                mAdapter = new ParseAdapter(getActivity(), mListings, true);
+                mAdapter = new MainListingAdapter(getActivity(), mListings, true);
                 return mListings;
             } catch (ParseException e) {
                 e.printStackTrace();

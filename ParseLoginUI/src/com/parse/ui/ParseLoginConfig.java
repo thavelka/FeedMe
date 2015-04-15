@@ -24,7 +24,6 @@ package com.parse.ui;
 import android.content.Context;
 import android.content.res.Resources.NotFoundException;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.parse.Parse;
 
@@ -343,7 +342,7 @@ public class ParseLoginConfig {
                 bundle.getInt(FACEBOOK_LOGIN_PERMISSIONS))));
       } catch (NotFoundException e) {
         if (Parse.getLogLevel() <= Parse.LOG_LEVEL_ERROR) {
-          Log.w(LOG_TAG, "Facebook permission string array resource not found");
+          //Log.w(LOG_TAG, "Facebook permission string array resource not found");
         }
       }
     } else if (keys.contains(FACEBOOK_LOGIN_PERMISSIONS_STRING_ARRAY)) {
