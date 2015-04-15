@@ -135,7 +135,9 @@
             android:orientation="horizontal"
             android:visibility="visible"
             android:padding="4dp"
-            android:weightSum="4">
+            android:weightSum="4"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp">
 
             <com.gc.materialdesign.views.ButtonFlat
                 android:id="@+id/favoriteButton"

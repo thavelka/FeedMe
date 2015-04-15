@@ -176,6 +176,7 @@ public class ParseLoginActivity extends FragmentActivity implements
     // You can change this implementation if you want a different behavior.
     setResult(RESULT_OK);
     finish();
+
   }
 
   /**

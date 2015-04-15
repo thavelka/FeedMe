@@ -61,7 +61,7 @@ public class FavoritesFragment extends Fragment {
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         getFavorites();
         try {
-            mAdapter = new ParseAdapter(getActivity(), mListings, true);
+            mAdapter = new MainListingAdapter(getActivity(), mListings, true);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -105,7 +105,7 @@ public class FavoritesFragment extends Fragment {
             try {
                 mListings = query.find();
                 Log.d(TAG, "got " + mListings.size() + " objects");
-                mAdapter = new ParseAdapter(getActivity(), mListings, true);
+                mAdapter = new MainListingAdapter(getActivity(), mListings, true);
                 return mListings;
             } catch (ParseException e) {
                 e.printStackTrace();

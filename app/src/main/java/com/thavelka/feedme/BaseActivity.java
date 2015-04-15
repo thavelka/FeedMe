@@ -2,6 +2,7 @@ package com.thavelka.feedme;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -25,7 +26,6 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
-import com.parse.ui.ParseLoginBuilder;
 
 
 public class BaseActivity extends ActionBarActivity
@@ -148,8 +148,10 @@ public class BaseActivity extends ActionBarActivity
         if (id == R.id.action_logout) {
             // signs user out, sends them to the login page
             ParseUser.logOut();
-            ParseLoginBuilder builder = new ParseLoginBuilder(this);
-            startActivityForResult(builder.build(), 0);
+            Intent intent = new Intent(this, InitialActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
             finish();
             return true;
         }
