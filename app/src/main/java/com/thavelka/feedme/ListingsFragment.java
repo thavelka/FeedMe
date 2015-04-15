@@ -68,8 +68,6 @@ public class ListingsFragment extends Fragment {
             }
         });
         mRecyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
-//        mRecyclerView.addItemDecoration
-//            (new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
         mRecyclerView.setHasFixedSize(true);
 
         final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());

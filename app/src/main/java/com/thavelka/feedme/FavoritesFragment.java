@@ -52,8 +52,6 @@ public class FavoritesFragment extends Fragment {
         mListings = Collections.emptyList();
         mEmptyText = (TextView) root.findViewById(R.id.emptyFavoritesText);
         mRecyclerView = (RecyclerView) root.findViewById(R.id.favoritesRecyclerView);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration
-                (getActivity(), DividerItemDecoration.VERTICAL_LIST));
 
         mRecyclerView.setHasFixedSize(true);
 

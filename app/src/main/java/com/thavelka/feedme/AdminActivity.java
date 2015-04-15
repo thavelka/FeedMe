@@ -44,8 +44,6 @@ public class AdminActivity extends ActionBarActivity {
         mListings = Collections.emptyList();
         mEmptyText = (TextView) findViewById(R.id.emptyAdminText);
         mRecyclerView = (RecyclerView) findViewById(R.id.adminRecyclerView);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration
-                (this, DividerItemDecoration.VERTICAL_LIST));
 
         mRecyclerView.setHasFixedSize(true);
 

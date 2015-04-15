@@ -118,8 +118,6 @@ public class NavigationDrawerFragment extends Fragment {
 
         }
         recyclerView = (RecyclerView) root.findViewById(R.id.drawerRecyclerView);
-        recyclerView.addItemDecoration(new DividerItemDecoration
-                (getActivity(), DividerItemDecoration.VERTICAL_LIST));
 
         recyclerView.setHasFixedSize(true);
 
