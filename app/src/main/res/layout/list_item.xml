@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/cardview_light_background"
-                android:elevation="2dp">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:background="@color/cardview_light_background"
+              android:elevation="2dp">
 
     <RelativeLayout
         android:id="@+id/compressed"
@@ -66,7 +67,6 @@
         android:id="@+id/expanded"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/compressed"
         android:orientation="vertical"
         android:visibility="gone">
 
@@ -83,13 +83,12 @@
                 tools:ignore="ContentDescription"/>
 
             <ImageView
-                android:id="@+id/shadow"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/imageExpanded"
-                android:scaleType="fitXY"
+                android:id="@+id/shadow"
                 android:src="@drawable/shadow"
-                tools:ignore="ContentDescription"/>
+                android:scaleType="fitXY"
+                android:layout_alignBottom="@+id/imageExpanded"/>
 
             <TextView
                 android:id="@+id/nameExpanded"
@@ -134,45 +133,48 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:orientation="horizontal"
-            >
+            android:visibility="visible"
+            android:padding="4dp"
+            android:weightSum="4">
 
-            <Button
+            <com.gc.materialdesign.views.ButtonFlat
                 android:id="@+id/favoriteButton"
-                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/favoriteLabel"
-                android:textColor="@color/accent"
-                android:singleLine="true"/>
 
-            <Button
+                android:layout_weight="1"
+                android:background="@color/accent"/>
+
+            <com.gc.materialdesign.views.ButtonFlat
                 android:id="@+id/shareButton"
-                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/shareLabel"
                 android:textColor="@color/accent"
-                android:singleLine="true"/>
 
-            <Button
+                android:layout_weight="1"
+                android:background="@color/accent"/>
+
+            <com.gc.materialdesign.views.ButtonFlat
                 android:id="@+id/directionsButton"
-                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/directionsLabel"
                 android:textColor="@color/accent"
-                android:singleLine="true"/>
 
-            <Button
+                android:layout_weight="1"
+                android:background="@color/accent"/>
+
+            <com.gc.materialdesign.views.ButtonFlat
                 android:id="@+id/reportButton"
-                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/reportButtonText"
-                android:textColor="#ffc1c1c1"
+
+                android:visibility="visible"
                 android:layout_weight="1"
-                android:singleLine="true"
-                android:textSize="10sp"/>
+                android:background="@color/accent"/>
 
         </LinearLayout>
 
@@ -180,4 +182,8 @@
 
     </LinearLayout>
 
-</RelativeLayout>
+    <View
+        style="@style/Divider"
+        />
+
+</LinearLayout>

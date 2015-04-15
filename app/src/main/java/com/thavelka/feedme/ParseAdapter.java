@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -24,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gc.materialdesign.views.ButtonFlat;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseRelation;
@@ -115,14 +115,16 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
         TextView mDescriptionExpanded;
         @InjectView(R.id.imageExpanded)
         ImageView mImageExpanded;
+        @InjectView(R.id.shadow)
+        ImageView mShadow;
         @InjectView(R.id.favoriteButton)
-        Button mFavoriteButton;
+        ButtonFlat mFavoriteButton;
         @InjectView(R.id.shareButton)
-        Button mShareButton;
+        ButtonFlat mShareButton;
         @InjectView(R.id.directionsButton)
-        Button mDirectionsButton;
+        ButtonFlat mDirectionsButton;
         @InjectView(R.id.reportButton)
-        Button mReportButton;
+        ButtonFlat mReportButton;
 
 
         public ParseViewHolder(final View itemView) {
@@ -217,6 +219,7 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ParseViewHol
             // Grabs name and address from object's restaurant pointer
             // Sets TextView with values
             Picasso.with(itemView.getContext()).load(listing.getImageUrl()).into(mImageCompressed);
+            Picasso.with(itemView.getContext()).load(R.drawable.shadow).into(mShadow);
             mNameCompressed.setText(listing.getName());
             mAddressCompressed.setText(listing.getAddress());
             mDescriptionCompressed.setText(listing.getDescription());

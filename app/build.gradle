@@ -8,8 +8,8 @@ android {
         applicationId "com.thavelka.feedme"
         minSdkVersion 17
         targetSdkVersion 22
-        versionCode 16
-        versionName "1.4.2"
+        versionCode 17
+        versionName "1.4.3"
     }
     buildTypes {
         release {
@@ -37,5 +37,6 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.2.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.google.android.gms:play-services:7.0.0'
+    compile 'com.github.navasmdc:MaterialDesign:1.+@aar'
     compile project(':ParseLoginUI')
 }
