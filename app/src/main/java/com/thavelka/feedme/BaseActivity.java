@@ -185,6 +185,7 @@ public class BaseActivity extends ActionBarActivity
                 if (value.length() > 5) {
                     ParseObject report = new ParseObject("Report");
                     report.put("description", value);
+                    report.put("user", ParseUser.getCurrentUser());
                     report.saveInBackground();
                     Toast.makeText(BaseActivity.this, "Thank you!", Toast.LENGTH_SHORT).show();
                 } else {

@@ -16,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseException;
@@ -37,7 +36,6 @@ public class ListingsFragment extends Fragment {
     SwipeRefreshLayout mSwipeRefreshLayout;
     ProgressBar mProgressBar;
     List<Listing> mListings;
-    TextView mEmptyText;
     boolean mIsFood;
 
     @Override
@@ -53,7 +51,6 @@ public class ListingsFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_listings, container, false);
         mListings = Collections.emptyList();
         mProgressBar = (ProgressBar) v.findViewById(R.id.progress);
-        mEmptyText = (TextView) v.findViewById(R.id.emptyText);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipeRefresher);
         mSwipeRefreshLayout.setColorSchemeResources(
@@ -72,7 +69,7 @@ public class ListingsFragment extends Fragment {
 
         final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setPadding(0,0,0,400);
+        mRecyclerView.setPadding(0,0,0,300);
         mRecyclerView.setClipToPadding(false);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         getListings();
@@ -109,7 +106,6 @@ public class ListingsFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mEmptyText.setVisibility(View.GONE);
             if (mProgressBar.isEnabled()) {
                 mProgressBar.setVisibility(View.VISIBLE);
             }
@@ -140,9 +136,6 @@ public class ListingsFragment extends Fragment {
         protected void onPostExecute(final List<Listing> listings) {
             super.onPostExecute(listings);
             mRecyclerView.setAdapter(mAdapter);
-            if (listings.size() == 0) {
-                mEmptyText.setVisibility(View.VISIBLE);
-            }
             mSwipeRefreshLayout.setRefreshing(false);
             mProgressBar.setVisibility(View.GONE);
             mProgressBar.setEnabled(true);

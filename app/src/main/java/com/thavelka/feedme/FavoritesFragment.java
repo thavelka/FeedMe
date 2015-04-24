@@ -4,24 +4,23 @@ package com.thavelka.feedme;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,8 +33,7 @@ public class FavoritesFragment extends Fragment {
     public static final String TAG = FavoritesFragment.class.getSimpleName();
     RecyclerView mRecyclerView;
     RecyclerView.Adapter mAdapter;
-    List<Listing> mListings;
-    TextView mEmptyText;
+    List<Listing> mListings = new ArrayList<>();
 
     public static FavoritesFragment newInstance() {
         return new FavoritesFragment();
@@ -50,14 +48,12 @@ public class FavoritesFragment extends Fragment {
 
         getActivity().setTitle("Favorites");
         mListings = Collections.emptyList();
-        mEmptyText = (TextView) root.findViewById(R.id.emptyFavoritesText);
         mRecyclerView = (RecyclerView) root.findViewById(R.id.favoritesRecyclerView);
-
         mRecyclerView.setHasFixedSize(true);
-
         final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-
         mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setPadding(0,0,0,300);
+        mRecyclerView.setClipToPadding(false);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         getFavorites();
         try {
@@ -73,9 +69,32 @@ public class FavoritesFragment extends Fragment {
 
     private void getFavorites() {
         if (isNetworkAvailable()) {
-            new ShowListings().execute();
+            ParseUser user = ParseUser.getCurrentUser();
+            ParseRelation<Listing> relation = user.getRelation("favorites");
+            ParseQuery<Listing> query = relation.getQuery();
+            query.include("listing");
+            query.findInBackground(new FindCallback<Listing>() {
+                @Override
+                public void done(List<Listing> listings, ParseException e) {
+                    showFavorites(listings);
+                }
+            });
+
         } else {
             Toast.makeText(getActivity(), "Network unavailable", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void showFavorites(List<Listing> listings) {
+        try {
+            if (listings != null && listings.size() > 0) {
+                mListings = listings;
+                mAdapter = new MainListingAdapter(getActivity(), listings, true);
+                mRecyclerView.setAdapter(mAdapter);
+
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
 
@@ -88,47 +107,7 @@ public class FavoritesFragment extends Fragment {
         return isAvailable;
     }
 
-    private class ShowListings extends AsyncTask<Void, Void, List<Listing>> {
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mEmptyText.setVisibility(View.GONE);
-        }
-
-        @Override
-        protected List<Listing> doInBackground(Void... params) {
-            ParseUser user = ParseUser.getCurrentUser();
-            ParseRelation<Listing> relation = user.getRelation("favorites");
-            ParseQuery<Listing> query = relation.getQuery();
-            query.include("listing");
-            try {
-                mListings = query.find();
-                Log.d(TAG, "got " + mListings.size() + " objects");
-                mAdapter = new MainListingAdapter(getActivity(), mListings, true);
-                return mListings;
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(final List<Listing> listings) {
-            super.onPostExecute(listings);
-            mRecyclerView.setAdapter(mAdapter);
-            if (listings.size() == 0) {
-                mEmptyText.setVisibility(View.VISIBLE);
-            }
-
-        }
-
-        @Override
-        protected void onCancelled() {
-            super.onCancelled();
-        }
-
-    }
 
 
 }

@@ -4,15 +4,6 @@
                 android:background="@color/background_material_light">
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/favoritesRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical">
-
-    </android.support.v7.widget.RecyclerView>
-
-
     <TextView
         android:id="@+id/emptyFavoritesText"
         android:layout_width="wrap_content"
@@ -21,6 +12,26 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="24dp"
         android:text="@string/emptyFavoriteText"
-        android:visibility="gone"/>
+        android:visibility="visible"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="© SkodaSoft 2015"
+        android:id="@+id/copyright"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="16dp"
+        android:elevation="1dp"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/favoritesRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical">
+
+    </android.support.v7.widget.RecyclerView>
+
 
 </RelativeLayout>
