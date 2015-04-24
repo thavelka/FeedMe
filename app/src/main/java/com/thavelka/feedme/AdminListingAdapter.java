@@ -10,13 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gc.materialdesign.views.ButtonFlat;
 import com.parse.ParseException;
 import com.squareup.picasso.Picasso;
 
@@ -106,13 +106,13 @@ public class AdminListingAdapter extends RecyclerView.Adapter<AdminListingAdapte
         @InjectView(R.id.imageExpanded)
         ImageView mImageExpanded;
         @InjectView(R.id.favoriteButton) // Hijacking favorite button to use as approve button
-                Button mApproveButton;
+                ButtonFlat mApproveButton;
         @InjectView(R.id.shareButton)  // Hijacking share button to use as delete button
-                Button mDeleteButton;
+                ButtonFlat mDeleteButton;
         @InjectView(R.id.directionsButton)
-        Button mDirectionsButton;
+        ButtonFlat mDirectionsButton;
         @InjectView(R.id.reportButton)
-        Button mReportButton;
+        ButtonFlat mReportButton;
 
 
         public ParseViewHolder(final View itemView) {
